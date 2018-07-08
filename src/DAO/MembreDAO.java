@@ -13,7 +13,20 @@ public class MembreDAO extends DAO<Membre>
 	}
 	
 	public boolean create(Membre obj){
-		return false;
+		boolean statementResult;
+		try {
+			Statement statement = connect.createStatement();
+			String query = "INSERT INTO Membre (IDM, nomM, prenomM, dateNaissM,  emailM, passwordM) VALUES ('" + obj.getiD() + "','" + obj.getNom() + "','" + obj.getPrenom() + "','" + "1994-02-18" + "','" + obj.getEmail() + "','" + obj.getPassword() + "')" + ";";
+			System.out.println(query);
+			statementResult = true;
+			statementResult = statement.execute(query);
+		} catch (SQLException e) {
+			statementResult = false;
+			e.printStackTrace();
+			System.out.println(e);
+		}
+		System.out.println(statementResult);
+		return statementResult;
 	}
 	
 	public boolean delete(Membre obj){

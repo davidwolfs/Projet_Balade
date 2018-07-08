@@ -9,10 +9,10 @@ public class Balade {
 	private List<Vehicule> listVehicule = new ArrayList<>();
 	private String lieuDepart;
 	private String dateDepart;
-	private int forfait;
+	private double forfait;
 	private String libelle;
 
-	public Balade(int IDB, String lieuDepart, String dateDepart, int forfait,
+	public Balade(int IDB, String lieuDepart, String dateDepart, double forfait,
 			String libelle) {
 		this.IDB = IDB;
 		//this.listVehicule = listVehicule;
@@ -57,11 +57,11 @@ public class Balade {
 		this.dateDepart = dateDepart;
 	}
 
-	public int getForfait() {
+	public double getForfait() {
 		return forfait;
 	}
 
-	public void setForfait(int forfait) {
+	public void setForfait(double forfait) {
 		this.forfait = forfait;
 	}
 

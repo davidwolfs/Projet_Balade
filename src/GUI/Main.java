@@ -21,8 +21,8 @@ public class Main {
 		JFrame frame = new JFrame();
 		Connection connect = DriverACCESS.getInstance();
 		//Connexion connexion = new Connexion(frame);
-		//CreerUser con = new CreerUser(frame, connect);
-		Dashboard dashboard = new Dashboard(frame, connect);
+		CreerUser con = new CreerUser(frame, connect);
+		//Dashboard dashboard = new Dashboard(frame, connect);
 		frame.setVisible(true);
 		/*SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

@@ -22,6 +22,11 @@ public class Membre extends Personne
 		super(iD, nom, prenom, dateNaiss, email, password);
 		this.solde = solde;
 	}
+	
+	public Membre(int iD, String nom, String prenom, Date dateNaiss, String email, String password) 
+	{
+		super(iD, nom, prenom, dateNaiss, email, password);
+	}
 
 	
 	public double getSolde() {

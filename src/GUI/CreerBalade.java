@@ -73,7 +73,7 @@ public class CreerBalade implements ActionListener
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		Balade balade = new Balade(1, lieuDepartField.getText(), dateDepartField.getText(), Integer.parseInt(forfaitField.getText()), libelleField.getText());
+		Balade balade = new Balade(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
 		baladeDAO.create(balade);
 	}

@@ -12,9 +12,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import DAO.MembreDAO;
 import DAO.ResponsableDAO;
+import DAO.TresorierDAO;
+import exo.Membre;
 import exo.Personne;
 import exo.Responsable;
+import exo.Tresorier;
 
 public class CreerUser extends JPanel implements ActionListener {
 	private Connection connect;
@@ -76,5 +80,13 @@ public class CreerUser extends JPanel implements ActionListener {
 		Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
 		ResponsableDAO responsableDAO = new ResponsableDAO(connect);
 		responsableDAO.create(personne);
+		
+		Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
+		MembreDAO membreDAO = new MembreDAO(connect);
+		membreDAO.create(membre);
+		
+		Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
+		TresorierDAO tresorierDAO = new TresorierDAO(connect);
+		tresorierDAO.create(tresorier);
 	}
 }

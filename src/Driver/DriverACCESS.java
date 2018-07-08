@@ -12,7 +12,6 @@ public class DriverACCESS {
     private DriverACCESS() {
         try {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            System.out.println("Coucou");
 
             String url = "jdbc:ucanaccess://./Projet_Balade_DB.accdb";
 
@@ -37,3 +36,4 @@ public class DriverACCESS {
         return snglConnection;
     }
 }
+
