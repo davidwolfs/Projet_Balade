@@ -10,11 +10,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import DAO.MembreDAO;
 import DAO.ResponsableDAO;
 import DAO.TresorierDAO;
+import exo.Categorie;
 import exo.Membre;
 import exo.Personne;
 import exo.Responsable;
@@ -28,14 +30,22 @@ public class CreerUser extends JPanel implements ActionListener {
 	private JLabel labelDateNaiss;
 	private JLabel labelEmail;
 	private JLabel labelPassword;
+	private JLabel labelResponsable;
+	private JLabel labelMembre;
+	private JLabel labelTresorier;
 	private JTextField nomField;
 	private JTextField prenomField;
 	private JTextField dateNaissField;
 	private JTextField emailField;
 	private JTextField passwordField;
+	private JRadioButton responsableRadio;
+	private JRadioButton membreRadio;
+	private JRadioButton tresorierRadio;
 	private JButton createUserButton;
 	private JButton retourButton;
 	private JPanel p;
+	private JPanel p2;
+	private JPanel p3;
 
 	public CreerUser(JFrame f, Connection connect) {
 		this.connect = connect;
@@ -50,10 +60,18 @@ public class CreerUser extends JPanel implements ActionListener {
 		dateNaissField = new JTextField(8);
 		emailField = new JTextField(25);
 		passwordField = new JTextField(15);
+		labelResponsable = new JLabel("Responsable");
+		labelMembre = new JLabel("Membre");
+		labelTresorier = new JLabel("Trésorier");
+		responsableRadio = new JRadioButton();
+		membreRadio = new JRadioButton();
+		tresorierRadio = new JRadioButton();
 		createUserButton = new JButton("Créer");
 		retourButton = new JButton("Retour");
-		p = new JPanel(new GridLayout(6, 2));
-
+		p = new JPanel(new GridLayout(5,2));
+		p2 = new JPanel(new GridLayout(1,3));
+		p3 = new JPanel(new GridLayout(1,2));
+		
 		p.add(labelNom);
 		p.add(nomField);
 		p.add(labelPrenom);
@@ -64,13 +82,25 @@ public class CreerUser extends JPanel implements ActionListener {
 		p.add(emailField);
 		p.add(labelPassword);
 		p.add(passwordField);
-		p.add(createUserButton);
-		p.add(retourButton);
+		
+		p2.add(labelResponsable);
+		p2.add(responsableRadio);
+		p2.add(labelMembre);
+		p2.add(membreRadio);
+		p2.add(labelTresorier);
+		p2.add(tresorierRadio);
+		
+		p3.add(createUserButton);
+		p3.add(retourButton);
 
+		f.setLayout(new GridLayout(3, 1));
 		f.add(p);
+	
+		f.add(p2);
+		f.add(p3);
 		
 		createUserButton.addActionListener(this);
-		retourButton.addActionListener(this);
+		retourButton.addActionListener(new ReturnListener(f));
 		
 		f.pack();
 	}
@@ -89,4 +119,24 @@ public class CreerUser extends JPanel implements ActionListener {
 		TresorierDAO tresorierDAO = new TresorierDAO(connect);
 		tresorierDAO.create(tresorier);
 	}
+	
+	private class ReturnListener implements ActionListener
+	{
+		private JFrame f;
+
+		public ReturnListener(JFrame f)
+		{
+			this.f = f;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Main.creerConnexion();
+			f.removeAll();
+			f.revalidate();
+			f.repaint();
+			//f.getLayout().removeLayoutComponent(f);
+		}
+	}
+	
 }

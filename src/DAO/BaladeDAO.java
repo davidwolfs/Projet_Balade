@@ -4,6 +4,7 @@ import java.sql.*;
 
 import DAO.BaladeDAO;
 import exo.Balade;
+import exo.Responsable;
 
 public class BaladeDAO extends DAO<Balade> 
 {
@@ -16,7 +17,7 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Balade (IDB, libelleB, lieuDepart, dateDepart, forfait) VALUES ('" + obj.getIDB() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "')" + ";";
+			String query = "INSERT INTO Balade (IDB, libelleB, lieuDepart, dateDepart, forfait, IdCal) VALUES ('" + obj.getIDB() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "','" + 2 + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -55,7 +56,9 @@ public class BaladeDAO extends DAO<Balade>
 		{
 			ResultSet result = this.connect.createStatement(
 				ResultSet.TYPE_SCROLL_INSENSITIVE,
-				ResultSet.CONCUR_READ_ONLY	).executeQuery("SELECT * FROM Balade WHERE IDB = " +id);
+				ResultSet.CONCUR_READ_ONLY	).executeQuery("SELECT * FROM Balade WHERE IDB = " + id);
+			if(result.first())
+				balade = new Balade(id, result.getString("lieuDepart"), result.getString("prenomB"), result.getDate("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();

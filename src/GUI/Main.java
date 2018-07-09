@@ -14,16 +14,29 @@ import Driver.DriverACCESS;
 import exo.Balade;
 
 public class Main {
-
+	
+	private static JFrame frame = new JFrame();
+	private static Connection connect = DriverACCESS.getInstance();
+	
+	public static void creerConnexion()
+	{
+		Connexion connexion = new Connexion(frame);
+		frame.setVisible(true);
+	}
+	
+	public static void creerUser()
+	{
+		CreerUser con = new CreerUser(frame, connect);
+		frame.setVisible(true);
+	}
+	
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
-		JFrame frame = new JFrame();
-		Connection connect = DriverACCESS.getInstance();
-		//Connexion connexion = new Connexion(frame);
-		CreerUser con = new CreerUser(frame, connect);
-		//Dashboard dashboard = new Dashboard(frame, connect);
-		frame.setVisible(true);
+		creerConnexion();
+		//CreerUser con = new CreerUser(frame, connect);
+		/*Dashboard dashboard = new Dashboard(frame, connect);*/
+		//frame.setVisible(true);
 		/*SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				// Turn off metal's use of bold fonts
