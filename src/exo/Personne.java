@@ -7,11 +7,11 @@ public abstract class Personne
 	protected int iD;
 	protected String nom;
 	protected String prenom;
-	protected Date dateNaiss;
+	protected String dateNaiss;
 	protected String email;
 	protected String password;
 	
-	public Personne(int iD, String nom, String prenom, Date dateNaiss, String email, String password)
+	public Personne(int iD, String nom, String prenom, String dateNaiss, String email, String password)
 	{
 		this.iD=iD;
 		this.nom=nom;
@@ -19,6 +19,11 @@ public abstract class Personne
 		this.dateNaiss=dateNaiss;
 		this.email=email;
 		this.password=password;
+	}
+	
+	public Personne()
+	{
+		
 	}
 
 	public int getiD() {
@@ -38,11 +43,11 @@ public abstract class Personne
 		this.nom = nom;
 	}
 
-	public Date getDateNaiss() {
+	public String getDateNaiss() {
 		return dateNaiss;
 	}
 
-	public void setDateNaiss(Date dateNaiss) {
+	public void setDateNaiss(String dateNaiss) {
 		this.dateNaiss = dateNaiss;
 	}
 

@@ -107,15 +107,15 @@ public class CreerUser extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
+		Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 		ResponsableDAO responsableDAO = new ResponsableDAO(connect);
 		responsableDAO.create(personne);
 		
-		Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
+		Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 		MembreDAO membreDAO = new MembreDAO(connect);
 		membreDAO.create(membre);
 		
-		Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
+		Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 		TresorierDAO tresorierDAO = new TresorierDAO(connect);
 		tresorierDAO.create(tresorier);
 	}

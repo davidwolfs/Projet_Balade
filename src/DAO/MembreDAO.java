@@ -43,7 +43,7 @@ public class MembreDAO extends DAO<Membre>
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Responsable WHERE IDR = " + id);
 			if(result.first())
-				membre = new Membre(id, result.getString("nomR"), result.getString("prenomR"), result.getDate("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
+				membre = new Membre(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();

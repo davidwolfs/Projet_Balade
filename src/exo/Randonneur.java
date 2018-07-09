@@ -7,6 +7,10 @@ public class Randonneur extends VTT {
 		super(supplement, typePneu, nom, NbrPlateau);
 		this.typeFourche = typeFourche;
 	}
+	
+	public Randonneur() {
+		super();
+	}
 
 	public String getTypeFourche() {
 		return typeFourche;

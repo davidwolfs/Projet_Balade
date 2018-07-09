@@ -4,7 +4,6 @@ import java.sql.*;
 
 import DAO.BaladeDAO;
 import exo.Balade;
-import exo.Responsable;
 
 public class BaladeDAO extends DAO<Balade> 
 {
@@ -58,7 +57,7 @@ public class BaladeDAO extends DAO<Balade>
 				ResultSet.TYPE_SCROLL_INSENSITIVE,
 				ResultSet.CONCUR_READ_ONLY	).executeQuery("SELECT * FROM Balade WHERE IDB = " + id);
 			if(result.first())
-				balade = new Balade(id, result.getString("lieuDepart"), result.getString("prenomB"), result.getDate("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
+				balade = new Balade(id, result.getString("lieuDepart"), result.getString("dateDepart"), Double.parseDouble(result.getString("forfait")), result.getString("libelleB"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();

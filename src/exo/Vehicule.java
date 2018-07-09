@@ -20,6 +20,10 @@ public class Vehicule {
 		this.immatriculation = immatriculation;
 		this.placeLibreVelo = placeLibreVelo;
 	}
+	
+	public Vehicule() {
+		
+	}
 
 	public int getIDV() {
 		return IDV;

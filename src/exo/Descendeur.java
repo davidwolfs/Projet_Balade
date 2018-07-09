@@ -7,6 +7,10 @@ public class Descendeur extends VTT {
 		super(supplement, typePneu, nom, NbrPlateau);
 		this.typeSuspension = typeSuspension;
 	}
+	
+	public Descendeur() {
+		
+	}
 
 	public String getTypeSuspension() {
 		return typeSuspension;

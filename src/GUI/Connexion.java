@@ -36,9 +36,10 @@ public class Connexion extends JPanel implements ActionListener
 		// Create everything.
 		passwordField.setActionCommand(Connexion);
 		passwordField.addActionListener(this);
+		connexionButton.addActionListener(new ConnexionButtonListener(f));
 		createUserButton.addActionListener(new CreateUserButtonListener(f));
 		
-		passwordField = new JPasswordField("Password : ");
+		passwordField = new JPasswordField(15);
 		// passwordField.setLabelFor(passwordField);
 
 		// Lay out everything.
@@ -142,6 +143,24 @@ public class Connexion extends JPanel implements ActionListener
 		// Display the window.
 		frame.pack();
 		frame.setVisible(true);
+	}
+	
+	private class ConnexionButtonListener implements ActionListener
+	{
+		private JFrame f;
+
+		public ConnexionButtonListener(JFrame f)
+		{
+			this.f = f;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			f.removeAll();
+			Main.creerConnexion();
+			/*f.revalidate();*/
+			//f.getLayout().removeLayoutComponent(f);
+		}
 	}
 	
 	private class CreateUserButtonListener implements ActionListener

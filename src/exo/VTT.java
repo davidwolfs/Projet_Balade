@@ -10,6 +10,11 @@ public class VTT extends Categorie
 		this.NbrPlateau = NbrPlateau;
 	}
 
+	public VTT() 
+	{
+		super();
+	}
+	
 	public int getNbrPlateau() {
 		return NbrPlateau;
 	}

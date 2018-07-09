@@ -8,6 +8,10 @@ public class Trialiste extends VTT {
 		this.selle = selle;
 	}
 
+	public Trialiste() {
+		super();
+	}
+	
 	public String getSelle() {
 		return selle;
 	}

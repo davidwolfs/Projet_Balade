@@ -1,6 +1,7 @@
 package exo;
 
 public class Categorie {
+	private int IdCat;
 	private int supplement;
 	private String typePneu;
 	private String nom;
@@ -9,6 +10,18 @@ public class Categorie {
 		this.supplement = supplement;
 		this.typePneu = typePneu;
 		this.nom = nom;
+	}
+	
+	public Categorie() {
+		
+	}
+	
+	public int getIdCat() {
+		return IdCat;
+	}
+
+	public void setIdCat(int idCat) {
+		IdCat = idCat;
 	}
 
 	public int getSupplement() {

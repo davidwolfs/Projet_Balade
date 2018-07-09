@@ -10,8 +10,10 @@ import javax.swing.UIManager;
 
 import DAO.BaladeDAO;
 import DAO.DAO;
+import DAO.ResponsableDAO;
 import Driver.DriverACCESS;
 import exo.Balade;
+import exo.Responsable;
 
 public class Main {
 	
@@ -34,6 +36,17 @@ public class Main {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
 		creerConnexion();
+		BaladeDAO baladeDAO = new BaladeDAO(connect);
+		Balade balade = new Balade();
+		balade = baladeDAO.find(18);
+		System.out.println(balade.getLibelle());
+		System.out.println("Balade 18 : " + baladeDAO.find(18));
+		
+		ResponsableDAO responsableDAO = new ResponsableDAO(connect);
+		Responsable responsable = new Responsable();
+		responsable = responsableDAO.find(75);
+		System.out.println(responsable.getNom());
+		System.out.println("Responsable 18 : " + responsableDAO.find(18));
 		//CreerUser con = new CreerUser(frame, connect);
 		/*Dashboard dashboard = new Dashboard(frame, connect);*/
 		//frame.setVisible(true);
