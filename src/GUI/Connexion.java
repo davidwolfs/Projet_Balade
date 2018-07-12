@@ -3,6 +3,11 @@ package GUI;
 import javax.swing.*;
 
 import DAO.MembreDAO;
+import DAO.ResponsableDAO;
+import DAO.TresorierDAO;
+import exo.Membre;
+import exo.Responsable;
+import exo.Tresorier;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -191,8 +196,72 @@ public class Connexion extends JPanel implements ActionListener
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			MembreDAO membreDAO	= new MembreDAO(connect);
+			ResponsableDAO responsableDAO	= new ResponsableDAO(connect);
+			TresorierDAO tresorierDAO	= new TresorierDAO(connect);
 			
-			if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
+			if(responsableRadio.isSelected())
+			{
+				if(responsableDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
+				{
+					Container cp = f.getContentPane();
+					cp.removeAll();
+					//f.removeAll();
+					Main.showDashboard();
+					/*f.revalidate();*/
+					//f.getLayout().removeLayoutComponent(f);
+				}
+				else 
+				{
+					JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
+					p3.add(msgErreur);
+					f.add(p3);
+					f.pack();
+					System.out.println("OK");
+				}
+			}
+			if(membreRadio.isSelected())
+			{
+				if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
+				{
+					Container cp = f.getContentPane();
+					cp.removeAll();
+					//f.removeAll();
+					Main.showDashboard();
+					/*f.revalidate();*/
+					//f.getLayout().removeLayoutComponent(f);
+				}
+				else 
+				{
+					JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
+					p3.add(msgErreur);
+					f.add(p3);
+					f.pack();
+					System.out.println("OK");
+				}
+			}
+			
+			if(tresorierRadio.isSelected())
+			{
+				if(tresorierDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
+				{
+					Container cp = f.getContentPane();
+					cp.removeAll();
+					//f.removeAll();
+					Main.showDashboard();
+					/*f.revalidate();*/
+					//f.getLayout().removeLayoutComponent(f);
+				}
+				else 
+				{
+					JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
+					p3.add(msgErreur);
+					f.add(p3);
+					f.pack();
+					System.out.println("OK");
+				}
+			}
+			
+			/*if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
 			{
 				Container cp = f.getContentPane();
 				cp.removeAll();
@@ -200,7 +269,7 @@ public class Connexion extends JPanel implements ActionListener
 				Main.showDashboard();
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
-			}
+			/*}
 			else 
 			{
 				JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
@@ -208,7 +277,7 @@ public class Connexion extends JPanel implements ActionListener
 				f.add(p3);
 				f.pack();
 				System.out.println("OK");
-			}
+			}*/
 			
 			
 			/*if(userField.getText().equals("david.wolfs@condorcet.be") && passwordField.getText().equals("test"))
