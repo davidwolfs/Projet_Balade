@@ -15,6 +15,7 @@ import Driver.DriverACCESS;
 import exo.Balade;
 import exo.Responsable;
 
+
 public class Main {
 	
 	private static JFrame frame = new JFrame();
@@ -32,11 +33,59 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void showDashboard()
+	public static void showDashboard_Membre()
 	{
-		Dashboard dashboard = new Dashboard(frame, connect);
+		Dashboard_Membre dashboardMembre = new Dashboard_Membre(frame, connect);
 		frame.setVisible(true);
 	}
+	
+	public static void showDashboard_Responsable()
+	{
+		Dashboard_Responsable dashboardResponsable = new Dashboard_Responsable(frame, connect);
+		frame.setVisible(true);
+	}
+	
+	public static void showDashboard_Tresorier()
+	{
+		Dashboard_Tresorier dashboardTresorier = new Dashboard_Tresorier(frame, connect);
+		frame.setVisible(true);
+	}
+	
+	public static void CreerBalade()
+	{
+		CreerBalade creerBalade = new CreerBalade(frame, connect);
+		frame.setVisible(true);
+	}
+	
+	public static void showMenuBalade()
+	{
+		MenuBalade menuBalade = new MenuBalade(frame, connect);
+		frame.setVisible(true);
+	}
+	
+	/*public static void showMenuRemboursement()
+	{
+		MenuRemboursement = new MenuRemboursement(frame, connect);
+		frame.setVisible(true);
+	}
+	
+	public static void showMenuDisponibilite()
+	{
+		 MenuDisponibilite = new MenuDisponibilite(frame, connect);
+		frame.setVisible(true);
+	}
+	
+	public static void showMenuCategorie()
+	{
+		MenuCategorie = new MenuCategorie(frame, connect);
+		frame.setVisible(true);
+	}
+	
+	public static void showMenuPayement()
+	{
+		MenuPayement = new MenuPayement(frame, connect);
+		frame.setVisible(true);
+	}*/
 	
 	public static void Liste_Balade()
 	{
@@ -48,6 +97,7 @@ public class Main {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
 		creerConnexion();
+		frame.setSize(500,500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		/*BaladeDAO baladeDAO = new BaladeDAO(connect);
 		Balade balade = new Balade();

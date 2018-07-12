@@ -52,7 +52,9 @@ public class Connexion extends JPanel implements ActionListener
 		membreRadio = new JRadioButton();
 		tresorierRadio = new JRadioButton();
 		connexionButton = new JButton("Connexion");
+		connexionButton.setSize(15,15);
 		createUserButton = new JButton("Créer un compte");
+		createUserButton.setSize(15,15);
 		p = new JPanel(new GridLayout(4, 2));
 		p2 = new JPanel(new GridLayout(1,3));
 		p3 = new JPanel(new GridLayout(1,2));
@@ -206,7 +208,7 @@ public class Connexion extends JPanel implements ActionListener
 					Container cp = f.getContentPane();
 					cp.removeAll();
 					//f.removeAll();
-					Main.showDashboard();
+					Main.showDashboard_Responsable();
 					/*f.revalidate();*/
 					//f.getLayout().removeLayoutComponent(f);
 				}
@@ -226,7 +228,7 @@ public class Connexion extends JPanel implements ActionListener
 					Container cp = f.getContentPane();
 					cp.removeAll();
 					//f.removeAll();
-					Main.showDashboard();
+					Main.showDashboard_Membre();
 					/*f.revalidate();*/
 					//f.getLayout().removeLayoutComponent(f);
 				}
@@ -247,7 +249,7 @@ public class Connexion extends JPanel implements ActionListener
 					Container cp = f.getContentPane();
 					cp.removeAll();
 					//f.removeAll();
-					Main.showDashboard();
+					Main.showDashboard_Tresorier();
 					/*f.revalidate();*/
 					//f.getLayout().removeLayoutComponent(f);
 				}

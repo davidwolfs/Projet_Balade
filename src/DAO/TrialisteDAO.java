@@ -51,7 +51,7 @@ public class TrialisteDAO extends DAO<Trialiste>{
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Tresorier WHERE IDT = " + id);
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Trialiste WHERE IDT = " + id);
 			if(result.first())
 				trialiste = new Trialiste(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
 		}
