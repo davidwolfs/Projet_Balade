@@ -21,9 +21,17 @@ public class Connexion extends JPanel implements ActionListener
 	private JLabel labelPassword;
 	private JTextField userField;
 	private JPasswordField passwordField;
+	private JLabel labelResponsable;
+	private JLabel labelMembre;
+	private JLabel labelTresorier;
+	private JRadioButton responsableRadio;
+	private JRadioButton membreRadio;
+	private JRadioButton tresorierRadio;
 	private JButton connexionButton;
 	private JButton createUserButton;
 	private JPanel p;
+	private JPanel p2;
+	private JPanel p3;
 
 	public Connexion(JFrame f, Connection connect) {
 		this.connect = connect;
@@ -32,9 +40,17 @@ public class Connexion extends JPanel implements ActionListener
 		labelPassword = new JLabel("Password : ");
 		userField = new JTextField(15);
 		passwordField = new JPasswordField(15);
+		labelResponsable = new JLabel("Responsable");
+		labelMembre = new JLabel("Membre");
+		labelTresorier = new JLabel("Trésorier");
+		responsableRadio = new JRadioButton();
+		membreRadio = new JRadioButton();
+		tresorierRadio = new JRadioButton();
 		connexionButton = new JButton("Connexion");
 		createUserButton = new JButton("Créer un compte");
 		p = new JPanel(new GridLayout(4, 2));
+		p2 = new JPanel(new GridLayout(1,3));
+		p3 = new JPanel(new GridLayout(1,2));
 
 		// Use the default FlowLayout.
 
@@ -52,11 +68,24 @@ public class Connexion extends JPanel implements ActionListener
 		p.add(userField);
 		p.add(labelPassword);
 		p.add(passwordField);
-		p.add(connexionButton);
-		p.add(createUserButton);
-
+		p2.add(labelResponsable);
+		p2.add(responsableRadio);
+		p2.add(labelMembre);
+		p2.add(membreRadio);
+		p2.add(labelTresorier);
+		p2.add(tresorierRadio);
+		p3.add(connexionButton);
+		p3.add(createUserButton);
+		f.setLayout(new GridLayout(3, 1));
 		f.add(p);
+		f.add(p2);
+		f.add(p3);
 		f.pack();
+		
+		ButtonGroup personneRadio = new ButtonGroup();
+		personneRadio.add(responsableRadio);
+		personneRadio.add(membreRadio);
+		personneRadio.add(tresorierRadio);
 	}
 
 	protected JComponent createButtonPanel() {
@@ -169,15 +198,14 @@ public class Connexion extends JPanel implements ActionListener
 				cp.removeAll();
 				//f.removeAll();
 				Main.showDashboard();
-				System.out.println("LOGIN");
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
 			else 
 			{
 				JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
-				p.add(msgErreur);
-				f.add(p);
+				p3.add(msgErreur);
+				f.add(p3);
 				f.pack();
 				System.out.println("OK");
 			}
