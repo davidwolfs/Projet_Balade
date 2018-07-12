@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import exo.Tresorier;
 import exo.Trialiste;
@@ -21,7 +23,7 @@ public class VehiculeDAO extends DAO<Vehicule>{
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Vehicule (IDT, nomT, prenomT, dateNaissT,  emailT, passwordT) VALUES ('" + obj.getiD() + "','" + obj.getNom() + "','" + obj.getPrenom() + "','" + "1994-02-18" + "','" + obj.getEmail() + "','" + obj.getPassword() + "')" + ";";
+			String query = "INSERT INTO Vehicule (IDV, Chauffeur, nombrePlace, Immatriculation,  nombrePlaceVelo) VALUES ('" + obj.getIDV() + "','" + obj.getChauffeur() + "','" + obj.getNombrePlace() + "','" + obj.getImmatriculation() + "','" + obj.getNombrePlaceVelo() + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -48,18 +50,40 @@ public class VehiculeDAO extends DAO<Vehicule>{
 
 	@Override
 	public Vehicule find(int id) {
-		Vehicule vehicule = new Vehicule();
+		Vehicule vehicule = null;
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicule WHERE IDT = " + id);
 			if(result.first())
-				vehicule = new Vehicule(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
+				vehicule = new Vehicule(result.getInt("IDV"), result.getString("Chauffeur"), result.getInt("nombrePlace"), result.getString("Immatriculation"), result.getInt("nombrePlaceVelo"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();
 		}
 		return vehicule;
+	}
+	
+	public List<Vehicule> listVehicule()
+	{
+		List<Vehicule> listVehicule = new ArrayList<>();
+		Vehicule vehicule = null;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicule");
+	System.out.println("after");
+			while(result.next())
+			{
+				vehicule = new Vehicule(result.getInt("IDV"), result.getString("Chauffeur"), result.getInt("nombrePlace"), result.getString("Immatriculation"), result.getInt("nombrePlaceVelo"));
+				listVehicule.add(vehicule);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listVehicule;
 	}
 
 }

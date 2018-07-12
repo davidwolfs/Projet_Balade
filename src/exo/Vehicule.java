@@ -4,41 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Vehicule {
-	private int IDV;
+	private int iDV;
 	private String chauffeur;
-	private int PlaceLibreMembre;
-	private int immatriculation;
-	private int placeLibreVelo;
+	private int nombrePlace;
+	private String immatriculation;
+	private int nombrePlaceVelo;
 	private List<Membre> listMembre = new ArrayList<>();
 
-	public Vehicule(int IDV, String chauffeur, List<Membre> listMembre, int PlaceLibreMembre, int immatriculation,
-			int placeLibreVelo) {
-		this.IDV = IDV;
+	public Vehicule(int iDV, String chauffeur, int nombrePlace, String immatriculation,
+			int nombrePlaceVelo, List<Membre> listMembre) {
+		this.iDV = iDV;
 		this.chauffeur = chauffeur;
-		this.listMembre = listMembre;
-		this.PlaceLibreMembre = PlaceLibreMembre;
+		this.nombrePlace = nombrePlace;
 		this.immatriculation = immatriculation;
-		this.placeLibreVelo = placeLibreVelo;
+		this.nombrePlaceVelo = nombrePlaceVelo;
+		this.listMembre = listMembre;
 	}
 	
-	public Vehicule() {
-		
+	public Vehicule(int iDV, String chauffeur, int nombrePlace, String immatriculation,
+			int nombrePlaceVelo) {
+		this(iDV, chauffeur, nombrePlace, immatriculation, nombrePlaceVelo, new ArrayList<Membre>());
 	}
-
+	
 	public int getIDV() {
-		return IDV;
+		return iDV;
 	}
 
 	public void setIDV(int iDV) {
-		IDV = iDV;
-	}
-
-	public List<Membre> getListMembre() {
-		return listMembre;
-	}
-
-	public void setListMembre(List<Membre> listMembre) {
-		this.listMembre = listMembre;
+		this.iDV = iDV;
 	}
 
 	public String getChauffeur() {
@@ -49,28 +42,43 @@ public class Vehicule {
 		this.chauffeur = chauffeur;
 	}
 
-	public int getPlaceLibreMembre() {
-		return PlaceLibreMembre;
+	public int getNombrePlace() {
+		return nombrePlace;
 	}
 
-	public void setPlaceLibreMembre(int placeLibreMembre) {
-		PlaceLibreMembre = placeLibreMembre;
+	public void setNombrePlace(int nombrePlace) {
+		this.nombrePlace = nombrePlace;
 	}
 
-	public int getImmatriculation() {
+	public String getImmatriculation() {
 		return immatriculation;
 	}
 
-	public void setImmatriculation(int immatriculation) {
+	public void setImmatriculation(String immatriculation) {
 		this.immatriculation = immatriculation;
 	}
 
-	public int getPlaceLibreVelo() {
-		return placeLibreVelo;
+	public int getNombrePlaceVelo() {
+		return nombrePlaceVelo;
 	}
 
-	public void setPlaceLibreVelo(int placeLibreVelo) {
-		this.placeLibreVelo = placeLibreVelo;
+	public void setNombrePlaceVelo(int nombrePlaceVelo) {
+		this.nombrePlaceVelo = nombrePlaceVelo;
+	}
+	
+	public List<Membre> getListMembre() {
+		return listMembre;
 	}
 
+	public void setListMembre(List<Membre> listMembre) {
+		this.listMembre = listMembre;
+	}
+
+	@Override
+	public String toString() {
+		return "Vehicule [iDV=" + iDV + ", chauffeur=" + chauffeur + ", nombrePlace=" + nombrePlace
+				+ ", immatriculation=" + immatriculation + ", nombrePlaceVelo=" + nombrePlaceVelo + ", listMembre="
+				+ listMembre + "]";
+	}
+	
 }

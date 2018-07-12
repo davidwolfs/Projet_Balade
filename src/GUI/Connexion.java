@@ -29,7 +29,7 @@ public class Connexion extends JPanel implements ActionListener
 		passwordField = new JPasswordField(15);
 		connexionButton = new JButton("Connexion");
 		createUserButton = new JButton("Créer un compte");
-		p = new JPanel(new GridLayout(3, 2));
+		p = new JPanel(new GridLayout(4, 2));
 
 		// Use the default FlowLayout.
 
@@ -156,10 +156,27 @@ public class Connexion extends JPanel implements ActionListener
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			f.removeAll();
-			Main.creerConnexion();
-			/*f.revalidate();*/
-			//f.getLayout().removeLayoutComponent(f);
+			
+			
+			if(userField.getText().equals("david.wolfs@condorcet.be") && passwordField.getText().equals("test"))
+			{
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				//f.removeAll();
+				Main.showDashboard();
+				System.out.println("LOGIN");
+				/*f.revalidate();*/
+				//f.getLayout().removeLayoutComponent(f);
+			}
+			else 
+			{
+				JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
+				p.add(msgErreur);
+				f.add(p);
+				f.pack();
+				System.out.println("OK");
+			}
+			
 		}
 	}
 	
@@ -174,8 +191,13 @@ public class Connexion extends JPanel implements ActionListener
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			f.removeAll();
+			Container cp = f.getContentPane();
+			cp.removeAll();
+			//f.removeAll();
 			Main.creerUser();
+			
+			cp.revalidate();
+			cp.repaint();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

@@ -6,26 +6,27 @@ import java.util.List;
 
 public class Membre extends Personne 
 {
+	private static final double initSolde = 0;
 	private double solde;
-	private List<Categorie> listCategorie = new ArrayList<>();
-	
+	private List<Categorie> listCategorie;
 
 	public Membre(int iD, String nom, String prenom, String dateNaiss, String email, String password,
-			List<Categorie> listCategorie, double solde) {
+			List<Categorie> listCategorie, double initSolde) {
 		super(iD, nom, prenom, dateNaiss, email, password);
 		this.listCategorie = listCategorie;
-		this.solde = solde;
 	}
 
-	public Membre(int iD, String nom, String prenom, String dateNaiss, String email, String password, double solde) 
+	public Membre(int iD, String nom, String prenom, String dateNaiss, String email, String password, double initSolde) 
 	{
-		super(iD, nom, prenom, dateNaiss, email, password);
-		this.solde = solde;
+		this(iD, nom, prenom, dateNaiss, email, password, new ArrayList<Categorie>(), initSolde);
+		
 	}
 	
 	public Membre(int iD, String nom, String prenom, String dateNaiss, String email, String password) 
 	{
-		super(iD, nom, prenom, dateNaiss, email, password);
+		 
+		this(iD, nom, prenom, dateNaiss, email, password, initSolde);
+		
 	}
 
 	

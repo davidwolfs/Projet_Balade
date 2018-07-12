@@ -32,11 +32,24 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
+	public static void showDashboard()
+	{
+		Dashboard dashboard = new Dashboard(frame, connect);
+		frame.setVisible(true);
+	}
+	
+	public static void Liste_Balade()
+	{
+		Liste_Balade listeBalade = new Liste_Balade(frame, connect);
+		frame.setVisible(true);
+	}
+	
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
 		creerConnexion();
-		BaladeDAO baladeDAO = new BaladeDAO(connect);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		/*BaladeDAO baladeDAO = new BaladeDAO(connect);
 		Balade balade = new Balade();
 		balade = baladeDAO.find(18);
 		System.out.println(balade.getLibelle());

@@ -1,11 +1,13 @@
 package GUI;
 
+import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.Date;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -99,25 +101,41 @@ public class CreerUser extends JPanel implements ActionListener {
 		f.add(p2);
 		f.add(p3);
 		
+		/*responsableRadio.addActionListener(new ResponsableListener(f));
+		tresorierRadio.addActionListener(new TresorierListener(f));*/
 		createUserButton.addActionListener(this);
 		retourButton.addActionListener(new ReturnListener(f));
 		
+		ButtonGroup personneRadio = new ButtonGroup();
+		personneRadio.add(responsableRadio);
+		personneRadio.add(membreRadio);
+		personneRadio.add(tresorierRadio);
+		
+		
 		f.pack();
 	}
-
+	
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
-		ResponsableDAO responsableDAO = new ResponsableDAO(connect);
-		responsableDAO.create(personne);
+	public void actionPerformed(ActionEvent e) {
+		if(responsableRadio.isSelected())
+		{
+			Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+			ResponsableDAO responsableDAO = new ResponsableDAO(connect);
+			responsableDAO.create(personne);
+		}
+		if(membreRadio.isSelected())
+		{
+			Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+			MembreDAO membreDAO = new MembreDAO(connect);
+			membreDAO.create(membre);
+		}
 		
-		Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
-		MembreDAO membreDAO = new MembreDAO(connect);
-		membreDAO.create(membre);
-		
-		Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
-		TresorierDAO tresorierDAO = new TresorierDAO(connect);
-		tresorierDAO.create(tresorier);
+		if(tresorierRadio.isSelected())
+		{
+			Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+			TresorierDAO tresorierDAO = new TresorierDAO(connect);
+			tresorierDAO.create(tresorier);
+		}
 	}
 	
 	private class ReturnListener implements ActionListener
@@ -131,8 +149,10 @@ public class CreerUser extends JPanel implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			Container cp = f.getContentPane();
+			cp.removeAll();
 			Main.creerConnexion();
-			f.removeAll();
+			//f.removeAll();
 			f.revalidate();
 			f.repaint();
 			//f.getLayout().removeLayoutComponent(f);

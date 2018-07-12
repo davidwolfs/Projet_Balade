@@ -16,7 +16,7 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Balade (IDB, libelleB, lieuDepart, dateDepart, forfait, IdCal) VALUES ('" + obj.getIDB() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "','" + 2 + "')" + ";";
+			String query = "INSERT INTO Balade (IDB, libelleB, lieuDepart, dateDepart, forfait) VALUES ('" + obj.getIDB() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
