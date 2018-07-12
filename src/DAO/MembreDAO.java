@@ -41,13 +41,33 @@ public class MembreDAO extends DAO<Membre>
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Responsable WHERE IDR = " + id);
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Membre WHERE IDM = " + id);
 			if(result.first())
-				membre = new Membre(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
+				membre = new Membre(id, result.getString("nomM"), result.getString("prenomM"), result.getString("dateNaissM"), result.getString("emailM"), result.getString("PasswordM"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();
 		}
 		return membre;
+	}
+	
+	public boolean findByEmailPassword(String email, String password){
+		boolean existe = false;
+		Membre membre = new Membre(1, null, null, null, email, password);
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Membre WHERE EmailM = " + "\"" + email + "\" AND PasswordM = " + "\"" + password + "\"");
+			if(result.first())
+			{
+				membre = new Membre(1, result.getString("nomM"), result.getString("prenomM"), result.getString("dateNaissM"), email, password);
+				existe = true;
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return existe;
 	}
 }

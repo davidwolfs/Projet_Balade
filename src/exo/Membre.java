@@ -28,6 +28,11 @@ public class Membre extends Personne
 		this(iD, nom, prenom, dateNaiss, email, password, initSolde);
 		
 	}
+	
+	public Membre() 
+	{
+		
+	}
 
 	
 	public double getSolde() {
@@ -45,4 +50,11 @@ public class Membre extends Personne
 	public void setListCategorie(List<Categorie> listCategorie) {
 		this.listCategorie = listCategorie;
 	}
+
+	@Override
+	public String toString() {
+		return "Membre [solde=" + solde + ", listCategorie=" + listCategorie + "]";
+	}
+	
+	
 }

@@ -1,8 +1,12 @@
 package GUI;
 
 import javax.swing.*;
+
+import DAO.MembreDAO;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
 import java.util.Arrays;
 
 /* PasswordDemo.java requires no other files. */
@@ -11,7 +15,7 @@ public class Connexion extends JPanel implements ActionListener
 {
 	private static String Connexion = "Connexion";
 	private static String CreateUser = "Créer un compte";
-
+	private Connection connect;
 	private JFrame controllingFrame; // needed for dialogs
 	private JLabel labelUser;
 	private JLabel labelPassword;
@@ -21,7 +25,8 @@ public class Connexion extends JPanel implements ActionListener
 	private JButton createUserButton;
 	private JPanel p;
 
-	public Connexion(JFrame f) {
+	public Connexion(JFrame f, Connection connect) {
+		this.connect = connect;
 		controllingFrame = f;
 		labelUser = new JLabel("User : ");
 		labelPassword = new JLabel("Password : ");
@@ -122,7 +127,7 @@ public class Connexion extends JPanel implements ActionListener
 	 * Create the GUI and show it. For thread safety, this method should be invoked
 	 * from the event dispatch thread.
 	 */
-	static void createAndShowGUI() {
+	/*static void createAndShowGUI() {
 		// Create and set up the window.
 		JFrame frame = new JFrame("PasswordDemo");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -143,12 +148,12 @@ public class Connexion extends JPanel implements ActionListener
 		// Display the window.
 		frame.pack();
 		frame.setVisible(true);
-	}
+	}*/
 	
 	private class ConnexionButtonListener implements ActionListener
 	{
 		private JFrame f;
-
+		
 		public ConnexionButtonListener(JFrame f)
 		{
 			this.f = f;
@@ -156,9 +161,9 @@ public class Connexion extends JPanel implements ActionListener
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			MembreDAO membreDAO	= new MembreDAO(connect);
 			
-			
-			if(userField.getText().equals("david.wolfs@condorcet.be") && passwordField.getText().equals("test"))
+			if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
 			{
 				Container cp = f.getContentPane();
 				cp.removeAll();
@@ -176,6 +181,26 @@ public class Connexion extends JPanel implements ActionListener
 				f.pack();
 				System.out.println("OK");
 			}
+			
+			
+			/*if(userField.getText().equals("david.wolfs@condorcet.be") && passwordField.getText().equals("test"))
+			{
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				//f.removeAll();
+				Main.showDashboard();
+				System.out.println("LOGIN");
+				/*f.revalidate();*/
+				//f.getLayout().removeLayoutComponent(f);
+			/*}
+			else 
+			{
+				JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
+				p.add(msgErreur);
+				f.add(p);
+				f.pack();
+				System.out.println("OK");
+			}*/
 			
 		}
 	}

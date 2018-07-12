@@ -22,7 +22,7 @@ public class Main {
 	
 	public static void creerConnexion()
 	{
-		Connexion connexion = new Connexion(frame);
+		Connexion connexion = new Connexion(frame, connect);
 		frame.setVisible(true);
 	}
 	
