@@ -80,9 +80,15 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
+	public static void AjoutVehicule()
+	{
+		AjouterVehicule ajouterBalade = new AjouterVehicule(frame, connect);
+		frame.setVisible(true);
+	}
+	
 	/*public static void showMenuRemboursement()
 	{
-		MenuRemboursement = new MenuRemboursement(frame, connect);
+		MenuRemboursement = new MenuRemboursement(frame, connect);membre@membre.com	
 		frame.setVisible(true);
 	}
 	
