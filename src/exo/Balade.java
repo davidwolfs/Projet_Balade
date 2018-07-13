@@ -77,4 +77,12 @@ public class Balade {
 	{
 		listVehicule.add(vehicule);
 	}
+
+	@Override
+	public String toString() {
+		return "Balade [IDB=" + IDB + ", listVehicule=" + listVehicule + ", lieuDepart=" + lieuDepart + ", dateDepart="
+				+ dateDepart + ", forfait=" + forfait + ", libelle=" + libelle + "]";
+	}
+	
+	
 }

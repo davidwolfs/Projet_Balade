@@ -5,25 +5,23 @@ import java.util.List;
 
 public class Vehicule {
 	private int iDV;
-	private String chauffeur;
 	private int nombrePlace;
 	private String immatriculation;
 	private int nombrePlaceVelo;
 	private List<Membre> listMembre = new ArrayList<>();
 
-	public Vehicule(int iDV, String chauffeur, int nombrePlace, String immatriculation,
+	public Vehicule(int iDV, int nombrePlace, String immatriculation,
 			int nombrePlaceVelo, List<Membre> listMembre) {
 		this.iDV = iDV;
-		this.chauffeur = chauffeur;
 		this.nombrePlace = nombrePlace;
 		this.immatriculation = immatriculation;
 		this.nombrePlaceVelo = nombrePlaceVelo;
 		this.listMembre = listMembre;
 	}
 	
-	public Vehicule(int iDV, String chauffeur, int nombrePlace, String immatriculation,
+	public Vehicule(int iDV, int nombrePlace, String immatriculation,
 			int nombrePlaceVelo) {
-		this(iDV, chauffeur, nombrePlace, immatriculation, nombrePlaceVelo, new ArrayList<Membre>());
+		this(iDV, nombrePlace, immatriculation, nombrePlaceVelo, new ArrayList<Membre>());
 	}
 	
 	public int getIDV() {
@@ -32,14 +30,6 @@ public class Vehicule {
 
 	public void setIDV(int iDV) {
 		this.iDV = iDV;
-	}
-
-	public String getChauffeur() {
-		return chauffeur;
-	}
-
-	public void setChauffeur(String chauffeur) {
-		this.chauffeur = chauffeur;
 	}
 
 	public int getNombrePlace() {
@@ -76,9 +66,10 @@ public class Vehicule {
 
 	@Override
 	public String toString() {
-		return "Vehicule [iDV=" + iDV + ", chauffeur=" + chauffeur + ", nombrePlace=" + nombrePlace
-				+ ", immatriculation=" + immatriculation + ", nombrePlaceVelo=" + nombrePlaceVelo + ", listMembre="
-				+ listMembre + "]";
+		return "Vehicule [iDV=" + iDV + ", nombrePlace=" + nombrePlace + ", immatriculation=" + immatriculation
+				+ ", nombrePlaceVelo=" + nombrePlaceVelo + ", listMembre=" + listMembre + "]";
 	}
+
+	
 	
 }
