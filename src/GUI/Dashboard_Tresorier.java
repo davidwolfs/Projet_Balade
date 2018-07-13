@@ -37,7 +37,7 @@ public class Dashboard_Tresorier implements ActionListener
 	public Dashboard_Tresorier(JFrame f, Connection connect) {
 		this.connect = connect;
 		controllingFrame = f;
-		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : ");
+		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : Trésorier");
 		
 		BaladeButton = new JButton("Balade");
 		RemboursementeButton = new JButton("Remboursement");

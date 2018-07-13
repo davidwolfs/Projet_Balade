@@ -37,7 +37,7 @@ public class Dashboard_Membre implements ActionListener
 	public Dashboard_Membre(JFrame f, Connection connect) {
 		this.connect = connect;
 		controllingFrame = f;
-		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : ");
+		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : Membre");
 		
 		BaladeButton = new JButton("Balade");
 		RemboursementeButton = new JButton("Remboursement");
@@ -112,7 +112,7 @@ public class Dashboard_Membre implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuRemboursement();
+			//Main.showMenuRemboursement();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

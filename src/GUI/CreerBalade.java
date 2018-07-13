@@ -1,5 +1,6 @@
-épackage GUI;
+package GUI;
 
+import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,6 +41,7 @@ public class CreerBalade implements ActionListener
 	private JTextField forfaitField;
 	private JTextField libelleField;
 	private JButton createBaladeButton;
+	private JButton retourButton;
 	private JPanel p;
 	
 
@@ -66,6 +68,7 @@ public class CreerBalade implements ActionListener
 		libelleField = new JTextField(15);
 		
 		createBaladeButton = new JButton("Créer");
+		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(7, 2));
 		
 		p.add(libelle);
@@ -81,9 +84,10 @@ public class CreerBalade implements ActionListener
 		p.add(labelListeVehiculeAddedToBalade);
 		p.add(listeVehiculeAddedToBalade);
 		p.add(createBaladeButton);
+		p.add(retourButton);
 		
 		createBaladeButton.addActionListener(this);
-		
+		retourButton.addActionListener(new retourButtonListener(f));
 		f.add(p);
 		f.pack();
 	}
@@ -91,8 +95,32 @@ public class CreerBalade implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		Balade balade = new Balade(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
+		Vehicule vehiculeSelectionne = (Vehicule) listeVehicule.getSelectedValue();
+		Vehicule vehicule = new Vehicule(vehiculeSelectionne.getIDV(), vehiculeSelectionne.getChauffeur(), vehiculeSelectionne.getNombrePlace(), vehiculeSelectionne.getImmatriculation(), vehiculeSelectionne.getNombrePlaceVelo());
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
 		baladeDAO.create(balade);
+		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
+		vehiculeDAO.create(vehicule);
+	}
+	
+	private class retourButtonListener implements ActionListener
+	{
+		private JFrame f;
+
+		public retourButtonListener(JFrame f)
+		{
+			this.f = f;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Container cp = f.getContentPane();
+			cp.removeAll();
+			//f.removeAll();*/
+			Main.showMenuBalade();
+			/*f.revalidate();*/
+			//f.getLayout().removeLayoutComponent(f);
+		}
 	}
 }
 

@@ -37,7 +37,7 @@ public class Dashboard_Responsable implements ActionListener
 	public Dashboard_Responsable(JFrame f, Connection connect) {
 		this.connect = connect;
 		controllingFrame = f;
-		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : ");
+		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : Responsable");
 		
 		BaladeButton = new JButton("Balade");
 		RemboursementeButton = new JButton("Remboursement");
