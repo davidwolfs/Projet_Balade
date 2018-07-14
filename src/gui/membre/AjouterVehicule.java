@@ -99,7 +99,7 @@ public class AjouterVehicule
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showDashboard_Membre();
+			Main.showMenuBalade_Membre();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

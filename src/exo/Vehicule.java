@@ -24,6 +24,11 @@ public class Vehicule {
 		this(iDV, nombrePlace, immatriculation, nombrePlaceVelo, new ArrayList<Membre>());
 	}
 	
+	public Vehicule() 
+	{
+		
+	}
+	
 	public int getIDV() {
 		return iDV;
 	}
@@ -64,6 +69,10 @@ public class Vehicule {
 		this.listMembre = listMembre;
 	}
 
+	public void AjouterMembre(Membre membre)
+	{
+		listMembre.add(membre);
+	}
 	@Override
 	public String toString() {
 		return "Vehicule [iDV=" + iDV + ", nombrePlace=" + nombrePlace + ", immatriculation=" + immatriculation

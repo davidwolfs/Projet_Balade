@@ -97,6 +97,10 @@ public class ToDelete implements ActionListener
 			//f.getLayout().removeLayoutComponent(f);
 		}
 	}
+
+	public static void main(String[] args) {
+		frame
+	}
 }
 
 

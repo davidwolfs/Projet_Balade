@@ -1,5 +1,6 @@
 package gui.membre;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -7,11 +8,13 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -36,7 +39,7 @@ public class RejoindreBalade
 	private JButton ajoutVehiculeButton;
 	private JButton retourButton;
 	private JPanel p;
-
+	private Object baladeSelected;
 	//String listVehicules = vehicules.toString();
 	//listeVehicule = new JList(vehicules);
 
@@ -60,24 +63,47 @@ public class RejoindreBalade
 		//Vehicule vehiculeSelectionne = (Vehicule) listeVehicule.getSelectedValue();
 		//balade.AjouterVehicule(vehiculeSelectionne);
 
+	    JList jlist1 = new JList(balades);
+	    jlist1.setVisibleRowCount(4);
+	    
+	    DefaultListModel model = new DefaultListModel();
+	    model.ensureCapacity(100);
+	    for (int i = 0; i < 100; i++) {
+	        model.addElement(Integer.toString(i));
+	    }
+	    
+	    JScrollPane scrollPane1 = new JScrollPane(jlist1);
+	    f.add(scrollPane1, BorderLayout.NORTH);
+
+	    JScrollPane scrollPane2 = new JScrollPane(listeVehicule);
+		f.add(scrollPane2, BorderLayout.NORTH);
+		 
+	    jlist1.setVisibleRowCount(4);
+	    jlist1.setFixedCellHeight(12);
+	    jlist1.setFixedCellWidth(200);
+
+
+	    f.setSize(300, 350);
+	    f.setVisible(true);
+	    
 		rejoindreButton = new JButton("Rejoindre");
 		ajoutVehiculeButton = new JButton("Ajout véhicule");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(7, 2));
 
 		p.add(labelBalade);
-		p.add(listeBalade);
+		p.add(scrollPane1);
 		p.add(labelVehicule);
-		p.add(listeVehicule);
+		p.add(scrollPane2);
 		p.add(rejoindreButton);
 		p.add(ajoutVehiculeButton);
 		p.add(retourButton);
 
 
 
-		listSelectionModel  = listeBalade.getSelectionModel();
+		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
-				new SharedListSelectionHandler(listeBalade, listeVehicule));
+				new SharedListSelectionHandler(f, jlist1, listeVehicule));
 
 		rejoindreButton.addActionListener(new rejoindreButtonListener(f));
 		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f));
@@ -90,10 +116,12 @@ public class RejoindreBalade
 	{
 		private JList listeBalade;
 		private JList listeVehicule;
+		private JFrame f;
 		
-		public SharedListSelectionHandler(JList listeBalade, JList listeVehicule)
+		public SharedListSelectionHandler(JFrame f, JList jlist1, JList listeVehicule)
 		{
-			this.listeBalade = listeBalade;
+			this.f = f;
+			this.listeBalade = jlist1;
 			this.listeVehicule = listeVehicule;
 		}
 
@@ -103,34 +131,15 @@ public class RejoindreBalade
 			int index = listeBalade.getSelectedIndex();
 			System.out.println("balade :" + listeBalade.getSelectedValue());
 			System.out.println(listeBalade.getSelectedValue().getClass());
-			
+			baladeSelected = listeBalade.getSelectedValue();
 			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 			
 			listeVehicule.setListData(vehiculeDAO.listVehicule((Balade)listeBalade.getSelectedValue()).toArray());
+			
 			//listeVehicule.repaint();
 			Container container = listeVehicule.getParent();
 			container.revalidate();
 			container.repaint();
-			/*  int lastIndex = e.getLastIndex();
-        boolean isAdjusting = e.getValueIsAdjusting();
-        output.append("Event for indexes "
-                      + firstIndex + " - " + lastIndex
-                      + "; isAdjusting is " + isAdjusting
-                      + "; selected indexes:");
-
-        if (lsm.isSelectionEmpty()) {
-            output.append(" <none>");
-        } else {
-            // Find out which indexes are selected.
-            int minIndex = lsm.getMinSelectionIndex();
-            int maxIndex = lsm.getMaxSelectionIndex();
-            for (int i = minIndex; i <= maxIndex; i++) {
-                if (lsm.isSelectedIndex(i)) {
-                    output.append(" " + i);
-                }
-            }
-        }
-        output.append(newline);*/
 		}
 	}
 
@@ -146,8 +155,12 @@ public class RejoindreBalade
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// requete ajout insert into liste_balade
-
-
+			System.out.println("Balade : " + baladeSelected);
+			System.out.println("Véhicule : " + listeVehicule.getSelectedValue());
+			
+			
+			
+			
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
@@ -169,10 +182,12 @@ public class RejoindreBalade
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// requete ajout insert into liste_balade
+
+
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.AjoutVehicule();
+			Main.showDashboard_Membre();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
