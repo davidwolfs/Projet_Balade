@@ -1,9 +1,13 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import exo.Balade;
 import exo.Membre;
 import exo.Responsable;
+import exo.Vehicule;
 
 public class MembreDAO extends DAO<Membre> 
 {
@@ -69,5 +73,27 @@ public class MembreDAO extends DAO<Membre>
 			e.printStackTrace();
 		}
 		return existe;
+	}
+	
+	public List<Membre> listMembre(Vehicule vehicule)
+	{
+		List<Membre> listMembre = new ArrayList<>();
+		Membre membre = null;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Membre INNER JOIN Ligne_Balade ON Membre.IDM = Ligne_Balade.IDM WHERE IDM = " + vehicule.getIDV());
+	System.out.println("after");
+			while(result.next())
+			{
+				membre = new Membre(result.getInt("IDM"), result.getString("nomM"), result.getString("prenomM"), result.getInt("dateNaissM"), result.getInt("EmailM"), result.getInt("PasswordM"), 1, result.getString("Solde"));
+				listMembre.add(membre);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listMembre;
 	}
 }

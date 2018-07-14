@@ -158,8 +158,10 @@ public class RejoindreBalade
 			System.out.println("Balade : " + baladeSelected);
 			System.out.println("Véhicule : " + listeVehicule.getSelectedValue());
 			
+			BaladeDAO baladeDAO = new BaladeDAO(connect);
+			baladeDAO.create((Balade)baladeSelected);
 			
-			
+			System.out.println("Liste balade : " + baladeDAO.listBalade());
 			
 			Container cp = f.getContentPane();
 			cp.removeAll();

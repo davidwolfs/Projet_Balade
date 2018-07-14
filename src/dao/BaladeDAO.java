@@ -22,11 +22,11 @@ public class BaladeDAO extends DAO<Balade>
 			String query = "INSERT INTO Balade (IDB, libelleB, lieuDepart, dateDepart, forfait) VALUES ('" + obj.getIDB() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "')" + ";";
 			for(int i = 0; i < obj.getListVehicule().size() ; i++)
 			{
-				String query2 = "INSERT INTO Liste_Balade (ID, IDB, IDV, IDM) VALUES ('" + 1 + "','" + obj.getIDB() + "','" + obj.getListVehicule().get(i).getIDV() + "')" + ";"s
+				//String query2 = "INSERT INTO Liste_Balade (ID, IDB, IDV, IDM) VALUES ('" + 1 + "','" + obj.getIDB() + "','" + obj.getListVehicule().get(i).getIDV() + "','" + obj."
 			}
-			System.out.println(query2);
+			System.out.println(query);
 			statementResult = true;
-			statementResult = statement.execute(query2);
+			statementResult = statement.execute(query);
 		} catch (SQLException e) {
 			statementResult = false;
 			e.printStackTrace();
