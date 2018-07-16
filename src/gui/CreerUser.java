@@ -173,6 +173,12 @@ public class CreerUser extends JPanel implements ActionListener {
 				Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				ResponsableDAO responsableDAO = new ResponsableDAO(connect);
 				responsableDAO.create(personne);
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				Main.showDashboard_Responsable();
+				//f.removeAll();
+				f.revalidate();
+				f.repaint();
 			}
 		}
 		else if(membreRadio.isSelected())
@@ -182,6 +188,12 @@ public class CreerUser extends JPanel implements ActionListener {
 				Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				MembreDAO membreDAO = new MembreDAO(connect);
 				membreDAO.create(membre);
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				Main.showDashboard_Membre();
+				//f.removeAll();
+				f.revalidate();
+				f.repaint();
 			}
 		}
 		
@@ -192,6 +204,12 @@ public class CreerUser extends JPanel implements ActionListener {
 				Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				TresorierDAO tresorierDAO = new TresorierDAO(connect);
 				tresorierDAO.create(tresorier);
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				Main.showDashboard_Tresorier();
+				//f.removeAll();
+				f.revalidate();
+				f.repaint();
 			}
 		}
 		else
