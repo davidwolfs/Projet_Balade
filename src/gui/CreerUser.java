@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -132,7 +134,12 @@ public class CreerUser extends JPanel implements ActionListener {
 	
 	public boolean champsVide()
 	{
-		boolean valid = false;
+		String regex = "^(.+)@(.+)$";
+		 
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(emailField.getText());
+		System.out.println();
+		boolean valid = true;
 		if(nomField.getText().isEmpty() || prenomField.getText().isEmpty() || dateNaissField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty())
 		{
 			labelMsgErreur.setText("Veuillez remplir tous les champs.");
@@ -140,9 +147,10 @@ public class CreerUser extends JPanel implements ActionListener {
 			f.add(p4);
 			f.pack();
 			System.out.println("OK");
-			valid = true;
+			valid = false;
 		}
-		else if (emailField.getText().equals("AAA"))
+		
+		else if (!(matcher.matches()))
 		{
 			labelMsgErreur.setText("Veuillez entrer un e-mail valide.");
 			p4.add(labelMsgErreur);
@@ -154,12 +162,13 @@ public class CreerUser extends JPanel implements ActionListener {
 		return valid;
 	}
 	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		if(responsableRadio.isSelected())
 		{
-			if(!champsVide())
+			if(champsVide())
 			{
 				Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				ResponsableDAO responsableDAO = new ResponsableDAO(connect);
@@ -168,7 +177,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		}
 		else if(membreRadio.isSelected())
 		{
-			if(!champsVide())
+			if(champsVide())
 			{
 				Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				MembreDAO membreDAO = new MembreDAO(connect);
@@ -178,7 +187,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		
 		else if(tresorierRadio.isSelected())
 		{
-			if(!champsVide())
+			if(champsVide())
 			{
 				Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				TresorierDAO tresorierDAO = new TresorierDAO(connect);
