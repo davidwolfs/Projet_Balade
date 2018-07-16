@@ -35,6 +35,7 @@ public class CreerUser extends JPanel implements ActionListener {
 	private JLabel labelResponsable;
 	private JLabel labelMembre;
 	private JLabel labelTresorier;
+	private JLabel labelMsgErreur;
 	private JTextField nomField;
 	private JTextField prenomField;
 	private JTextField dateNaissField;
@@ -48,7 +49,8 @@ public class CreerUser extends JPanel implements ActionListener {
 	private JPanel p;
 	private JPanel p2;
 	private JPanel p3;
-
+	private JPanel p4;
+	
 	public CreerUser(JFrame f, Connection connect) {
 		this.connect = connect;
 		controllingFrame = f;
@@ -57,6 +59,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		labelDateNaiss = new JLabel("Date de naissance");
 		labelEmail = new JLabel("Email");
 		labelPassword = new JLabel("Password");
+		labelMsgErreur = new JLabel();
 		nomField = new JTextField(15);
 		prenomField = new JTextField(15);
 		dateNaissField = new JTextField(8);
@@ -72,7 +75,8 @@ public class CreerUser extends JPanel implements ActionListener {
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(5,2));
 		p2 = new JPanel(new GridLayout(1,3));
-		p3 = new JPanel(new GridLayout(1,2));
+		p3 = new JPanel(new GridLayout(1,1));
+		p4 = new JPanel(new GridLayout(1,2));
 		
 		p.add(labelNom);
 		p.add(nomField);
@@ -92,14 +96,17 @@ public class CreerUser extends JPanel implements ActionListener {
 		p2.add(labelTresorier);
 		p2.add(tresorierRadio);
 		
-		p3.add(createUserButton);
-		p3.add(retourButton);
+		p3.add(labelMsgErreur);
+		
+		p4.add(createUserButton);
+		p4.add(retourButton);
 
 		f.setLayout(new GridLayout(3, 1));
 		f.add(p);
 	
 		f.add(p2);
 		f.add(p3);
+		f.add(p4);
 		
 		/*responsableRadio.addActionListener(new ResponsableListener(f));
 		tresorierRadio.addActionListener(new TresorierListener(f));*/
@@ -117,24 +124,65 @@ public class CreerUser extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		if(responsableRadio.isSelected())
 		{
-			Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
-			ResponsableDAO responsableDAO = new ResponsableDAO(connect);
-			responsableDAO.create(personne);
+			if(nomField.getText().isEmpty() || prenomField.getText().isEmpty() || dateNaissField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty())
+			{
+				JLabel msgErreur = new JLabel("Veuillez remplir tous les champs.");
+				p3.add(msgErreur);
+				controllingFrame.add(p3);
+				controllingFrame.pack();
+				System.out.println("OK");
+			}
+			else
+			{
+				Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+				ResponsableDAO responsableDAO = new ResponsableDAO(connect);
+				responsableDAO.create(personne);
+			}
 		}
-		if(membreRadio.isSelected())
+		else if(membreRadio.isSelected())
 		{
-			Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
-			MembreDAO membreDAO = new MembreDAO(connect);
-			membreDAO.create(membre);
+			if(nomField.getText().isEmpty() || prenomField.getText().isEmpty() || dateNaissField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty())
+			{
+				JLabel msgErreur = new JLabel("Veuillez remplir tous les champs.");
+				p3.add(msgErreur);
+				controllingFrame.add(p3);
+				controllingFrame.pack();
+				System.out.println("OK");
+			}
+			else 
+			{
+				Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+				MembreDAO membreDAO = new MembreDAO(connect);
+				membreDAO.create(membre);
+			}
 		}
 		
-		if(tresorierRadio.isSelected())
+		else if(tresorierRadio.isSelected())
 		{
-			Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
-			TresorierDAO tresorierDAO = new TresorierDAO(connect);
-			tresorierDAO.create(tresorier);
+			if(nomField.getText().isEmpty() || prenomField.getText().isEmpty() || dateNaissField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty())
+			{
+				JLabel msgErreur = new JLabel("Veuillez remplir tous les champs.");
+				p3.add(msgErreur);
+				controllingFrame.add(p3);
+				controllingFrame.pack();
+				System.out.println("OK");
+			}
+			else 
+			{
+				Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+				TresorierDAO tresorierDAO = new TresorierDAO(connect);
+				tresorierDAO.create(tresorier);
+			}
+		}
+		else
+		{
+			JLabel msgErreur = new JLabel("Veuillez sélectionner un type de personne.");
+			p3.add(msgErreur);
+			controllingFrame.add(p3);
+			controllingFrame.pack();
 		}
 	}
 	

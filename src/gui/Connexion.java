@@ -203,8 +203,24 @@ public class Connexion extends JPanel implements ActionListener
 			
 			if(responsableRadio.isSelected())
 			{
-				if(responsableDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
+				if(userField.getText().isEmpty() || passwordField.getText().isEmpty())
 				{
+					JLabel msgErreur = new JLabel("Veuillez entrer le login et/ou le mot de passe.");
+					p3.add(msgErreur);
+					f.add(p3);
+					f.pack();
+					System.out.println("OK");
+				}
+				else if(responsableDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
+				{
+					if(userField.getText().isEmpty() || passwordField.getText().isEmpty())
+					{
+						JLabel msgErreur = new JLabel("Veuillez entrer le login et/ou le mot de passe.");
+						p3.add(msgErreur);
+						f.add(p3);
+						f.pack();
+						System.out.println("OK");
+					}
 					Container cp = f.getContentPane();
 					cp.removeAll();
 					//f.removeAll();
@@ -221,9 +237,17 @@ public class Connexion extends JPanel implements ActionListener
 					System.out.println("OK");
 				}
 			}
-			if(membreRadio.isSelected())
+			else if(membreRadio.isSelected())
 			{
-				if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
+				if(userField.getText().isEmpty() || passwordField.getText().isEmpty())
+				{
+					JLabel msgErreur = new JLabel("Veuillez entrer le login et/ou le mot de passe.");
+					p3.add(msgErreur);
+					f.add(p3);
+					f.pack();
+					System.out.println("OK");
+				}
+				else if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
 				{
 					Container cp = f.getContentPane();
 					cp.removeAll();
@@ -242,9 +266,17 @@ public class Connexion extends JPanel implements ActionListener
 				}
 			}
 			
-			if(tresorierRadio.isSelected())
+			else if(tresorierRadio.isSelected())
 			{
-				if(tresorierDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
+				if(userField.getText().isEmpty() || passwordField.getText().isEmpty())
+				{
+					JLabel msgErreur = new JLabel("Veuillez entrer le login et/ou le mot de passe.");
+					p3.add(msgErreur);
+					f.add(p3);
+					f.pack();
+					System.out.println("OK");
+				}
+				else if(tresorierDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
 				{
 					Container cp = f.getContentPane();
 					cp.removeAll();
@@ -261,6 +293,13 @@ public class Connexion extends JPanel implements ActionListener
 					f.pack();
 					System.out.println("OK");
 				}
+			}
+			else 
+			{
+				JLabel msgErreur = new JLabel("Veuillez sélectionner un type de personne.");
+				p3.add(msgErreur);
+				f.add(p3);
+				f.pack();
 			}
 			
 			/*if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))

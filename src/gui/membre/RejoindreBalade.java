@@ -161,6 +161,7 @@ public class RejoindreBalade
 			BaladeDAO baladeDAO = new BaladeDAO(connect);
 			baladeDAO.create((Balade)baladeSelected);
 			
+			
 			System.out.println("Liste balade : " + baladeDAO.listBalade());
 			
 			Container cp = f.getContentPane();
@@ -184,12 +185,12 @@ public class RejoindreBalade
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// requete ajout insert into liste_balade
-
+			
 
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showDashboard_Membre();
+			Main.AjoutVehicule();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

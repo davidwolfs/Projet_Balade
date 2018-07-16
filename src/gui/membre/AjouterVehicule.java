@@ -30,6 +30,7 @@ public class AjouterVehicule
 	private JLabel labelNombrePlaces;
 	private JLabel labelImmatriculation;
 	private JLabel labelnombrePlaceVelo;
+	private JLabel labelMsgErreur;
 	private JTextField nombrePlacesField;
 	private JTextField immatriculationField;
 	private JTextField nombrePlaceVeloField;
@@ -43,15 +44,16 @@ public class AjouterVehicule
 		this.connect = connect;
 		controllingFrame = f;
 		labelNombrePlaces = new JLabel("Nombre de places : ");
-		labelImmatriculation = new JLabel("Immatriculation ");
+		labelImmatriculation = new JLabel("Immatriculation : ");
 		labelnombrePlaceVelo = new JLabel("Nombre de places vélos : ");
+		labelMsgErreur = new JLabel();
 		nombrePlacesField = new JTextField(2);
 		immatriculationField = new JTextField(15);
 		nombrePlaceVeloField = new JTextField(2);
 		
 		ajoutButton = new JButton("Ajouter");
 		retourButton = new JButton("Retour");
-		p = new JPanel(new GridLayout(4, 2));
+		p = new JPanel(new GridLayout(5, 2));
 
 		p.add(labelNombrePlaces);
 		p.add(nombrePlacesField);
@@ -59,6 +61,7 @@ public class AjouterVehicule
 		p.add(immatriculationField);
 		p.add(labelnombrePlaceVelo);
 		p.add(nombrePlaceVeloField);
+		p.add(labelMsgErreur);
 		p.add(ajoutButton);
 		p.add(retourButton);
 
@@ -79,9 +82,16 @@ public class AjouterVehicule
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			Vehicule vehicule = new Vehicule(1, Integer.parseInt(nombrePlacesField.getText()), immatriculationField.getText(), Integer.parseInt(nombrePlaceVeloField.getText()));
-			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-			vehiculeDAO.create(vehicule);
+			if(nombrePlacesField.getText().isEmpty() || immatriculationField.getText().isEmpty() || nombrePlaceVeloField.getText().isEmpty())
+			{
+				labelMsgErreur.setText("Veuillez entrer tous les champs.");
+			}
+			else 
+			{
+				Vehicule vehicule = new Vehicule(1, Integer.parseInt(nombrePlacesField.getText()), immatriculationField.getText(), Integer.parseInt(nombrePlaceVeloField.getText()));
+				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
+				vehiculeDAO.create(vehicule);
+			}
 		}
 	}
 	

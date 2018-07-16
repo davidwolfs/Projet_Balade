@@ -86,7 +86,7 @@ public class MembreDAO extends DAO<Membre>
 	System.out.println("after");
 			while(result.next())
 			{
-				membre = new Membre(result.getInt("IDM"), result.getString("nomM"), result.getString("prenomM"), result.getInt("dateNaissM"), result.getInt("EmailM"), result.getInt("PasswordM"), 1, result.getString("Solde"));
+				membre = new Membre(result.getInt("IDM"), result.getString("nomM"), result.getString("prenomM"), result.getString("dateNaissM"), result.getString("EmailM"), result.getString("PasswordM"), result.getDouble("Solde"));
 				listMembre.add(membre);
 			}
 		}
