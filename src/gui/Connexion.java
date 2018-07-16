@@ -29,6 +29,7 @@ public class Connexion extends JPanel implements ActionListener
 	private JLabel labelResponsable;
 	private JLabel labelMembre;
 	private JLabel labelTresorier;
+	private JLabel labelMsgErreur;
 	private JRadioButton responsableRadio;
 	private JRadioButton membreRadio;
 	private JRadioButton tresorierRadio;
@@ -37,6 +38,7 @@ public class Connexion extends JPanel implements ActionListener
 	private JPanel p;
 	private JPanel p2;
 	private JPanel p3;
+	private JPanel p4;
 
 	public Connexion(JFrame f, Connection connect) {
 		this.connect = connect;
@@ -48,6 +50,7 @@ public class Connexion extends JPanel implements ActionListener
 		labelResponsable = new JLabel("Responsable");
 		labelMembre = new JLabel("Membre");
 		labelTresorier = new JLabel("Trésorier");
+		labelMsgErreur = new JLabel("Veuillez entrer tous les champs.");
 		responsableRadio = new JRadioButton();
 		membreRadio = new JRadioButton();
 		tresorierRadio = new JRadioButton();
@@ -55,9 +58,11 @@ public class Connexion extends JPanel implements ActionListener
 		connexionButton.setSize(15,15);
 		createUserButton = new JButton("Créer un compte");
 		createUserButton.setSize(15,15);
-		p = new JPanel(new GridLayout(4, 2));
+		p = new JPanel(new GridLayout(2, 2));
 		p2 = new JPanel(new GridLayout(1,3));
-		p3 = new JPanel(new GridLayout(1,2));
+		p3 = new JPanel(new GridLayout(1,1));
+		p4 = new JPanel(new GridLayout(1,2));
+		
 
 		// Use the default FlowLayout.
 
@@ -81,12 +86,14 @@ public class Connexion extends JPanel implements ActionListener
 		p2.add(membreRadio);
 		p2.add(labelTresorier);
 		p2.add(tresorierRadio);
-		p3.add(connexionButton);
-		p3.add(createUserButton);
-		f.setLayout(new GridLayout(3, 1));
+		//p3.add(labelMsgErreur);
+		p4.add(connexionButton);
+		p4.add(createUserButton);
+		f.setLayout(new GridLayout(4, 2));
 		f.add(p);
 		f.add(p2);
-		f.add(p3);
+		//f.add(p3);
+		f.add(p4);
 		f.pack();
 		
 		ButtonGroup personneRadio = new ButtonGroup();
@@ -109,7 +116,7 @@ public class Connexion extends JPanel implements ActionListener
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		String cmd = e.getActionCommand();
+		/*String cmd = e.getActionCommand();
 
 		if (Connexion.equals(cmd)) { // Process the password.
 			char[] input = passwordField.getPassword();
@@ -131,14 +138,14 @@ public class Connexion extends JPanel implements ActionListener
 							+ "source code for the string \"correctPassword\".\n"
 							+ "Or look at the section How to Use Password Fields in\n"
 							+ "the components section of The Java Tutorial.");
-		}
+		}*/
 	}
 
 	/**
 	 * Checks the passed-in array against the correct password. After this method
 	 * returns, you should invoke eraseArray on the passed-in array.
 	 */
-	private static boolean isPasswordCorrect(char[] input) {
+	/*private static boolean isPasswordCorrect(char[] input) {
 		boolean isCorrect = true;
 		char[] correctPassword = { 'b', 'u', 'g', 'a', 'b', 'o', 'o' };
 
@@ -157,7 +164,7 @@ public class Connexion extends JPanel implements ActionListener
 	// Must be called from the event dispatch thread.
 	protected void resetFocus() {
 		passwordField.requestFocusInWindow();
-	}
+	}*/
 
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be invoked
@@ -195,6 +202,41 @@ public class Connexion extends JPanel implements ActionListener
 			this.f = f;
 		}
 		
+		
+		public void choixTypePersonne()
+		{
+			labelMsgErreur.setText("Veuillez sélectionner un type de personne.");
+			p3.add(labelMsgErreur);
+			f.add(p3);
+			f.pack();
+		}
+		
+		public boolean champsVide()
+		{
+			boolean vide = false;
+			if(userField.getText().isEmpty() || passwordField.getText().isEmpty())
+			{
+				labelMsgErreur.setText("Veuillez remplir tous les champs.");
+				p3.add(labelMsgErreur);
+				f.add(p3);
+				f.pack();
+				System.out.println("OK");
+				vide = true;
+			}
+			return vide;
+		}
+		
+		public void loginpasswordIncorrect()
+		{
+			labelMsgErreur.setText("Login et/ou mot de passe incorrect.");
+			p3.add(labelMsgErreur);
+			f.add(p3);
+			f.pack();
+			System.out.println("OK");
+		}
+		
+		
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			MembreDAO membreDAO	= new MembreDAO(connect);
@@ -203,143 +245,57 @@ public class Connexion extends JPanel implements ActionListener
 			
 			if(responsableRadio.isSelected())
 			{
-				if(userField.getText().isEmpty() || passwordField.getText().isEmpty())
+				if(!champsVide())
 				{
-					JLabel msgErreur = new JLabel("Veuillez entrer le login et/ou le mot de passe.");
-					p3.add(msgErreur);
-					f.add(p3);
-					f.pack();
-					System.out.println("OK");
-				}
-				else if(responsableDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
-				{
-					if(userField.getText().isEmpty() || passwordField.getText().isEmpty())
+					if(responsableDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
 					{
-						JLabel msgErreur = new JLabel("Veuillez entrer le login et/ou le mot de passe.");
-						p3.add(msgErreur);
-						f.add(p3);
-						f.pack();
-						System.out.println("OK");
+						Container cp = f.getContentPane();
+						cp.removeAll();
+						Main.showDashboard_Responsable();
 					}
-					Container cp = f.getContentPane();
-					cp.removeAll();
-					//f.removeAll();
-					Main.showDashboard_Responsable();
-					/*f.revalidate();*/
-					//f.getLayout().removeLayoutComponent(f);
-				}
-				else 
-				{
-					JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
-					p3.add(msgErreur);
-					f.add(p3);
-					f.pack();
-					System.out.println("OK");
+					else
+					{
+						loginpasswordIncorrect();
+					}
 				}
 			}
 			else if(membreRadio.isSelected())
 			{
-				if(userField.getText().isEmpty() || passwordField.getText().isEmpty())
+				if(!champsVide())
 				{
-					JLabel msgErreur = new JLabel("Veuillez entrer le login et/ou le mot de passe.");
-					p3.add(msgErreur);
-					f.add(p3);
-					f.pack();
-					System.out.println("OK");
-				}
-				else if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
-				{
-					Container cp = f.getContentPane();
-					cp.removeAll();
-					//f.removeAll();
-					Main.showDashboard_Membre();
-					/*f.revalidate();*/
-					//f.getLayout().removeLayoutComponent(f);
-				}
-				else 
-				{
-					JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
-					p3.add(msgErreur);
-					f.add(p3);
-					f.pack();
-					System.out.println("OK");
+					if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
+					{
+						Container cp = f.getContentPane();
+						cp.removeAll();
+						Main.showDashboard_Membre();
+					}
+					else 
+					{
+						loginpasswordIncorrect();
+					}
 				}
 			}
 			
 			else if(tresorierRadio.isSelected())
 			{
-				if(userField.getText().isEmpty() || passwordField.getText().isEmpty())
+				if(!champsVide())
 				{
-					JLabel msgErreur = new JLabel("Veuillez entrer le login et/ou le mot de passe.");
-					p3.add(msgErreur);
-					f.add(p3);
-					f.pack();
-					System.out.println("OK");
-				}
-				else if(tresorierDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
-				{
-					Container cp = f.getContentPane();
-					cp.removeAll();
-					//f.removeAll();
-					Main.showDashboard_Tresorier();
-					/*f.revalidate();*/
-					//f.getLayout().removeLayoutComponent(f);
-				}
-				else 
-				{
-					JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
-					p3.add(msgErreur);
-					f.add(p3);
-					f.pack();
-					System.out.println("OK");
+					if(tresorierDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
+					{
+						Container cp = f.getContentPane();
+						cp.removeAll();
+						Main.showDashboard_Tresorier();
+					}
+					else 
+					{
+						loginpasswordIncorrect();
+					}
 				}
 			}
 			else 
 			{
-				JLabel msgErreur = new JLabel("Veuillez sélectionner un type de personne.");
-				p3.add(msgErreur);
-				f.add(p3);
-				f.pack();
+				choixTypePersonne();
 			}
-			
-			/*if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
-			{
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				//f.removeAll();
-				Main.showDashboard();
-				/*f.revalidate();*/
-				//f.getLayout().removeLayoutComponent(f);
-			/*}
-			else 
-			{
-				JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
-				p3.add(msgErreur);
-				f.add(p3);
-				f.pack();
-				System.out.println("OK");
-			}*/
-			
-			
-			/*if(userField.getText().equals("david.wolfs@condorcet.be") && passwordField.getText().equals("test"))
-			{
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				//f.removeAll();
-				Main.showDashboard();
-				System.out.println("LOGIN");
-				/*f.revalidate();*/
-				//f.getLayout().removeLayoutComponent(f);
-			/*}
-			else 
-			{
-				JLabel msgErreur = new JLabel("Login et/ou mot de passe incorrect.");
-				p.add(msgErreur);
-				f.add(p);
-				f.pack();
-				System.out.println("OK");
-			}*/
-			
 		}
 	}
 	

@@ -26,7 +26,7 @@ import exo.Tresorier;
 
 public class CreerUser extends JPanel implements ActionListener {
 	private Connection connect;
-	private JFrame controllingFrame; // needed for dialogs
+	private JFrame f; // needed for dialogs
 	private JLabel labelNom;
 	private JLabel labelPrenom;
 	private JLabel labelDateNaiss;
@@ -51,9 +51,10 @@ public class CreerUser extends JPanel implements ActionListener {
 	private JPanel p3;
 	private JPanel p4;
 	
-	public CreerUser(JFrame f, Connection connect) {
+	public CreerUser(JFrame f, Connection connect) 
+	{
 		this.connect = connect;
-		controllingFrame = f;
+		this.f = f;
 		labelNom = new JLabel("Nom");
 		labelPrenom = new JLabel("Prenom");
 		labelDateNaiss = new JLabel("Date de naissance");
@@ -75,8 +76,9 @@ public class CreerUser extends JPanel implements ActionListener {
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(5,2));
 		p2 = new JPanel(new GridLayout(1,3));
-		p3 = new JPanel(new GridLayout(1,1));
-		p4 = new JPanel(new GridLayout(1,2));
+		p3 = new JPanel(new GridLayout(1,2));
+		p4 = new JPanel(new GridLayout(1,1));
+	
 		
 		p.add(labelNom);
 		p.add(nomField);
@@ -96,20 +98,18 @@ public class CreerUser extends JPanel implements ActionListener {
 		p2.add(labelTresorier);
 		p2.add(tresorierRadio);
 		
-		p3.add(labelMsgErreur);
-		
-		p4.add(createUserButton);
-		p4.add(retourButton);
+		p3.add(createUserButton);
+		p3.add(retourButton);
 
-		f.setLayout(new GridLayout(3, 1));
+		//p4.add(labelMsgErreur);
+		
+		f.setLayout(new GridLayout(4, 1));
 		f.add(p);
-	
 		f.add(p2);
 		f.add(p3);
-		f.add(p4);
+		//f.add(p4);
 		
-		/*responsableRadio.addActionListener(new ResponsableListener(f));
-		tresorierRadio.addActionListener(new TresorierListener(f));*/
+		
 		createUserButton.addActionListener(this);
 		retourButton.addActionListener(new ReturnListener(f));
 		
@@ -122,20 +122,44 @@ public class CreerUser extends JPanel implements ActionListener {
 		f.pack();
 	}
 	
+	public void choixTypePersonne()
+	{
+		labelMsgErreur.setText("Veuillez sélectionner un type de personne.");
+		p4.add(labelMsgErreur);
+		f.add(p4);
+		f.pack();
+	}
+	
+	public boolean champsVide()
+	{
+		boolean valid = false;
+		if(nomField.getText().isEmpty() || prenomField.getText().isEmpty() || dateNaissField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty())
+		{
+			labelMsgErreur.setText("Veuillez remplir tous les champs.");
+			p4.add(labelMsgErreur);
+			f.add(p4);
+			f.pack();
+			System.out.println("OK");
+			valid = true;
+		}
+		else if (emailField.getText().equals("AAA"))
+		{
+			labelMsgErreur.setText("Veuillez entrer un e-mail valide.");
+			p4.add(labelMsgErreur);
+			f.add(p4);
+			f.pack();
+			System.out.println("OK");
+			valid = false;
+		}
+		return valid;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		if(responsableRadio.isSelected())
 		{
-			if(nomField.getText().isEmpty() || prenomField.getText().isEmpty() || dateNaissField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty())
-			{
-				JLabel msgErreur = new JLabel("Veuillez remplir tous les champs.");
-				p3.add(msgErreur);
-				controllingFrame.add(p3);
-				controllingFrame.pack();
-				System.out.println("OK");
-			}
-			else
+			if(!champsVide())
 			{
 				Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				ResponsableDAO responsableDAO = new ResponsableDAO(connect);
@@ -144,15 +168,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		}
 		else if(membreRadio.isSelected())
 		{
-			if(nomField.getText().isEmpty() || prenomField.getText().isEmpty() || dateNaissField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty())
-			{
-				JLabel msgErreur = new JLabel("Veuillez remplir tous les champs.");
-				p3.add(msgErreur);
-				controllingFrame.add(p3);
-				controllingFrame.pack();
-				System.out.println("OK");
-			}
-			else 
+			if(!champsVide())
 			{
 				Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				MembreDAO membreDAO = new MembreDAO(connect);
@@ -162,15 +178,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		
 		else if(tresorierRadio.isSelected())
 		{
-			if(nomField.getText().isEmpty() || prenomField.getText().isEmpty() || dateNaissField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty())
-			{
-				JLabel msgErreur = new JLabel("Veuillez remplir tous les champs.");
-				p3.add(msgErreur);
-				controllingFrame.add(p3);
-				controllingFrame.pack();
-				System.out.println("OK");
-			}
-			else 
+			if(!champsVide())
 			{
 				Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				TresorierDAO tresorierDAO = new TresorierDAO(connect);
@@ -179,10 +187,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		}
 		else
 		{
-			JLabel msgErreur = new JLabel("Veuillez sélectionner un type de personne.");
-			p3.add(msgErreur);
-			controllingFrame.add(p3);
-			controllingFrame.pack();
+			choixTypePersonne();
 		}
 	}
 	
