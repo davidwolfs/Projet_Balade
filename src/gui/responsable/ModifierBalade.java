@@ -25,7 +25,7 @@ import exo.Responsable;
 import exo.Vehicule;
 import gui.Main;
 
-public class CreerBalade implements ActionListener 
+public class ModifierBalade implements ActionListener 
 {
 	private Connection connect;
 	private JFrame f; // needed for dialogs
@@ -37,11 +37,11 @@ public class CreerBalade implements ActionListener
 	private JTextField lieuDepartField;
 	private JTextField dateDepartField;
 	private JTextField forfaitField;
-	private JButton createBaladeButton;
+	private JButton modifierBaladeButton;
 	private JButton retourButton;
 	private	JPanel p;
 	
-	public CreerBalade(JFrame f, Connection connect) 
+	public ModifierBalade(JFrame f, Connection connect) 
 	{
 		/*VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
@@ -58,7 +58,7 @@ public class CreerBalade implements ActionListener
 		dateDepartField = new JTextField(15);
 		forfaitField = new JTextField(5);
 		
-		createBaladeButton = new JButton("Créer");
+		modifierBaladeButton = new JButton("Modifier");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(7, 2));
 		
@@ -70,10 +70,10 @@ public class CreerBalade implements ActionListener
 		p.add(dateDepartField);
 		p.add(labelForfait);
 		p.add(forfaitField);
-		p.add(createBaladeButton);
+		p.add(modifierBaladeButton);
 		p.add(retourButton);
 		
-		createBaladeButton.addActionListener(this);
+		modifierBaladeButton.addActionListener(this);
 		retourButton.addActionListener(new retourButtonListener(f));
 		f.add(p);
 		f.pack();
@@ -83,7 +83,7 @@ public class CreerBalade implements ActionListener
 	public void actionPerformed(ActionEvent arg0) {
 		Balade balade = new Balade(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
-		baladeDAO.create(balade);
+		baladeDAO.update(balade);
 		Container cp = f.getContentPane();
 		cp.removeAll();
 		Main.showMenuBalade_Responsable();

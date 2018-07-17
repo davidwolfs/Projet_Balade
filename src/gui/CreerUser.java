@@ -134,7 +134,7 @@ public class CreerUser extends JPanel implements ActionListener {
 	
 	public boolean champsVide()
 	{
-		String regex = "^(.+)@(.+)$";
+		String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 		 
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(emailField.getText());

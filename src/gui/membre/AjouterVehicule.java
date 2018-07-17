@@ -38,6 +38,7 @@ public class AjouterVehicule
 	private JButton ajoutButton;
 	private JButton retourButton;
 	private JPanel p;
+	private JPanel p2;
 	
 	public AjouterVehicule(JFrame f, Connection connect) 
 	{
@@ -54,20 +55,21 @@ public class AjouterVehicule
 		ajoutButton = new JButton("Ajouter");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(5, 2));
-
+		p2 = new JPanel(new GridLayout(5, 2));
+		
 		p.add(labelNombrePlaces);
 		p.add(nombrePlacesField);
 		p.add(labelImmatriculation);
 		p.add(immatriculationField);
 		p.add(labelnombrePlaceVelo);
 		p.add(nombrePlaceVeloField);
-		p.add(labelMsgErreur);
+		//p2.add(labelMsgErreur);
 		p.add(ajoutButton);
 		p.add(retourButton);
-
 		ajoutButton.addActionListener(new ajoutButtonListener(f));
 		retourButton.addActionListener(new retourButtonListener(f));
 		f.add(p);
+		f.add(p2);
 		f.pack();
 	}
 
@@ -85,6 +87,9 @@ public class AjouterVehicule
 			if(nombrePlacesField.getText().isEmpty() || immatriculationField.getText().isEmpty() || nombrePlaceVeloField.getText().isEmpty())
 			{
 				labelMsgErreur.setText("Veuillez entrer tous les champs.");
+				p2.add(labelMsgErreur);
+				f.add(p2);
+				f.pack();
 			}
 			else 
 			{

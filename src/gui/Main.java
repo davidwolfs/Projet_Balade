@@ -62,6 +62,12 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
+	public static void ModifierBalade()
+	{
+		ModifierBalade creerBalade = new ModifierBalade(frame, connect);
+		frame.setVisible(true);
+	}
+	
 	public static void showMenuBalade_Membre()
 	{
 		MenuBalade_Membre menuBalade = new MenuBalade_Membre(frame, connect);

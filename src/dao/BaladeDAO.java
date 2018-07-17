@@ -54,8 +54,22 @@ public class BaladeDAO extends DAO<Balade>
 	}
 	
 	public boolean update(Balade obj){
-		return false;
+		boolean statementResult;
+		try {
+			Statement statement = connect.createStatement();
+			String query = "UPDATE FROM Balade SET libelleB = " + "'" + obj.getLibelle() +  "', " + "lieuDepart = " + "'" + obj.getLieuDepart() + "', " +  "dateDepart = " + "'" + obj.getDateDepart() + "', " + "forfait = " + "'" + obj.getForfait() + "'" + " WHERE IDB = " + obj.getIDB() + ";";
+			System.out.println(query);
+			statementResult = true;
+			statementResult = statement.execute(query);
+		} catch (SQLException e) {
+			statementResult = false;
+			e.printStackTrace();
+			System.out.println(e);
+		}
+		System.out.println(statementResult);
+		return statementResult;
 	}
+	
 	public Balade find(int id){
 		Balade balade = new Balade();
 		try

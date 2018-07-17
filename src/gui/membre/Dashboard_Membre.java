@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -22,6 +23,7 @@ public class Dashboard_Membre implements ActionListener
 {
 	private Connection connect;
 	private JFrame controllingFrame; // needed for dialogs
+	JMenuBar menuBar = new JMenuBar();
 	private JLabel labelBonjour;
 	private JButton BaladeButton;
 	private JButton RemboursementeButton;
