@@ -231,6 +231,12 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 			if(baladeSelected != null)
 			{
 				baladeDAO.delete((Balade)baladeSelected);
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				//f.removeAll();*/
+				Main.showMenuBalade_Responsable();
+				/*f.revalidate();*/
+				//f.getLayout().removeLayoutComponent(f);
 				
 			}
 			else 
@@ -241,12 +247,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 				f.pack();
 			}
 
-			Container cp = f.getContentPane();
-			cp.removeAll();
-			//f.removeAll();*/
-			Main.showMenuBalade_Responsable();
-			/*f.revalidate();*/
-			//f.getLayout().removeLayoutComponent(f);
+			
 		}
 	}
 	

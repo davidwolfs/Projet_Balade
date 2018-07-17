@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,6 +35,7 @@ public class CreerBalade implements ActionListener
 	private JLabel labelLieuDepart;
 	private JLabel labelDateDepart;
 	private JLabel labelForfait;
+	private JLabel labelMsgErreur;
 	private JTextField libelleField;
 	private JTextField lieuDepartField;
 	private JTextField dateDepartField;
@@ -40,6 +43,7 @@ public class CreerBalade implements ActionListener
 	private JButton createBaladeButton;
 	private JButton retourButton;
 	private	JPanel p;
+	private	JPanel p2;
 	
 	public CreerBalade(JFrame f, Connection connect) 
 	{
@@ -52,6 +56,7 @@ public class CreerBalade implements ActionListener
 		labelLieuDepart = new JLabel("Lieu départ");
 		labelDateDepart = new JLabel("Date départ");
 		labelForfait = new JLabel("Forfait");
+		labelMsgErreur = new JLabel();
 		//String listVehicules = vehicules.toString();
 		libelleField = new JTextField(15);
 		lieuDepartField = new JTextField(15);
@@ -61,6 +66,7 @@ public class CreerBalade implements ActionListener
 		createBaladeButton = new JButton("Créer");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(7, 2));
+		p2 = new JPanel(new GridLayout(1,1));
 		
 		p.add(labelLibelle);
 		p.add(libelleField);
@@ -80,13 +86,37 @@ public class CreerBalade implements ActionListener
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		Balade balade = new Balade(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
-		BaladeDAO baladeDAO = new BaladeDAO(connect);
-		baladeDAO.create(balade);
-		Container cp = f.getContentPane();
-		cp.removeAll();
-		Main.showMenuBalade_Responsable();
+	public void actionPerformed(ActionEvent arg0) 
+	{
+		String regex = "^(-?)(0|([1-9][0-9]*))(\\.[0-9]+)?$";
+		 
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(forfaitField.getText());
+		
+		if(libelleField.getText().isEmpty() || lieuDepartField.getText().isEmpty() || dateDepartField.getText().isEmpty() || forfaitField.getText().isEmpty())
+		{
+			labelMsgErreur.setText("Veuillez remplir tous les champs.");
+			p2.add(labelMsgErreur);
+			f.add(p2);
+			f.pack();
+			System.out.println("Veuillez remplir tous les champs.");
+		}
+		else if(!(matcher.matches()))
+		{
+			labelMsgErreur.setText("Le champs forfait ne peut contenir que des chiffres");
+			p2.add(labelMsgErreur);
+			f.add(p2);
+			f.pack();
+		}
+		else
+		{
+			Balade balade = new Balade(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
+			BaladeDAO baladeDAO = new BaladeDAO(connect);
+			baladeDAO.create(balade);
+			Container cp = f.getContentPane();
+			cp.removeAll();
+			Main.showMenuBalade_Responsable();
+		}
 	}
 	
 	private class retourButtonListener implements ActionListener
