@@ -40,14 +40,16 @@ public class ModifierBalade implements ActionListener
 	private JButton modifierBaladeButton;
 	private JButton retourButton;
 	private	JPanel p;
+	private Object baladeSelected;
 	
-	public ModifierBalade(JFrame f, Connection connect) 
+	public ModifierBalade(JFrame f, Connection connect, Object baladeSelected)
 	{
 		/*VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
 		Object[] vehicules = listVehicule.toArray();*/
 		this.connect = connect;
 		this.f = f;
+		this.baladeSelected = baladeSelected;
 		labelLibelle = new JLabel("Libellé");
 		labelLieuDepart = new JLabel("Lieu départ");
 		labelDateDepart = new JLabel("Date départ");
@@ -81,8 +83,22 @@ public class ModifierBalade implements ActionListener
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		Balade balade = new Balade(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
+		System.out.println("Libelle : " + ((Balade)baladeSelected).getLibelle());
+		System.out.println("Lieu départ : " + ((Balade)baladeSelected).getLieuDepart());
+		System.out.println("Date départ : " + ((Balade)baladeSelected).getDateDepart());
+		System.out.println("Forfait : " + Double.toString(((Balade)baladeSelected).getForfait()));
+		
+		/*libelleField.setText(();
+		lieuDepartField.setText(((Balade)baladeSelected).getLieuDepart());
+		dateDepartField.setText(((Balade)baladeSelected).getDateDepart());
+		forfaitField.setText(Double.toString(((Balade)baladeSelected).getForfait()));*/
+				
+		
+				
+		//baladeSelected.(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
+		Balade balade = new Balade(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
+		baladeDAO.update((Balade)baladeSelected);
 		baladeDAO.update(balade);
 		Container cp = f.getContentPane();
 		cp.removeAll();

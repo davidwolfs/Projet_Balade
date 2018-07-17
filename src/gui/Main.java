@@ -25,6 +25,8 @@ public class Main {
 	
 	private static JFrame frame = new JFrame();
 	private static Connection connect = DriverACCESS.getInstance();
+	private Object baladeSelected;
+
 	
 	public static void creerConnexion()
 	{
@@ -62,9 +64,9 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void ModifierBalade()
+	public static void ModifierBalade(Object baladeSelected)
 	{
-		ModifierBalade creerBalade = new ModifierBalade(frame, connect);
+		ModifierBalade creerBalade = new ModifierBalade(frame, connect, baladeSelected);
 		frame.setVisible(true);
 	}
 	

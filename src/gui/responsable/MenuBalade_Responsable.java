@@ -192,18 +192,10 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 			
 			if(baladeSelected != null)
 			{
-				libelleField.setText(((Balade)baladeSelected).getLibelle());
-				lieuDepartField.setText(((Balade)baladeSelected).getLieuDepart());
-				dateDepartField.setText(((Balade)baladeSelected).getDateDepart());
-				forfaitField.setText(Double.toString(((Balade)baladeSelected).getForfait()));
-						
-						
-				//baladeSelected.(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
-				baladeDAO.update((Balade)baladeSelected);
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.ModifierBalade();
+				Main.ModifierBalade(baladeSelected);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
