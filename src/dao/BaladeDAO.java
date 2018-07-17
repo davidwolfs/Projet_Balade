@@ -54,10 +54,11 @@ public class BaladeDAO extends DAO<Balade>
 	}
 	
 	public boolean update(Balade obj){
+		System.out.println("Mon objet depuis la méthode update : " + obj);
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "UPDATE FROM Balade SET libelleB = " + "'" + obj.getLibelle() +  "', " + "lieuDepart = " + "'" + obj.getLieuDepart() + "', " +  "dateDepart = " + "'" + obj.getDateDepart() + "', " + "forfait = " + "'" + obj.getForfait() + "'" + " WHERE IDB = " + obj.getIDB() + ";";
+			String query = "UPDATE Balade SET libelleB = " + "'" + obj.getLibelle() +  "', " + "lieuDepart = " + "'" + obj.getLieuDepart() + "', " +  "dateDepart = " + "'" + obj.getDateDepart() + "', " + "forfait = " + "'" + obj.getForfait() + "'" + " WHERE IDB = " + obj.getIDB() + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);

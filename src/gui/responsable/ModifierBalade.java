@@ -60,6 +60,11 @@ public class ModifierBalade implements ActionListener
 		dateDepartField = new JTextField(15);
 		forfaitField = new JTextField(5);
 		
+		libelleField.setText(((Balade)baladeSelected).getLibelle());
+		lieuDepartField.setText(((Balade)baladeSelected).getLieuDepart());
+		dateDepartField.setText(((Balade)baladeSelected).getDateDepart());
+		forfaitField.setText(Double.toString(((Balade)baladeSelected).getForfait()));
+		
 		modifierBaladeButton = new JButton("Modifier");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(7, 2));
@@ -83,23 +88,17 @@ public class ModifierBalade implements ActionListener
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		System.out.println("Libelle : " + ((Balade)baladeSelected).getLibelle());
-		System.out.println("Lieu départ : " + ((Balade)baladeSelected).getLieuDepart());
-		System.out.println("Date départ : " + ((Balade)baladeSelected).getDateDepart());
-		System.out.println("Forfait : " + Double.toString(((Balade)baladeSelected).getForfait()));
-		
-		/*libelleField.setText(();
-		lieuDepartField.setText(((Balade)baladeSelected).getLieuDepart());
-		dateDepartField.setText(((Balade)baladeSelected).getDateDepart());
-		forfaitField.setText(Double.toString(((Balade)baladeSelected).getForfait()));*/
-				
-		
-				
 		//baladeSelected.(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
+		((Balade)baladeSelected).setLibelle(libelleField.getText());
+		((Balade)baladeSelected).setLieuDepart(lieuDepartField.getText());
+		((Balade)baladeSelected).setDateDepart(dateDepartField.getText());
+		((Balade)baladeSelected).setForfait(Double.parseDouble(forfaitField.getText()));
+		
+		System.out.println("Mon nouvel objet balade : " + ((Balade)baladeSelected));
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
-		Balade balade = new Balade(1, lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
+		 //new Balade(1, , , Double.parseDouble(forfaitField.getText()), libelleField.getText());
 		baladeDAO.update((Balade)baladeSelected);
-		baladeDAO.update(balade);
+		//baladeDAO.update(balade);
 		Container cp = f.getContentPane();
 		cp.removeAll();
 		Main.showMenuBalade_Responsable();
