@@ -15,13 +15,15 @@ import javax.swing.JTextField;
 
 import dao.BaladeDAO;
 import exo.Balade;
+import exo.Tresorier;
 import gui.Main;
 import gui.ToDelete;
 
 public class Dashboard_Tresorier implements ActionListener 
 {
 	private Connection connect;
-	private JFrame controllingFrame; // needed for dialogs
+	private JFrame f; // needed for dialogs
+	private Tresorier currentTresorier;
 	private JLabel labelBonjour;
 	private JButton BaladeButton;
 	private JButton RemboursementeButton;
@@ -36,11 +38,11 @@ public class Dashboard_Tresorier implements ActionListener
 	private JButton deconnexionButton;
 	private JPanel p;
 
-	public Dashboard_Tresorier(JFrame f, Connection connect) {
+	public Dashboard_Tresorier(JFrame f, Connection connect, Tresorier currentTresorier) {
 		this.connect = connect;
-		controllingFrame = f;
+		this.f = f;
+		this.currentTresorier = currentTresorier;
 		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : Trésorier");
-		
 		BaladeButton = new JButton("Balade");
 		RemboursementeButton = new JButton("Remboursement");
 		DisponibiliteButton = new JButton("Disponibilité");

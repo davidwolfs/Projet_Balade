@@ -83,7 +83,7 @@ public class MembreDAO extends DAO<Membre>
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Membre WHERE EmailM = " + "\"" + email + "\" AND PasswordM = " + "\"" + password + "\"");
 			if(result.first())
 			{
-				membre = new Membre(1, result.getString("nomM"), result.getString("prenomM"), result.getString("dateNaissM"), email, password);
+				membre = new Membre(result.getInt("IDM"), result.getString("nomM"), result.getString("prenomM"), result.getString("dateNaissM"), email, password);
 			}
 				
 		}

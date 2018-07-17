@@ -20,6 +20,7 @@ import driver.DriverACCESS;
 import exo.Balade;
 import exo.Membre;
 import exo.Responsable;
+import exo.Tresorier;
 
 
 public class Main {
@@ -27,7 +28,9 @@ public class Main {
 	private static JFrame frame = new JFrame();
 	private static Connection connect = DriverACCESS.getInstance();
 	private Object baladeSelected;
+	private Responsable currentResponsable;
 	private Membre currentMembre;
+	private Tresorier currentTresorier;
 	
 	public static void creerConnexion()
 	{
@@ -47,15 +50,15 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void showDashboard_Responsable()
+	public static void showDashboard_Responsable(Responsable currentResponsable)
 	{
-		Dashboard_Responsable dashboardResponsable = new Dashboard_Responsable(frame, connect);
+		Dashboard_Responsable dashboardResponsable = new Dashboard_Responsable(frame, connect, currentResponsable);
 		frame.setVisible(true);
 	}
 	
-	public static void showDashboard_Tresorier()
+	public static void showDashboard_Tresorier(Tresorier currentTresorier)
 	{
-		Dashboard_Tresorier dashboardTresorier = new Dashboard_Tresorier(frame, connect);
+		Dashboard_Tresorier dashboardTresorier = new Dashboard_Tresorier(frame, connect, currentTresorier);
 		frame.setVisible(true);
 	}
 	

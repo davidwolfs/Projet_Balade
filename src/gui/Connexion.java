@@ -254,7 +254,7 @@ public class Connexion extends JPanel implements ActionListener
 					{
 						Container cp = f.getContentPane();
 						cp.removeAll();
-						Main.showDashboard_Responsable();
+						Main.showDashboard_Responsable(currentResponsable);
 					}
 					else
 					{
@@ -288,7 +288,7 @@ public class Connexion extends JPanel implements ActionListener
 					{
 						Container cp = f.getContentPane();
 						cp.removeAll();
-						Main.showDashboard_Tresorier();
+						Main.showDashboard_Tresorier(currentTresorier);
 					}
 					else 
 					{

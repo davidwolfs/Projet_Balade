@@ -80,5 +80,23 @@ public class ResponsableDAO extends DAO<Responsable>{
 		}
 		return existe;
 	}
+	
+	public Responsable findMembreByEmailPassword(String email, String password){
+		Responsable responsable = new Responsable(1, null, null, null, email, password);
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Responsable WHERE emailR = " + "\"" + email + "\" AND passwordR = " + "\"" + password + "\"");
+			if(result.first())
+			{
+				responsable = new Responsable(result.getInt("IDR"), result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), email, password);
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return responsable;
+	}
 
 }

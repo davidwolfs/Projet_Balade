@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.Date;
 
 import exo.Membre;
+import exo.Responsable;
 import exo.Tresorier;
 
 public class TresorierDAO extends DAO<Tresorier>{
@@ -79,6 +80,24 @@ public class TresorierDAO extends DAO<Tresorier>{
 			e.printStackTrace();
 		}
 		return existe;
+	}
+	
+	public Tresorier findMembreByEmailPassword(String email, String password){
+		Tresorier tresorier = new Tresorier(1, null, null, null, email, password);
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Tresorier WHERE emailT = " + "\"" + email + "\" AND passwordT = " + "\"" + password + "\"");
+			if(result.first())
+			{
+				tresorier = new Tresorier(result.getInt("IDT"), result.getString("nomT"), result.getString("prenomT"), result.getString("dateNaissT"), email, password);
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return tresorier;
 	}
 
 }

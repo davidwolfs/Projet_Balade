@@ -15,13 +15,16 @@ import javax.swing.JTextField;
 
 import dao.BaladeDAO;
 import exo.Balade;
+import exo.Membre;
+import exo.Responsable;
 import gui.Main;
 import gui.ToDelete;
 
 public class Dashboard_Responsable implements ActionListener 
 {
 	private Connection connect;
-	private JFrame controllingFrame; // needed for dialogs
+	private JFrame f; // needed for dialogs
+	private Responsable currentResponsable;
 	private JLabel labelBonjour;
 	private JButton BaladeButton;
 	private JButton RemboursementeButton;
@@ -36,9 +39,11 @@ public class Dashboard_Responsable implements ActionListener
 	private JButton deconnexionButton;
 	private JPanel p;
 
-	public Dashboard_Responsable(JFrame f, Connection connect) {
+	public Dashboard_Responsable(JFrame f, Connection connect, Responsable currentResponsable) 
+	{
 		this.connect = connect;
-		controllingFrame = f;
+		this.f = f;
+		this.currentResponsable = currentResponsable;
 		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : Responsable");
 		
 		BaladeButton = new JButton("Balade");
