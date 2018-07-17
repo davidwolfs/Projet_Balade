@@ -16,13 +16,15 @@ import javax.swing.JTextField;
 
 import dao.BaladeDAO;
 import exo.Balade;
+import exo.Membre;
 import gui.Main;
-import gui.ToDelete;
 
 public class Dashboard_Membre implements ActionListener 
 {
 	private Connection connect;
 	private JFrame controllingFrame; // needed for dialogs
+	private Membre currentMembre;
+	
 	JMenuBar menuBar = new JMenuBar();
 	private JLabel labelBonjour;
 	private JButton BaladeButton;
@@ -38,10 +40,11 @@ public class Dashboard_Membre implements ActionListener
 	private JButton deconnexionButton;
 	private JPanel p;
 
-	public Dashboard_Membre(JFrame f, Connection connect) {
+	public Dashboard_Membre(JFrame f, Connection connect, Membre currentMembre) {
 		this.connect = connect;
 		controllingFrame = f;
-		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : Membre");
+		this.currentMembre = currentMembre;
+		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : " + currentMembre.getNom());
 		
 		BaladeButton = new JButton("Balade");
 		RemboursementeButton = new JButton("Remboursement");
@@ -72,10 +75,10 @@ public class Dashboard_Membre implements ActionListener
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		JFrame frame = new JFrame();
+		/*JFrame frame = new JFrame();
 		ToDelete creerBalade = new ToDelete(frame, connect);
 		frame.setVisible(true);
-		System.out.println(connect);
+		System.out.println(connect);*/
 		
 		/*Balade balade = new Balade(1, listVehicule.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
@@ -96,7 +99,7 @@ public class Dashboard_Membre implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuBalade_Membre();
+			Main.showMenuBalade_Membre(currentMembre);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

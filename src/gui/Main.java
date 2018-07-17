@@ -18,6 +18,7 @@ import dao.DAO;
 import dao.ResponsableDAO;
 import driver.DriverACCESS;
 import exo.Balade;
+import exo.Membre;
 import exo.Responsable;
 
 
@@ -26,7 +27,7 @@ public class Main {
 	private static JFrame frame = new JFrame();
 	private static Connection connect = DriverACCESS.getInstance();
 	private Object baladeSelected;
-
+	private Membre currentMembre;
 	
 	public static void creerConnexion()
 	{
@@ -40,9 +41,9 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void showDashboard_Membre()
+	public static void showDashboard_Membre(Membre currentMembre)
 	{
-		Dashboard_Membre dashboardMembre = new Dashboard_Membre(frame, connect);
+		Dashboard_Membre dashboardMembre = new Dashboard_Membre(frame, connect, currentMembre);
 		frame.setVisible(true);
 	}
 	
@@ -70,9 +71,9 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void showMenuBalade_Membre()
+	public static void showMenuBalade_Membre(Membre currentMembre)
 	{
-		MenuBalade_Membre menuBalade = new MenuBalade_Membre(frame, connect);
+		MenuBalade_Membre menuBalade = new MenuBalade_Membre(frame, connect, currentMembre);
 		frame.setVisible(true);
 	}
 	
@@ -82,9 +83,9 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void RejoindreBalade()
+	public static void RejoindreBalade(Membre currentMembre)
 	{
-		RejoindreBalade rejoindreBalade = new RejoindreBalade(frame, connect);
+		RejoindreBalade rejoindreBalade = new RejoindreBalade(frame, connect, currentMembre);
 		frame.setVisible(true);
 	}
 	

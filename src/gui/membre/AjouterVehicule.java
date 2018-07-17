@@ -96,6 +96,7 @@ public class AjouterVehicule
 				Vehicule vehicule = new Vehicule(1, Integer.parseInt(nombrePlacesField.getText()), immatriculationField.getText(), Integer.parseInt(nombrePlaceVeloField.getText()));
 				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 				vehiculeDAO.create(vehicule);
+				Main.RejoindreBalade();
 			}
 		}
 	}
@@ -114,7 +115,7 @@ public class AjouterVehicule
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuBalade_Membre();
+			Main.RejoindreBalade();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

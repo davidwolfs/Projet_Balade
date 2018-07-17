@@ -15,12 +15,15 @@ import javax.swing.JTextField;
 
 import dao.BaladeDAO;
 import exo.Balade;
+import exo.Membre;
 import gui.Main;
 
 public class MenuBalade_Membre extends JPanel implements ActionListener 
 {
 	private Connection connect;
 	private JFrame controllingFrame; // needed for dialogs
+	private Membre currentMembre;
+	
 	private JButton rechercherBaladeButton;
 	private JButton rejoindreBaladeButton;
 	private JButton supprimerBaladeButton;
@@ -29,10 +32,10 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 	private JButton deconnexionButton;
 	private JPanel p;
 
-	public MenuBalade_Membre(JFrame f, Connection connect) {
+	public MenuBalade_Membre(JFrame f, Connection connect, Membre currentMembre) {
 		this.connect = connect;
 		controllingFrame = f;
-		
+		this.currentMembre = currentMembre;
 		rechercherBaladeButton = new JButton("Rechercher balade");
 		rejoindreBaladeButton = new JButton("Rejoindre balade");
 		retourButton = new JButton("Retour");
@@ -50,7 +53,7 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 		f.add(p);
 	
 		rechercherBaladeButton.addActionListener(new rechercherBaladeButtonListener(f));
-		rejoindreBaladeButton.addActionListener(new rejoindreBaladeButtonListener(f));
+		rejoindreBaladeButton.addActionListener(new rejoindreBaladeButtonListener(f, currentMembre));
 		retourButton.addActionListener(new retourButtonListener(f));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
@@ -58,10 +61,10 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		JFrame frame = new JFrame();
+		/*JFrame frame = new JFrame();
 		ToDelete creerBalade = new ToDelete(frame, connect);
 		frame.setVisible(true);
-		System.out.println(connect);
+		System.out.println(connect);*/
 		
 		/*Balade balade = new Balade(1, listVehicule.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
@@ -91,10 +94,12 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 	private class rejoindreBaladeButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Membre currentMembre;
 
-		public rejoindreBaladeButtonListener(JFrame f)
+		public rejoindreBaladeButtonListener(JFrame f, Membre currentMembre)
 		{
 			this.f = f;
+			this.currentMembre = currentMembre;
 		}
 		
 		@Override
@@ -102,7 +107,7 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.RejoindreBalade();
+			Main.RejoindreBalade(currentMembre);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -122,7 +127,7 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showDashboard_Membre();
+			Main.showDashboard_Membre(currentMembre);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

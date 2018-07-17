@@ -39,6 +39,9 @@ public class Connexion extends JPanel implements ActionListener
 	private JPanel p2;
 	private JPanel p3;
 	private JPanel p4;
+	private Responsable currentResponsable;
+	private Membre currentMembre;
+	private Tresorier currentTresorier;
 
 	public Connexion(JFrame f, Connection connect) {
 		this.connect = connect;
@@ -265,9 +268,10 @@ public class Connexion extends JPanel implements ActionListener
 				{
 					if(membreDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
 					{
+						currentMembre = membreDAO.findMembreByEmailPassword(userField.getText(), passwordField.getText());
 						Container cp = f.getContentPane();
 						cp.removeAll();
-						Main.showDashboard_Membre();
+						Main.showDashboard_Membre(currentMembre);
 					}
 					else 
 					{
