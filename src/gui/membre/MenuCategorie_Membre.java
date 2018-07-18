@@ -53,7 +53,7 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 	{
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		CategorieDAO categorieDAO = new CategorieDAO(connect);
-		List<Categorie> listCategorie = categorieDAO.listCategorie();
+		List<Categorie> listCategorie = categorieDAO.listCategorie(currentMembre);
 		//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
 		Object[] categories = listCategorie.toArray();
 		//Object[] vehicules = listVehicule.toArray();
@@ -162,10 +162,13 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 		}
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) 
+		{
+			System.out.println(currentMembre.getListCategorie());
 			currentMembre.AjouterCategorie((Categorie)categorieSelected);
+			System.out.println(currentMembre.getListCategorie());
 			CategorieDAO categorieDAO = new CategorieDAO(connect);
-			categorieDAO.
+			//categorieDAO.
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/

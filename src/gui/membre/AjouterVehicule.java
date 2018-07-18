@@ -98,8 +98,20 @@ public class AjouterVehicule
 			{
 				Vehicule vehicule = new Vehicule(1, Integer.parseInt(nombrePlacesField.getText()), immatriculationField.getText(), Integer.parseInt(nombrePlaceVeloField.getText()));
 				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-				vehiculeDAO.create(vehicule);
-				Main.RejoindreBalade(currentMembre);
+				if(vehiculeDAO.alreadyExist(immatriculationField.getText()))
+				{
+					labelMsgErreur.setText("Cette immatriculation existe déjà.");
+					p2.add(labelMsgErreur);
+					f.add(p2);
+					f.pack();
+				}
+				else
+				{
+					Container cp = f.getContentPane();
+					cp.removeAll();
+					vehiculeDAO.create(vehicule);
+					Main.RejoindreBalade(currentMembre);
+				}
 			}
 		}
 	}

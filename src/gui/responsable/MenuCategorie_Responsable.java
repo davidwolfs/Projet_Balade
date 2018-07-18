@@ -25,6 +25,7 @@ import dao.BaladeDAO;
 import dao.CategorieDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Categorie;
 import exo.Responsable;
 import gui.Main;
@@ -37,46 +38,47 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	private JLabel labelMsgErreur;
 	private Responsable currentResponsable;
 	private ListSelectionModel listSelectionModel;
-	private JTextField libelleField;
-	private JTextField lieuDepartField;
-	private JTextField dateDepartField;
-	private JTextField forfaitField;
-	private JButton creerBaladeButton;
-	private JButton modifierBaladeButton;
-	private JButton supprimerBaladeButton;
+	private JButton creerCategorieButton;
+	private JButton modifierCategorieButton;
+	private JButton supprimerCategorieButton;
+	private JButton organiserCalendrierButton;
+	private JButton voirCalendrierButton;
 	private JButton retourButton;
 	private JButton deconnexionButton;
 	private JPanel p;
 	private JPanel p2;
+	private JPanel p3;
+	private JPanel p4;
 	private Object categorieSelected;
 
 	public MenuCategorie_Responsable(JFrame f, Connection connect, Responsable currentResponsable) 
 	{
-		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-		CategorieDAO categorieDAO = new CategorieDAO(connect);
-		List<Categorie> listCategorie = categorieDAO.listCategorie();
-		//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
-		Object[] categories = listCategorie.toArray();
-		//Object[] vehicules = listVehicule.toArray();
 		this.connect = connect;
 		this.f = f;
 		this.currentResponsable = currentResponsable;
+		
+		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
+		CategorieDAO categorieDAO = new CategorieDAO(connect);
+		List<Categorie> listCategorie = categorieDAO.listCategorie(currentResponsable);
+		//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
+		Object[] categories = listCategorie.toArray();
+		
 		labelCategorie = new JLabel("Catégorie : ");
 		labelMsgErreur = new JLabel();
-		libelleField = new JTextField(15);
-		lieuDepartField = new JTextField(15);
-		dateDepartField = new JTextField(15);
-		forfaitField = new JTextField(5);
-		creerBaladeButton = new JButton("Créer catégorie");
-		modifierBaladeButton = new JButton("Modifier catégorie");
-		supprimerBaladeButton = new JButton("Supprimer catégorie");
+		creerCategorieButton = new JButton("Créer catégorie");
+		modifierCategorieButton = new JButton("Modifier catégorie");
+		supprimerCategorieButton = new JButton("Supprimer catégorie");
+		organiserCalendrierButton = new JButton("Organiser et publier le calendrier");
+		voirCalendrierButton = new JButton("Voir calendrier");
 		retourButton = new JButton("Retour");
 		deconnexionButton = new JButton("Déconnexion");
 		
 		
 		//deconnexionButton = new JButton("Déconnexion");
-		p = new JPanel(new GridLayout(4, 1));
-		p2 = new JPanel(new GridLayout(1,1));
+		p = new JPanel(new GridLayout(1,1));
+		p2 = new JPanel(new GridLayout(3,1));
+		p3 = new JPanel(new GridLayout(2,1));
+		p4 = new JPanel(new GridLayout(1,1));
 		
 	    JList jlist1 = new JList(categories);
 	    jlist1.setVisibleRowCount(4);
@@ -99,20 +101,25 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	    f.setVisible(true);
 	    
 	    p.add(scrollPane1);
-		p.add(creerBaladeButton);
-		p.add(modifierBaladeButton);
-		p.add(supprimerBaladeButton);
-		p.add(retourButton);
-		p.add(deconnexionButton);
+		p2.add(creerCategorieButton);
+		p2.add(modifierCategorieButton);
+		p2.add(supprimerCategorieButton);
+		p2.add(organiserCalendrierButton);
+		p3.add(voirCalendrierButton);
+		p3.add(retourButton);
+		p3.add(deconnexionButton);
 		f.add(p);
 		f.add(p2);
+		f.add(p3);
 		
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1));
-		creerBaladeButton.addActionListener(new creerBaladeButtonListener(f));
-		modifierBaladeButton.addActionListener(new modifierBaladeButtonListener(f, jlist1));
-		supprimerBaladeButton.addActionListener(new supprimerBaladeButtonListener(f, jlist1, currentResponsable));
+		creerCategorieButton.addActionListener(new creerCategorieButtonListener(f));
+		modifierCategorieButton.addActionListener(new modifierCategorieButtonListener(f, jlist1));
+		supprimerCategorieButton.addActionListener(new supprimerCategorieButtonListener(f, jlist1, currentResponsable));
+		organiserCalendrierButton.addActionListener(new organiserCalendrierButtonListener(f, jlist1));
+		voirCalendrierButton.addActionListener(new voirCalendrierButtonListener(f, jlist1));
 		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
@@ -137,7 +144,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 			System.out.println("Categorie :" + (Categorie)listeCategorie.getSelectedValue());
 			System.out.println(listeCategorie.getSelectedValue().getClass());
 			categorieSelected = listeCategorie.getSelectedValue();
-		
+
 			
 			//listeVehicule.repaint();
 			Container container = listeCategorie.getParent();
@@ -147,21 +154,21 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		JFrame frame = new JFrame();
+		/*JFrame frame = new JFrame();
 		ToDelete creerBalade = new ToDelete(frame, connect);
 		frame.setVisible(true);
-		System.out.println(connect);
+		System.out.println(connect);*/
 		
 		/*Balade balade = new Balade(1, listVehicule.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
 		baladeDAO.create(balade);*/
 	}
 	
-	private class creerBaladeButtonListener implements ActionListener
+	private class creerCategorieButtonListener implements ActionListener
 	{
 		private JFrame f;
 
-		public creerBaladeButtonListener(JFrame f)
+		public creerCategorieButtonListener(JFrame f)
 		{
 			this.f = f;
 		}
@@ -171,18 +178,18 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.CreerBalade();
+			Main.CreerCategorie(currentResponsable);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
 	}
 	
-	private class modifierBaladeButtonListener implements ActionListener
+	private class modifierCategorieButtonListener implements ActionListener
 	{
 		private JList listeBalade;
 		private JFrame f;
 		
-		public modifierBaladeButtonListener(JFrame f, JList listeBalade)
+		public modifierCategorieButtonListener(JFrame f, JList listeBalade)
 		{
 			this.f = f;
 			this.listeBalade = listeBalade;
@@ -190,54 +197,54 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			baladeSelected = listeBalade.getSelectedValue();
-			System.out.println("Balade : " + baladeSelected);
+			categorieSelected = listeBalade.getSelectedValue();
+			System.out.println("Catégorie : " + categorieSelected);
 			
 			BaladeDAO baladeDAO = new BaladeDAO(connect);
 			
-			if(baladeSelected != null)
+			if(categorieSelected != null)
 			{
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.ModifierBalade(baladeSelected);
+				//Main.ModifierBalade(categorieSelected);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
 			else 
 			{
 				labelMsgErreur.setText("Veuillez sélectionner une balade.");
-				p2.add(labelMsgErreur);
-				f.add(p2);
+				p4.add(labelMsgErreur);
+				f.add(p4);
 				f.pack();
 			}
 		}
 	}
 	
-	private class supprimerBaladeButtonListener implements ActionListener
+	private class supprimerCategorieButtonListener implements ActionListener
 	{
-		private JList listeBalade;
+		private JList listeCategorie;
 		private JFrame f;
 		private Responsable currentResponsable;
 		
-		public supprimerBaladeButtonListener(JFrame f, JList listeBalade, Responsable currentResponsable)
+		public supprimerCategorieButtonListener(JFrame f, JList listeCategorie, Responsable currentResponsable)
 		{
 			this.f = f;
-			this.listeBalade = listeBalade;
+			this.listeCategorie = listeCategorie;
 			this.currentResponsable = currentResponsable;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			baladeSelected = listeBalade.getSelectedValue();
-			System.out.println("Balade : " + baladeSelected);
+			categorieSelected = listeCategorie.getSelectedValue();
+			System.out.println("Balade : " + categorieSelected);
 			
 			BaladeDAO baladeDAO = new BaladeDAO(connect);
 			
-			if(baladeSelected != null)
+			if(categorieSelected != null)
 			{
-				baladeDAO.delete((Balade)baladeSelected);
+				//categorieDAO.delete((Categorie)categorieSelected);
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
@@ -249,13 +256,69 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 			else 
 			{
 				labelMsgErreur.setText("Veuillez sélectionner une balade.");
-				p2.add(labelMsgErreur);
-				f.add(p2);
+				p4.add(labelMsgErreur);
+				f.add(p4);
 				f.pack();
 			}
 
 			
 		}
+	}
+	
+	private class organiserCalendrierButtonListener implements ActionListener
+	{
+		private JFrame f;
+		private JList listeCategorie;
+
+		public organiserCalendrierButtonListener(JFrame f, JList listeCategorie)
+		{
+			this.f = f;
+			this.listeCategorie = listeCategorie;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Categorie sélectionnée : " + categorieSelected);
+			
+			if(listeCategorie.isSelectionEmpty())
+			{
+				labelMsgErreur.setText("Veuillez sélectionner une catégorie.");
+				p4.add(labelMsgErreur);
+				f.add(p4);
+				f.pack();
+			}
+			else
+			{
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				//f.removeAll();*/
+				Main.OrganiserCalendrier(currentResponsable, (Categorie)categorieSelected);
+				/*f.revalidate();*/
+				//f.getLayout().removeLayoutComponent(f);
+			}
+		}
+	}
+	
+	private class voirCalendrierButtonListener implements ActionListener
+	{
+		private JFrame f;
+		private JList listeCategorie;
+
+		public voirCalendrierButtonListener(JFrame f, JList listeCategorie)
+		{
+			this.f = f;
+			this.listeCategorie = listeCategorie;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				//f.removeAll();*/
+				Main.VoirCalendrier(currentResponsable);
+				/*f.revalidate();*/
+				//f.getLayout().removeLayoutComponent(f);
+			}
 	}
 	
 	private class retourButtonListener implements ActionListener

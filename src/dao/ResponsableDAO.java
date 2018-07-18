@@ -81,7 +81,7 @@ public class ResponsableDAO extends DAO<Responsable>{
 		return existe;
 	}
 	
-	public Responsable findMembreByEmailPassword(String email, String password){
+	public Responsable findResponsableByEmailPassword(String email, String password){
 		Responsable responsable = new Responsable(1, null, null, null, email, password);
 		try{
 			ResultSet result = this.connect.createStatement(

@@ -18,11 +18,11 @@ public class CategorieDAO extends DAO<Categorie>
 		super(conn);
 	}
 	
-	public boolean create(Categorie obj){
+	public boolean create(Categorie obj, Responsable responsable, int idMembre){
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Categorie (IdCat, IDR, IDM, Supplement, TypePneu, Nom) VALUES ('" + obj.getIdCat() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "','" + 2 + "')" + ";";
+			String query = "INSERT INTO Categorie (IdCat, IDR, IDM, Supplement, TypePneu, Nom) VALUES ('" + obj.getIdCat() + "','" + responsable.getiD() + "','" + idMembre + "','" + obj.getSupplement() + "','" + obj.getTypePneu() + "','" + obj.getNom() + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -71,6 +71,28 @@ public class CategorieDAO extends DAO<Categorie>
 		return categorie;
 	}
 	
+	
+	public List<Categorie> listCategorie(Responsable responsable)
+	{
+		List<Categorie> listCategorie = new ArrayList<>();
+		Categorie categorie = null;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie WHERE IDR = " + responsable.getiD());
+	System.out.println("after");
+			while(result.next())
+			{
+				categorie = new Categorie(result.getInt("IdCat"), result.getInt("Supplement"), result.getString("TypePneu"), result.getString("nom"));
+				listCategorie.add(categorie);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listCategorie;
+	}
 	
 	public List<Categorie> listCategorie(Membre membre)
 	{

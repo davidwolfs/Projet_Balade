@@ -13,7 +13,6 @@ public class Categorie {
 		this.supplement = supplement;
 		this.typePneu = typePneu;
 		this.nom = nom;
-		this.calendrier = calendrier;
 	}
 	
 	public Categorie(int supplement, String typePneu, String nom, Calendrier calendrier) {

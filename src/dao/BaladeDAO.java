@@ -6,6 +6,7 @@ import java.util.List;
 
 import DAO.BaladeDAO;
 import exo.Balade;
+import exo.Categorie;
 import exo.Membre;
 import exo.Vehicule;
 
@@ -131,4 +132,26 @@ public class BaladeDAO extends DAO<Balade>
 		
 		return listBalade;
 	}
+	
+	/*public List<Balade> listBalade(Categorie categorie)
+	{
+		List<Balade> listBalade = new ArrayList<>();
+		Balade balade = null;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Balade INNER JOIN Calendrier ON Balade.IDB = Calendrier.IDB INNER JOIN Categorie ON Calendrier.IdCat = Categorie.IdCat WHERE IdCat = " + categorie.getIdCat());
+	System.out.println("after");
+			while(result.next())
+			{
+				balade = new Balade(result.getInt("IDB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"), result.getString("libelleB"));
+				listBalade.add(balade);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listBalade;
+	}*/
 }

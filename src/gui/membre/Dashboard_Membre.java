@@ -44,8 +44,7 @@ public class Dashboard_Membre implements ActionListener
 		this.connect = connect;
 		this.f = f;
 		this.currentMembre = currentMembre;
-		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : " + currentMembre.getNom());
-		
+		labelBonjour = new JLabel("Bonjour " + currentMembre.getPrenom() + " " + currentMembre.getNom() + ", vous êtes connecté en tant que : Membre");
 		BaladeButton = new JButton("Balade");
 		RemboursementeButton = new JButton("Remboursement");
 		DisponibiliteButton = new JButton("Disponibilité");

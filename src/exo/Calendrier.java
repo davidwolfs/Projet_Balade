@@ -6,16 +6,24 @@ import java.util.List;
 public class Calendrier 
 {
 	private int ID;
+	private String dateCal;
 	private List<Balade> listBalade = new ArrayList<>();
 	
-	public Calendrier(List<Balade> listBalade)
+	public Calendrier(String dateCal, List<Balade> listBalade)
 	{
+		this.dateCal = dateCal;
 		this.listBalade = listBalade;
 	}
 	
-	public Calendrier()
+	public Calendrier(String dateCal)
 	{
-		
+		this.dateCal = dateCal;
+	}
+	
+	public Calendrier(int ID, String dateCal)
+	{
+		this.ID = ID;
+		this.dateCal = dateCal;
 	}
 	
 	public int getID() {
@@ -24,6 +32,14 @@ public class Calendrier
 
 	public void setID(int iD) {
 		ID = iD;
+	}
+	
+	public String getDateCal() {
+		return dateCal;
+	}
+
+	public void setDateCal(String dateCal) {
+		this.dateCal = dateCal;
 	}
 
 	public List<Balade> getListBalade() {
@@ -38,4 +54,11 @@ public class Calendrier
 	{
 		listBalade.add(balade);
 	}
+
+	@Override
+	public String toString() {
+		return "Calendrier [ID=" + ID + ", dateCal=" + dateCal + ", listBalade=" + listBalade + "]";
+	}
+	
+	
 }

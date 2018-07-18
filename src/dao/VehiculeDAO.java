@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import exo.Balade;
+import exo.Membre;
 import exo.Tresorier;
 import exo.Trialiste;
 import exo.Vehicule;
@@ -75,6 +76,27 @@ public class VehiculeDAO extends DAO<Vehicule>{
 			e.printStackTrace();
 		}
 		return vehicule;
+	}
+	
+	public boolean alreadyExist(String immatriculation)
+	{
+		boolean exist = false;
+		Vehicule vehicule = new Vehicule();
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicule WHERE Immatriculation = " + "\"" + immatriculation + "\"");
+			if(result.first())
+			{
+				vehicule = new Vehicule();
+				exist = true;
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return exist;
 	}
 	
 	public List<Vehicule> listVehicule(Balade balade)

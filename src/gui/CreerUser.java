@@ -260,10 +260,8 @@ public class CreerUser extends JPanel implements ActionListener {
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			Main.creerConnexion();
-			//f.removeAll();
 			f.revalidate();
 			f.repaint();
-			//f.getLayout().removeLayoutComponent(f);
 		}
 	}
 	

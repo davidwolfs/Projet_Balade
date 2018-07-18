@@ -98,7 +98,7 @@ public class RejoindreBalade
 		ajoutVehiculeButton = new JButton("Ajout véhicule");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(8, 2));
-		p2 = new JPanel(new GridLayout(1,2));
+		p2 = new JPanel(new GridLayout(1,1));
 		
 		p.add(labelBalade);
 		p.add(scrollPane1);
@@ -115,7 +115,7 @@ public class RejoindreBalade
 				new SharedListSelectionHandler(f, jlist1, listeVehicule));
 
 		rejoindreButton.addActionListener(new rejoindreButtonListener(f, currentMembre));
-		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, currentMembre));
+		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, currentMembre, (Balade)baladeSelected));
 		retourButton.addActionListener(new retourButtonListener(f, currentMembre));
 		f.add(p);
 		f.pack();
@@ -176,7 +176,7 @@ public class RejoindreBalade
 				f.add(p2);
 				f.pack();
 			}
-			else if(vehicule.getNombrePlace() == 0 || vehicule.getNombrePlaceVelo() == 0)
+			else if(vehicule.getNombrePlace() <= 0 || vehicule.getNombrePlaceVelo() <= 0)
 			{
 				labelMsgErreur.setText("Il n'y a plus de place disponible.");
 				p2.add(labelMsgErreur);
@@ -228,11 +228,13 @@ public class RejoindreBalade
 	{
 		private JFrame f;
 		private Membre currentMembre;
+		private Balade baladeSelected;
 
-		public ajoutVehiculeButtonListener(JFrame f, Membre currentMembre)
+		public ajoutVehiculeButtonListener(JFrame f, Membre currentMembre, Balade baladeSelected)
 		{
 			this.f = f;
 			this.currentMembre = currentMembre;
+			this.baladeSelected = baladeSelected;
 		}
 
 		@Override

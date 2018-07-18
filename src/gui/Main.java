@@ -18,6 +18,7 @@ import dao.DAO;
 import dao.ResponsableDAO;
 import driver.DriverACCESS;
 import exo.Balade;
+import exo.Categorie;
 import exo.Membre;
 import exo.Responsable;
 import exo.Tresorier;
@@ -28,6 +29,7 @@ public class Main {
 	private static JFrame frame = new JFrame();
 	private static Connection connect = DriverACCESS.getInstance();
 	private Object baladeSelected;
+	private Object categorieSelected;
 	private Responsable currentResponsable;
 	private Membre currentMembre;
 	private Tresorier currentTresorier;
@@ -74,6 +76,12 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
+	public static void CreerCategorie(Responsable currentResponsable)
+	{
+		CreerCategorie creerCategorie = new CreerCategorie(frame, connect, currentResponsable);
+		frame.setVisible(true);
+	}
+	
 	public static void showMenuBalade_Membre(Membre currentMembre)
 	{
 		MenuBalade_Membre menuBalade_Membre = new MenuBalade_Membre(frame, connect, currentMembre);
@@ -107,6 +115,18 @@ public class Main {
 	public static void AjoutVehicule(Membre currentMembre)
 	{
 		AjouterVehicule ajouterBalade = new AjouterVehicule(frame, connect, currentMembre);
+		frame.setVisible(true);
+	}
+	
+	public static void OrganiserCalendrier(Responsable currentResponsable, Categorie categorieSelected)
+	{
+		OrganiserCalendrier organiserCalendrier = new OrganiserCalendrier(frame, connect, currentResponsable, categorieSelected);
+		frame.setVisible(true);
+	}
+	
+	public static void VoirCalendrier(Responsable currentResponsable)
+	{
+		VoirCalendrier voirCalendrier = new VoirCalendrier(frame, connect, currentResponsable);
 		frame.setVisible(true);
 	}
 	

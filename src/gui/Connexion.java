@@ -252,6 +252,7 @@ public class Connexion extends JPanel implements ActionListener
 				{
 					if(responsableDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
 					{
+						currentResponsable = responsableDAO.findResponsableByEmailPassword(userField.getText(), passwordField.getText());
 						Container cp = f.getContentPane();
 						cp.removeAll();
 						Main.showDashboard_Responsable(currentResponsable);
@@ -286,6 +287,7 @@ public class Connexion extends JPanel implements ActionListener
 				{
 					if(tresorierDAO.findByEmailPassword(userField.getText(), passwordField.getText()))
 					{
+						currentTresorier = tresorierDAO.findTresorierByEmailPassword(userField.getText(), passwordField.getText());
 						Container cp = f.getContentPane();
 						cp.removeAll();
 						Main.showDashboard_Tresorier(currentTresorier);

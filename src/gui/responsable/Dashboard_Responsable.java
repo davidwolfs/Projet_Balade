@@ -18,7 +18,6 @@ import exo.Balade;
 import exo.Membre;
 import exo.Responsable;
 import gui.Main;
-import gui.ToDelete;
 
 public class Dashboard_Responsable implements ActionListener 
 {
@@ -44,7 +43,7 @@ public class Dashboard_Responsable implements ActionListener
 		this.connect = connect;
 		this.f = f;
 		this.currentResponsable = currentResponsable;
-		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : Responsable");
+		labelBonjour = new JLabel("Bonjour " + currentResponsable.getPrenom() + " " + currentResponsable.getNom() + ", vous êtes connecté en tant que : Responsable");
 		
 		BaladeButton = new JButton("Balade");
 		RemboursementeButton = new JButton("Remboursement");

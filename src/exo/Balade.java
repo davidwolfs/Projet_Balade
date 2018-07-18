@@ -21,6 +21,15 @@ public class Balade {
 		this.forfait = forfait;
 		this.libelle = libelle;
 	}
+	
+	public Balade(String lieuDepart, String dateDepart, double forfait,
+			String libelle) {
+		//this.listVehicule = listVehicule;
+		this.lieuDepart = lieuDepart;
+		this.dateDepart = dateDepart;
+		this.forfait = forfait;
+		this.libelle = libelle;
+	}
 
 	public Balade() {
 	}

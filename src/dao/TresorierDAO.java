@@ -82,7 +82,7 @@ public class TresorierDAO extends DAO<Tresorier>{
 		return existe;
 	}
 	
-	public Tresorier findMembreByEmailPassword(String email, String password){
+	public Tresorier findTresorierByEmailPassword(String email, String password){
 		Tresorier tresorier = new Tresorier(1, null, null, null, email, password);
 		try{
 			ResultSet result = this.connect.createStatement(

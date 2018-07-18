@@ -1,9 +1,14 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import dao.CalendrierDAO;
+import exo.Balade;
 import exo.Calendrier;
+import exo.Categorie;
+import exo.Membre;
 import exo.Responsable;
 
 public class CalendrierDAO extends DAO<Calendrier> 
@@ -13,11 +18,17 @@ public class CalendrierDAO extends DAO<Calendrier>
 		super(conn);
 	}
 	
-	public boolean create(Calendrier obj){
+	@Override
+	public boolean create(Calendrier obj) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public boolean create(Calendrier calendrier, Balade balade, Categorie categorie){
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Calendrier (IdCal, dateCal, IDB, Idcat) VALUES ('" + obj.getID() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "','" + 2 + "')" + ";";
+			String query = "INSERT INTO Calendrier (IdCal, dateCal, IDB, Idcat) VALUES ('" + calendrier.getID() + "','" + calendrier.getDateCal() + "','" + balade.getIDB() + "','" + categorie.getIdCat() + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -64,5 +75,27 @@ public class CalendrierDAO extends DAO<Calendrier>
 			e.printStackTrace();
 		}
 		return calendrier;
+	}
+	
+	public List<Calendrier> listCalendrier()
+	{
+		List<Calendrier> listCalendrier = new ArrayList<>();
+		Calendrier calendrier;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendrier");
+	System.out.println("after");
+			while(result.next())
+			{
+				calendrier = new Calendrier(result.getInt("IdCal"), result.getString("dateCal"));
+				listCalendrier.add(calendrier);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listCalendrier;
 	}
 }

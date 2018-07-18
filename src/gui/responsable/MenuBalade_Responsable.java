@@ -46,6 +46,8 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	private JButton deconnexionButton;
 	private JPanel p;
 	private JPanel p2;
+	private JPanel p3;
+	private JPanel p4;
 	private Object baladeSelected;
 
 	public MenuBalade_Responsable(JFrame f, Connection connect, Responsable currentResponsable) 
@@ -73,8 +75,10 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 		
 		
 		//deconnexionButton = new JButton("Déconnexion");
-		p = new JPanel(new GridLayout(4, 1));
-		p2 = new JPanel(new GridLayout(1,1));
+		p = new JPanel(new GridLayout(1, 1));
+		p2 = new JPanel(new GridLayout(3, 1));
+		p3 = new JPanel(new GridLayout(2,1));
+		p4 = new JPanel(new GridLayout(1,1));
 		
 	    JList jlist1 = new JList(balades);
 	    jlist1.setVisibleRowCount(4);
@@ -97,13 +101,14 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	    f.setVisible(true);
 	    
 	    p.add(scrollPane1);
-		p.add(creerBaladeButton);
-		p.add(modifierBaladeButton);
-		p.add(supprimerBaladeButton);
-		p.add(retourButton);
-		p.add(deconnexionButton);
+		p2.add(creerBaladeButton);
+		p2.add(modifierBaladeButton);
+		p2.add(supprimerBaladeButton);
+		p3.add(retourButton);
+		p3.add(deconnexionButton);
 		f.add(p);
 		f.add(p2);
+		f.add(p3);
 		
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
@@ -138,8 +143,6 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 			System.out.println(listeBalade.getSelectedValue().getClass());
 			baladeSelected = listeBalade.getSelectedValue();
 		
-			
-			//listeVehicule.repaint();
 			Container container = listeBalade.getParent();
 			container.revalidate();
 			container.repaint();
@@ -147,10 +150,10 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		JFrame frame = new JFrame();
+		/*JFrame frame = new JFrame();
 		ToDelete creerBalade = new ToDelete(frame, connect);
 		frame.setVisible(true);
-		System.out.println(connect);
+		System.out.println(connect);*/
 		
 		/*Balade balade = new Balade(1, listVehicule.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
@@ -171,7 +174,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.CreerBalade();
+			Main.CreerBalade(currentResponsable);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -200,15 +203,15 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.ModifierBalade(baladeSelected);
+				Main.ModifierBalade(baladeSelected, currentResponsable);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
 			else 
 			{
 				labelMsgErreur.setText("Veuillez sélectionner une balade.");
-				p2.add(labelMsgErreur);
-				f.add(p2);
+				p4.add(labelMsgErreur);
+				f.add(p4);
 				f.pack();
 			}
 		}
@@ -249,8 +252,8 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 			else 
 			{
 				labelMsgErreur.setText("Veuillez sélectionner une balade.");
-				p2.add(labelMsgErreur);
-				f.add(p2);
+				p4.add(labelMsgErreur);
+				f.add(p4);
 				f.pack();
 			}
 

@@ -18,36 +18,38 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import dao.BaladeDAO;
+import dao.CategorieDAO;
 import dao.MembreDAO;
 import dao.ResponsableDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
 import exo.Calendrier;
+import exo.Categorie;
 import exo.Membre;
 import exo.Responsable;
 import exo.Vehicule;
 import gui.Main;
 
-public class CreerBalade implements ActionListener 
+public class CreerCategorie implements ActionListener 
 {
 	private Connection connect;
 	private JFrame f; // needed for dialogs
 	private Responsable currentResponsable;
-	private JLabel labelLibelle;
-	private JLabel labelLieuDepart;
-	private JLabel labelDateDepart;
-	private JLabel labelForfait;
+	private JLabel labelSupplement;
+	private JLabel labelTypePneu;
+	private JLabel labelNom;
+	private JLabel labelMembre;
 	private JLabel labelMsgErreur;
-	private JTextField libelleField;
-	private JTextField lieuDepartField;
-	private JTextField dateDepartField;
-	private JTextField forfaitField;
+	private JTextField supplementField;
+	private JTextField typePneuField;
+	private JTextField nomField;
+	private JTextField membreField;
 	private JButton createBaladeButton;
 	private JButton retourButton;
 	private	JPanel p;
 	private	JPanel p2;
 	
-	public CreerBalade(JFrame f, Connection connect, Responsable currentResponsable) 
+	public CreerCategorie(JFrame f, Connection connect, Responsable currentResponsable) 
 	{
 		/*VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
@@ -55,30 +57,29 @@ public class CreerBalade implements ActionListener
 		this.connect = connect;
 		this.f = f;
 		this.currentResponsable = currentResponsable;
-		labelLibelle = new JLabel("Libellé");
-		labelLieuDepart = new JLabel("Lieu départ");
-		labelDateDepart = new JLabel("Date départ");
-		labelForfait = new JLabel("Forfait");
+		labelSupplement = new JLabel("Supplement");
+		labelTypePneu = new JLabel("Type Pneu");
+		labelNom = new JLabel("Nom");
+		labelMembre = new JLabel("Membre");
 		labelMsgErreur = new JLabel();
 		//String listVehicules = vehicules.toString();
-		libelleField = new JTextField(15);
-		lieuDepartField = new JTextField(15);
-		dateDepartField = new JTextField(15);
-		forfaitField = new JTextField(5);
-		
+		supplementField = new JTextField(5);
+		typePneuField = new JTextField(15);
+		nomField = new JTextField(15);
+		membreField = new JTextField(15);
 		createBaladeButton = new JButton("Créer");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(7, 2));
 		p2 = new JPanel(new GridLayout(1,1));
 		
-		p.add(labelLibelle);
-		p.add(libelleField);
-		p.add(labelLieuDepart);
-		p.add(lieuDepartField);
-		p.add(labelDateDepart);
-		p.add(dateDepartField);
-		p.add(labelForfait);
-		p.add(forfaitField);
+		p.add(labelSupplement);
+		p.add(supplementField);
+		p.add(labelTypePneu);
+		p.add(typePneuField);
+		p.add(labelNom);
+		p.add(nomField);
+		p.add(labelMembre);
+		p.add(membreField);
 		p.add(createBaladeButton);
 		p.add(retourButton);
 		
@@ -91,12 +92,8 @@ public class CreerBalade implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent arg0) 
 	{
-		String regex = "^(-?)(0|([1-9][0-9]*))(\\.[0-9]+)?$";
-		 
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(forfaitField.getText());
-		
-		if(libelleField.getText().isEmpty() || lieuDepartField.getText().isEmpty() || dateDepartField.getText().isEmpty() || forfaitField.getText().isEmpty())
+		int idMembre = Integer.parseInt(membreField.getText());
+		if(supplementField.getText().isEmpty() || typePneuField.getText().isEmpty() || nomField.getText().isEmpty() || membreField.getText().isEmpty())
 		{
 			labelMsgErreur.setText("Veuillez remplir tous les champs.");
 			p2.add(labelMsgErreur);
@@ -104,23 +101,14 @@ public class CreerBalade implements ActionListener
 			f.pack();
 			System.out.println("Veuillez remplir tous les champs.");
 		}
-		else if(!(matcher.matches()))
-		{
-			labelMsgErreur.setText("Le champs forfait ne peut contenir que des chiffres");
-			p2.add(labelMsgErreur);
-			f.add(p2);
-			f.pack();
-		}
 		else
 		{
-			Calendrier calendrier = new Calendrier();
-			Balade balade = new Balade(lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
-			BaladeDAO baladeDAO = new BaladeDAO(connect);
-			baladeDAO.create(balade);
-			calendrier.AjouterBalade(balade);
+			Categorie categorie = new Categorie(Integer.parseInt(supplementField.getText()), typePneuField.getText(), nomField.getText());
+			CategorieDAO categorieDAO = new CategorieDAO(connect);
+			categorieDAO.create(categorie, currentResponsable, idMembre);
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuBalade_Responsable(currentResponsable);
+			Main.showMenuCategorie_Responsable(currentResponsable);
 		}
 	}
 	
@@ -137,7 +125,7 @@ public class CreerBalade implements ActionListener
 		public void actionPerformed(ActionEvent e) {
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuBalade_Responsable(currentResponsable);
+			Main.showMenuCategorie_Responsable(currentResponsable);
 		}
 	}
 }
