@@ -93,6 +93,27 @@ public class MembreDAO extends DAO<Membre>
 		return membre;
 	}
 	
+	public boolean alreadyExist(String email)
+	{
+		boolean exist = false;
+		Membre membre = new Membre();
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Membre WHERE EmailM = " + "\"" + email + "\"");
+			if(result.first())
+			{
+				membre = new Membre(result.getInt("IDM"), result.getString("nomM"), result.getString("prenomM"), result.getString("dateNaissM"), email, result.getString("PasswordM"));
+				exist = true;
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return exist;
+	}
+	
 	public List<Membre> listMembre(Vehicule vehicule)
 	{
 		List<Membre> listMembre = new ArrayList<>();

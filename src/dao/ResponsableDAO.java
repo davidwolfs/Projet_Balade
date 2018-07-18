@@ -98,5 +98,25 @@ public class ResponsableDAO extends DAO<Responsable>{
 		}
 		return responsable;
 	}
-
+	
+	public boolean alreadyExist(String email)
+	{
+		boolean exist = false;
+		Responsable responsable = new Responsable();
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Responsable WHERE emailR = " + "\"" + email + "\"");
+			if(result.first())
+			{
+				responsable = new Responsable(result.getInt("IDR"), result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), email, result.getString("passwordR"));
+				exist = true;
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return exist;
+	}
 }

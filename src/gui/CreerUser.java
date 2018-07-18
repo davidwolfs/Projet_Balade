@@ -162,7 +162,6 @@ public class CreerUser extends JPanel implements ActionListener {
 		return valid;
 	}
 	
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -170,15 +169,24 @@ public class CreerUser extends JPanel implements ActionListener {
 		{
 			if(champsVide())
 			{
-				Responsable personne = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+				Responsable responsable = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				ResponsableDAO responsableDAO = new ResponsableDAO(connect);
-				responsableDAO.create(personne);
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				Main.showDashboard_Responsable();
-				//f.removeAll();
-				f.revalidate();
-				f.repaint();
+				if(responsableDAO.alreadyExist(emailField.getText()))
+				{
+					labelMsgErreur.setText("Cet adresse e-mail existe déjà.");
+					p4.add(labelMsgErreur);
+					f.add(p4);
+					f.pack();
+				}
+				else
+				{
+					responsableDAO.create(responsable);
+					Container cp = f.getContentPane();
+					cp.removeAll();
+					Main.showDashboard_Responsable(responsable);
+					f.revalidate();
+					f.repaint();
+				}
 			}
 		}
 		else if(membreRadio.isSelected())
@@ -187,13 +195,23 @@ public class CreerUser extends JPanel implements ActionListener {
 			{
 				Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				MembreDAO membreDAO = new MembreDAO(connect);
-				membreDAO.create(membre);
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				Main.showDashboard_Membre();
-				//f.removeAll();
-				f.revalidate();
-				f.repaint();
+				if(membreDAO.alreadyExist(emailField.getText()))
+				{
+					labelMsgErreur.setText("Cet adresse e-mail existe déjà.");
+					p4.add(labelMsgErreur);
+					f.add(p4);
+					f.pack();
+				}
+				else
+				{
+					membreDAO.create(membre);
+					Container cp = f.getContentPane();
+					cp.removeAll();
+					Main.showDashboard_Membre(membre);
+					//f.removeAll();
+					f.revalidate();
+					f.repaint();
+				}
 			}
 		}
 		
@@ -203,13 +221,23 @@ public class CreerUser extends JPanel implements ActionListener {
 			{
 				Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				TresorierDAO tresorierDAO = new TresorierDAO(connect);
-				tresorierDAO.create(tresorier);
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				Main.showDashboard_Tresorier();
-				//f.removeAll();
-				f.revalidate();
-				f.repaint();
+				if(tresorierDAO.alreadyExist(emailField.getText()))
+				{
+					labelMsgErreur.setText("Cet adresse e-mail existe déjà.");
+					p4.add(labelMsgErreur);
+					f.add(p4);
+					f.pack();
+				}
+				else
+				{
+					tresorierDAO.create(tresorier);
+					Container cp = f.getContentPane();
+					cp.removeAll();
+					Main.showDashboard_Tresorier(tresorier);
+					//f.removeAll();
+					f.revalidate();
+					f.repaint();
+				}
 			}
 		}
 		else

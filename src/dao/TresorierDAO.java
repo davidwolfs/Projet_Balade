@@ -99,5 +99,25 @@ public class TresorierDAO extends DAO<Tresorier>{
 		}
 		return tresorier;
 	}
-
+	
+	public boolean alreadyExist(String email)
+	{
+		boolean exist = false;
+		Tresorier tresorier = new Tresorier();
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Tresorier WHERE emailT = " + "\"" + email + "\"");
+			if(result.first())
+			{
+				tresorier = new Tresorier(result.getInt("IDT"), result.getString("nomT"), result.getString("prenomT"), result.getString("dateNaissT"), email, result.getString("passwordT"));
+				exist = true;
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return exist;
+	}
 }

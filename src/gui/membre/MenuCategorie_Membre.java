@@ -165,6 +165,7 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 		public void actionPerformed(ActionEvent e) {
 			currentMembre.AjouterCategorie((Categorie)categorieSelected);
 			CategorieDAO categorieDAO = new CategorieDAO(connect);
+			categorieDAO.
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
