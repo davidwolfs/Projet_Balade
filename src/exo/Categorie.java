@@ -7,6 +7,15 @@ public class Categorie {
 	private String nom;
 	private Calendrier calendrier;
 
+	public Categorie(int IdCat, int supplement, String typePneu, String nom) 
+	{
+		this.IdCat = IdCat;
+		this.supplement = supplement;
+		this.typePneu = typePneu;
+		this.nom = nom;
+		this.calendrier = calendrier;
+	}
+	
 	public Categorie(int supplement, String typePneu, String nom, Calendrier calendrier) {
 		this.supplement = supplement;
 		this.typePneu = typePneu;

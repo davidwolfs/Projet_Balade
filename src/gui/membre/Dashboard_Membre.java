@@ -67,7 +67,7 @@ public class Dashboard_Membre implements ActionListener
 		BaladeButton.addActionListener(new BaladeButtonListener(f));
 		RemboursementeButton.addActionListener(new RemboursementeButtonListener(f));
 		DisponibiliteButton.addActionListener(new DisponibiliteButtonListener(f));
-		CategorieButton.addActionListener(new CategorieButtonListener(f));
+		CategorieButton.addActionListener(new CategorieButtonListener(f, currentMembre));
 		PayementButton.addActionListener(new PayementButtonListener(f));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
@@ -148,10 +148,12 @@ public class Dashboard_Membre implements ActionListener
 	private class CategorieButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Membre currentMembre;
 
-		public CategorieButtonListener(JFrame f)
+		public CategorieButtonListener(JFrame f, Membre currentMembre)
 		{
 			this.f = f;
+			this.currentMembre = currentMembre;
 		}
 		
 		@Override
@@ -159,7 +161,7 @@ public class Dashboard_Membre implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			//Main.showMenuCategorie();
+			Main.showMenuCategorie_Membre(currentMembre);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

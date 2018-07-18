@@ -8,6 +8,7 @@ import dao.CategorieDAO;
 import exo.Balade;
 import exo.Calendrier;
 import exo.Categorie;
+import exo.Membre;
 import exo.Responsable;
 
 public class CategorieDAO extends DAO<Categorie> 
@@ -21,7 +22,7 @@ public class CategorieDAO extends DAO<Categorie>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Categorie (IdCat, IDR, IDMl) VALUES ('" + obj.getIdCat() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "','" + 2 + "')" + ";";
+			String query = "INSERT INTO Categorie (IdCat, IDR, IDM, Supplement, TypePneu, Nom) VALUES ('" + obj.getIdCat() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "','" + 2 + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -71,18 +72,18 @@ public class CategorieDAO extends DAO<Categorie>
 	}
 	
 	
-	public List<Categorie> listCategorie()
+	public List<Categorie> listCategorie(Membre membre)
 	{
 		List<Categorie> listCategorie = new ArrayList<>();
 		Categorie categorie = null;
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie");
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie WHERE IDM = " + membre.getiD());
 	System.out.println("after");
 			while(result.next())
 			{
-				categorie = new Categorie(result.getInt("Supplement"), result.getString("TypePneu"), result.getString("nom"));
+				categorie = new Categorie(result.getInt("IdCat"), result.getInt("Supplement"), result.getString("TypePneu"), result.getString("nom"));
 				listCategorie.add(categorie);
 			}
 		}

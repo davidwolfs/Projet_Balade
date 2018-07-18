@@ -62,9 +62,9 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void CreerBalade()
+	public static void CreerBalade(Responsable currentResponsable)
 	{
-		CreerBalade creerBalade = new CreerBalade(frame, connect);
+		CreerBalade creerBalade = new CreerBalade(frame, connect, currentResponsable);
 		frame.setVisible(true);
 	}
 	
@@ -89,6 +89,12 @@ public class Main {
 	public static void showMenuCategorie_Responsable(Responsable currentResponsable)
 	{
 		MenuCategorie_Responsable menuCategorie_Responsable = new MenuCategorie_Responsable(frame, connect, currentResponsable);
+		frame.setVisible(true);
+	}
+	
+	public static void showMenuCategorie_Membre(Membre currentMembre)
+	{
+		MenuCategorie_Membre menuCategorie_Membre = new MenuCategorie_Membre(frame, connect, currentMembre);
 		frame.setVisible(true);
 	}
 	
