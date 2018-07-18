@@ -22,16 +22,18 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import dao.BaladeDAO;
+import dao.CategorieDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Categorie;
 import exo.Responsable;
 import gui.Main;
 
-public class MenuBalade_Responsable extends JPanel implements ActionListener 
+public class MenuCategorie_Responsable extends JPanel implements ActionListener 
 {
 	private Connection connect;
 	private JFrame f; // needed for dialogs
-	private JLabel labelBalade;
+	private JLabel labelCategorie;
 	private JLabel labelMsgErreur;
 	private Responsable currentResponsable;
 	private ListSelectionModel listSelectionModel;
@@ -46,26 +48,26 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	private JButton deconnexionButton;
 	private JPanel p;
 	private JPanel p2;
-	private Object baladeSelected;
+	private Object categorieSelected;
 
-	public MenuBalade_Responsable(JFrame f, Connection connect, Responsable currentResponsable) 
+	public MenuCategorie_Responsable(JFrame f, Connection connect, Responsable currentResponsable) 
 	{
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-		BaladeDAO baladeDAO = new BaladeDAO(connect);
-		List<Balade> listBalade = baladeDAO.listBalade();
+		CategorieDAO categorieDAO = new CategorieDAO(connect);
+		List<Categorie> listCategorie = categorieDAO.listCategorie();
 		//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
-		Object[] balades = listBalade.toArray();
+		Object[] categories = listCategorie.toArray();
 		//Object[] vehicules = listVehicule.toArray();
 		this.connect = connect;
 		this.f = f;
 		this.currentResponsable = currentResponsable;
-		labelBalade = new JLabel("Balades : ");
+		labelCategorie = new JLabel("Catégorie : ");
 		labelMsgErreur = new JLabel();
 		libelleField = new JTextField(15);
 		lieuDepartField = new JTextField(15);
 		dateDepartField = new JTextField(15);
 		forfaitField = new JTextField(5);
-		creerBaladeButton = new JButton("Créer balade");
+		creerBaladeButton = new JButton("Créer catégorie");
 		modifierBaladeButton = new JButton("Modifier balade");
 		supprimerBaladeButton = new JButton("Supprimer balade");
 		retourButton = new JButton("Retour");
@@ -76,7 +78,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 		p = new JPanel(new GridLayout(4, 1));
 		p2 = new JPanel(new GridLayout(1,1));
 		
-	    JList jlist1 = new JList(balades);
+	    JList jlist1 = new JList(categories);
 	    jlist1.setVisibleRowCount(4);
 	    
 	    DefaultListModel model = new DefaultListModel();
@@ -107,7 +109,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 		
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
-				new SharedListSelectionHandler(f, jlist1, currentResponsable));
+				new SharedListSelectionHandler(f, jlist1));
 		creerBaladeButton.addActionListener(new creerBaladeButtonListener(f));
 		modifierBaladeButton.addActionListener(new modifierBaladeButtonListener(f, jlist1));
 		supprimerBaladeButton.addActionListener(new supprimerBaladeButtonListener(f, jlist1, currentResponsable));
@@ -119,28 +121,26 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	
 	private class SharedListSelectionHandler implements ListSelectionListener 
 	{
-		private JList listeBalade;
+		private JList listeCategorie;
 		private JFrame f;
-		private Responsable currentResponsable;
 		
-		public SharedListSelectionHandler(JFrame f, JList jlist1, Responsable currentResponsable)
+		public SharedListSelectionHandler(JFrame f, JList jlist1)
 		{
 			this.f = f;
-			this.listeBalade = jlist1;
-			this.currentResponsable = currentResponsable;
+			this.listeCategorie = jlist1;
 		}
 
 		public void valueChanged(ListSelectionEvent e) {
 			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 
-			int index = listeBalade.getSelectedIndex();
-			System.out.println("balade :" + listeBalade.getSelectedValue());
-			System.out.println(listeBalade.getSelectedValue().getClass());
-			baladeSelected = listeBalade.getSelectedValue();
+			int index = listeCategorie.getSelectedIndex();
+			System.out.println("Categorie :" + (Categorie)listeCategorie.getSelectedValue());
+			System.out.println(listeCategorie.getSelectedValue().getClass());
+			categorieSelected = listeCategorie.getSelectedValue();
 		
 			
 			//listeVehicule.repaint();
-			Container container = listeBalade.getParent();
+			Container container = listeCategorie.getParent();
 			container.revalidate();
 			container.repaint();
 		}

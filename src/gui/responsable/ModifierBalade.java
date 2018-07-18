@@ -31,6 +31,7 @@ public class ModifierBalade implements ActionListener
 {
 	private Connection connect;
 	private JFrame f; // needed for dialogs
+	private Responsable currentResponsable;
 	private JLabel labelLibelle;
 	private JLabel labelLieuDepart;
 	private JLabel labelDateDepart;
@@ -46,7 +47,7 @@ public class ModifierBalade implements ActionListener
 	private	JPanel p2;
 	private Object baladeSelected;
 	
-	public ModifierBalade(JFrame f, Connection connect, Object baladeSelected)
+	public ModifierBalade(JFrame f, Connection connect, Object baladeSelected, Responsable currentResponsable)
 	{
 		/*VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
@@ -54,6 +55,7 @@ public class ModifierBalade implements ActionListener
 		this.connect = connect;
 		this.f = f;
 		this.baladeSelected = baladeSelected;
+		this.currentResponsable = currentResponsable;
 		labelLibelle = new JLabel("Libellé");
 		labelLieuDepart = new JLabel("Lieu départ");
 		labelDateDepart = new JLabel("Date départ");
@@ -87,7 +89,7 @@ public class ModifierBalade implements ActionListener
 		p.add(retourButton);
 		
 		modifierBaladeButton.addActionListener(this);
-		retourButton.addActionListener(new retourButtonListener(f));
+		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
 		f.add(p);
 		f.pack();
 	}
@@ -128,24 +130,26 @@ public class ModifierBalade implements ActionListener
 			//baladeDAO.update(balade);
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuBalade_Responsable();
+			Main.showMenuBalade_Responsable(currentResponsable);
 		}
 	}
 	
 	private class retourButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Responsable currentResponsable;
 
-		public retourButtonListener(JFrame f)
+		public retourButtonListener(JFrame f, Responsable currentResponsable)
 		{
 			this.f = f;
+			this.currentResponsable = currentResponsable;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuBalade_Responsable();
+			Main.showMenuBalade_Responsable(currentResponsable);
 		}
 	}
 }

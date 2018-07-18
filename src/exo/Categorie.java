@@ -5,7 +5,15 @@ public class Categorie {
 	private int supplement;
 	private String typePneu;
 	private String nom;
+	private Calendrier calendrier;
 
+	public Categorie(int supplement, String typePneu, String nom, Calendrier calendrier) {
+		this.supplement = supplement;
+		this.typePneu = typePneu;
+		this.nom = nom;
+		this.calendrier = calendrier;
+	}
+	
 	public Categorie(int supplement, String typePneu, String nom) {
 		this.supplement = supplement;
 		this.typePneu = typePneu;
@@ -47,4 +55,21 @@ public class Categorie {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
+
+	public Calendrier getCalendrier() {
+		return calendrier;
+	}
+
+	public void setCalendrier(Calendrier calendrier) {
+		this.calendrier = calendrier;
+	}
+
+	@Override
+	public String toString() {
+		return "Categorie [IdCat=" + IdCat + ", supplement=" + supplement + ", typePneu=" + typePneu + ", nom=" + nom
+				+ ", calendrier=" + calendrier + "]";
+	}
+	
+	
+	
 }

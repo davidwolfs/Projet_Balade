@@ -42,7 +42,7 @@ public class Vehicule {
 	}
 
 	public void setNombrePlace(int nombrePlace) {
-		this.nombrePlace = nombrePlace;
+		this.nombrePlace -= nombrePlace;
 	}
 
 	public String getImmatriculation() {
@@ -58,7 +58,7 @@ public class Vehicule {
 	}
 
 	public void setNombrePlaceVelo(int nombrePlaceVelo) {
-		this.nombrePlaceVelo = nombrePlaceVelo;
+		this.nombrePlaceVelo -= nombrePlaceVelo;
 	}
 	
 	public List<Membre> getListMembre() {

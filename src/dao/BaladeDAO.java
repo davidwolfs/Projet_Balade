@@ -6,6 +6,7 @@ import java.util.List;
 
 import DAO.BaladeDAO;
 import exo.Balade;
+import exo.Membre;
 import exo.Vehicule;
 
 public class BaladeDAO extends DAO<Balade> 
@@ -21,6 +22,28 @@ public class BaladeDAO extends DAO<Balade>
 			Statement statement = connect.createStatement();
 			String query = "INSERT INTO Balade (IDB, libelleB, lieuDepart, dateDepart, forfait) VALUES ('" + obj.getIDB() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "')" + ";";
 			for(int i = 0; i < obj.getListVehicule().size() ; i++)
+			{
+				//String query2 = "INSERT INTO Ligne_Balade (ID, IDB, IDV, IDM) VALUES ('" + 1 + "','" + obj.getIDB() + "','" + obj.getListVehicule().get(i).getIDV() + "','" + obj."
+			}
+			System.out.println(query);
+			statementResult = true;
+			statementResult = statement.execute(query);
+		} catch (SQLException e) {
+			statementResult = false;
+			e.printStackTrace();
+			System.out.println(e);
+		}
+		System.out.println(statementResult);
+		return statementResult;
+	}
+	
+	public boolean create_Ligne_Balade(Balade balade, Vehicule vehicule, Membre membre)
+	{
+		boolean statementResult;
+		try {
+			Statement statement = connect.createStatement();
+			String query = "INSERT INTO Ligne_Balade (IDB, IDV, IDM) VALUES (" + balade.getIDB() + "," + vehicule.getIDV() + "," + membre.getiD() + ");";
+			for(int i = 0; i < balade.getListVehicule().size() ; i++)
 			{
 				//String query2 = "INSERT INTO Liste_Balade (ID, IDB, IDV, IDM) VALUES ('" + 1 + "','" + obj.getIDB() + "','" + obj.getListVehicule().get(i).getIDV() + "','" + obj."
 			}

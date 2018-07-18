@@ -20,13 +20,15 @@ import javax.swing.event.ListSelectionListener;
 import dao.BaladeDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Membre;
 import exo.Vehicule;
 import gui.Main;
 
 public class AjouterVehicule 
 {
 	private Connection connect;
-	private JFrame controllingFrame; // needed for dialogs
+	private JFrame f; // needed for dialogs
+	private Membre currentMembre;
 	private JLabel labelNombrePlaces;
 	private JLabel labelImmatriculation;
 	private JLabel labelnombrePlaceVelo;
@@ -40,10 +42,11 @@ public class AjouterVehicule
 	private JPanel p;
 	private JPanel p2;
 	
-	public AjouterVehicule(JFrame f, Connection connect) 
+	public AjouterVehicule(JFrame f, Connection connect, Membre currentMembre) 
 	{
 		this.connect = connect;
-		controllingFrame = f;
+		this.f = f;
+		this.currentMembre = currentMembre;
 		labelNombrePlaces = new JLabel("Nombre de places : ");
 		labelImmatriculation = new JLabel("Immatriculation : ");
 		labelnombrePlaceVelo = new JLabel("Nombre de places vélos : ");
@@ -67,7 +70,7 @@ public class AjouterVehicule
 		p.add(ajoutButton);
 		p.add(retourButton);
 		ajoutButton.addActionListener(new ajoutButtonListener(f));
-		retourButton.addActionListener(new retourButtonListener(f));
+		retourButton.addActionListener(new retourButtonListener(f, currentMembre));
 		f.add(p);
 		f.add(p2);
 		f.pack();
@@ -96,7 +99,7 @@ public class AjouterVehicule
 				Vehicule vehicule = new Vehicule(1, Integer.parseInt(nombrePlacesField.getText()), immatriculationField.getText(), Integer.parseInt(nombrePlaceVeloField.getText()));
 				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 				vehiculeDAO.create(vehicule);
-				Main.RejoindreBalade();
+				Main.RejoindreBalade(currentMembre);
 			}
 		}
 	}
@@ -104,10 +107,12 @@ public class AjouterVehicule
 	private class retourButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Membre currentMembre;
 
-		public retourButtonListener(JFrame f)
+		public retourButtonListener(JFrame f, Membre currentMembre)
 		{
 			this.f = f;
+			this.currentMembre = currentMembre;
 		}
 
 		@Override
@@ -115,7 +120,7 @@ public class AjouterVehicule
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.RejoindreBalade();
+			Main.RejoindreBalade(currentMembre);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

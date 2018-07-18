@@ -68,21 +68,27 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void ModifierBalade(Object baladeSelected)
+	public static void ModifierBalade(Object baladeSelected, Responsable currentResponsable)
 	{
-		ModifierBalade creerBalade = new ModifierBalade(frame, connect, baladeSelected);
+		ModifierBalade creerBalade = new ModifierBalade(frame, connect, baladeSelected, currentResponsable);
 		frame.setVisible(true);
 	}
 	
 	public static void showMenuBalade_Membre(Membre currentMembre)
 	{
-		MenuBalade_Membre menuBalade = new MenuBalade_Membre(frame, connect, currentMembre);
+		MenuBalade_Membre menuBalade_Membre = new MenuBalade_Membre(frame, connect, currentMembre);
 		frame.setVisible(true);
 	}
 	
-	public static void showMenuBalade_Responsable()
+	public static void showMenuBalade_Responsable(Responsable currentResponsable)
 	{
-		MenuBalade_Responsable menuBalade = new MenuBalade_Responsable(frame, connect);
+		MenuBalade_Responsable menuBalade_Responsable = new MenuBalade_Responsable(frame, connect, currentResponsable);
+		frame.setVisible(true);
+	}
+	
+	public static void showMenuCategorie_Responsable(Responsable currentResponsable)
+	{
+		MenuCategorie_Responsable menuCategorie_Responsable = new MenuCategorie_Responsable(frame, connect, currentResponsable);
 		frame.setVisible(true);
 	}
 	
@@ -92,9 +98,9 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void AjoutVehicule()
+	public static void AjoutVehicule(Membre currentMembre)
 	{
-		AjouterVehicule ajouterBalade = new AjouterVehicule(frame, connect);
+		AjouterVehicule ajouterBalade = new AjouterVehicule(frame, connect, currentMembre);
 		frame.setVisible(true);
 	}
 	

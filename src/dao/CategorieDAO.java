@@ -1,8 +1,12 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import dao.CategorieDAO;
+import exo.Balade;
+import exo.Calendrier;
 import exo.Categorie;
 import exo.Responsable;
 
@@ -64,5 +68,28 @@ public class CategorieDAO extends DAO<Categorie>
 			e.printStackTrace();
 		}
 		return categorie;
+	}
+	
+	
+	public List<Categorie> listCategorie()
+	{
+		List<Categorie> listCategorie = new ArrayList<>();
+		Categorie categorie = null;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie");
+	System.out.println("after");
+			while(result.next())
+			{
+				categorie = new Categorie(result.getInt("Supplement"), result.getString("TypePneu"), result.getString("nom"));
+				listCategorie.add(categorie);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listCategorie;
 	}
 }

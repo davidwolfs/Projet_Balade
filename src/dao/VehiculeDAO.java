@@ -45,8 +45,20 @@ public class VehiculeDAO extends DAO<Vehicule>{
 
 	@Override
 	public boolean update(Vehicule obj) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean statementResult;
+		try {
+			Statement statement = connect.createStatement();
+			String query = "UPDATE Vehicule SET nombrePlace = " + obj.getNombrePlace() + "-1" + ", " + "nombrePlaceVelo = " + obj.getNombrePlaceVelo() + "-1" + " WHERE IDV = " + obj.getIDV() + ";";
+			System.out.println(query);
+			statementResult = true;
+			statementResult = statement.execute(query);
+		} catch (SQLException e) {
+			statementResult = false;
+			e.printStackTrace();
+			System.out.println(e);
+		}
+		System.out.println(statementResult);
+		return statementResult;
 	}
 
 	@Override

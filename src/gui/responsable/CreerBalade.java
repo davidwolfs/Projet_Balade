@@ -31,6 +31,7 @@ public class CreerBalade implements ActionListener
 {
 	private Connection connect;
 	private JFrame f; // needed for dialogs
+	private Responsable currentResponsable;
 	private JLabel labelLibelle;
 	private JLabel labelLieuDepart;
 	private JLabel labelDateDepart;
@@ -45,13 +46,14 @@ public class CreerBalade implements ActionListener
 	private	JPanel p;
 	private	JPanel p2;
 	
-	public CreerBalade(JFrame f, Connection connect) 
+	public CreerBalade(JFrame f, Connection connect, Responsable currentResponsable) 
 	{
 		/*VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
 		Object[] vehicules = listVehicule.toArray();*/
 		this.connect = connect;
 		this.f = f;
+		this.currentResponsable = currentResponsable;
 		labelLibelle = new JLabel("Libellé");
 		labelLieuDepart = new JLabel("Lieu départ");
 		labelDateDepart = new JLabel("Date départ");
@@ -115,7 +117,7 @@ public class CreerBalade implements ActionListener
 			baladeDAO.create(balade);
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuBalade_Responsable();
+			Main.showMenuBalade_Responsable(currentResponsable);
 		}
 	}
 	
@@ -132,7 +134,7 @@ public class CreerBalade implements ActionListener
 		public void actionPerformed(ActionEvent e) {
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuBalade_Responsable();
+			Main.showMenuBalade_Responsable(currentResponsable);
 		}
 	}
 }

@@ -115,8 +115,8 @@ public class RejoindreBalade
 				new SharedListSelectionHandler(f, jlist1, listeVehicule));
 
 		rejoindreButton.addActionListener(new rejoindreButtonListener(f, currentMembre));
-		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f));
-		retourButton.addActionListener(new retourButtonListener(f));
+		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, currentMembre));
+		retourButton.addActionListener(new retourButtonListener(f, currentMembre));
 		f.add(p);
 		f.pack();
 	}
@@ -166,9 +166,19 @@ public class RejoindreBalade
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// requete ajout insert into liste_balade
+			Vehicule vehicule;
+			vehicule = (Vehicule)listeVehicule.getSelectedValue();
+			
 			if(listeVehicule.isSelectionEmpty())
 			{
 				labelMsgErreur.setText("Veuillez sélectionner un véhicule.");
+				p2.add(labelMsgErreur);
+				f.add(p2);
+				f.pack();
+			}
+			else if(vehicule.getNombrePlace() == 0 || vehicule.getNombrePlaceVelo() == 0)
+			{
+				labelMsgErreur.setText("Il n'y a plus de place disponible.");
 				p2.add(labelMsgErreur);
 				f.add(p2);
 				f.pack();
@@ -184,10 +194,25 @@ public class RejoindreBalade
 				(Vehicule)listeVehicule.getSelectedValue()).toArray()*/
 				
 				BaladeDAO baladeDAO = new BaladeDAO(connect);
+				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 				baladeDAO.create((Balade)baladeSelected);
 				
 				
 				System.out.println("Liste balade : " + baladeDAO.listBalade());
+				
+				
+				System.out.println("Avant : "+  vehicule);
+				vehicule.AjouterMembre(currentMembre);
+				vehicule.setNombrePlace(1);
+				vehicule.setNombrePlaceVelo(1);
+				
+				System.out.println("Après : " + vehicule);
+				System.out.println("Numéro du véhicule : " + vehicule.getIDV());
+				System.out.println("Membre actuel : " + currentMembre);
+				System.out.println("Membre : " + vehicule.getListMembre());
+				
+				baladeDAO.create_Ligne_Balade((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue(), currentMembre);
+				vehiculeDAO.update(vehicule);
 				
 				Container cp = f.getContentPane();
 				cp.removeAll();
@@ -202,10 +227,12 @@ public class RejoindreBalade
 	private class ajoutVehiculeButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Membre currentMembre;
 
-		public ajoutVehiculeButtonListener(JFrame f)
+		public ajoutVehiculeButtonListener(JFrame f, Membre currentMembre)
 		{
 			this.f = f;
+			this.currentMembre = currentMembre;
 		}
 
 		@Override
@@ -216,7 +243,7 @@ public class RejoindreBalade
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.AjoutVehicule();
+			Main.AjoutVehicule(currentMembre);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -225,10 +252,12 @@ public class RejoindreBalade
 	private class retourButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Membre currentMembre;
 
-		public retourButtonListener(JFrame f)
+		public retourButtonListener(JFrame f, Membre currentMembre)
 		{
 			this.f = f;
+			this.currentMembre = currentMembre;
 		}
 
 		@Override
@@ -236,7 +265,7 @@ public class RejoindreBalade
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuBalade_Membre();
+			Main.showMenuBalade_Membre(currentMembre);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

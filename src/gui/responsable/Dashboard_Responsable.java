@@ -64,10 +64,10 @@ public class Dashboard_Responsable implements ActionListener
 		
 		f.add(p);
 		
-		BaladeButton.addActionListener(new BaladeButtonListener(f));
+		BaladeButton.addActionListener(new BaladeButtonListener(f, currentResponsable));
 		RemboursementeButton.addActionListener(new RemboursementeButtonListener(f));
 		DisponibiliteButton.addActionListener(new DisponibiliteButtonListener(f));
-		CategorieButton.addActionListener(new CategorieButtonListener(f));
+		CategorieButton.addActionListener(new CategorieButtonListener(f, currentResponsable));
 		PayementButton.addActionListener(new PayementButtonListener(f));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
@@ -88,10 +88,12 @@ public class Dashboard_Responsable implements ActionListener
 	private class BaladeButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Responsable currentResponsable;
 
-		public BaladeButtonListener(JFrame f)
+		public BaladeButtonListener(JFrame f, Responsable currentResponsable)
 		{
 			this.f = f;
+			this.currentResponsable = currentResponsable;
 		}
 		
 		@Override
@@ -99,7 +101,7 @@ public class Dashboard_Responsable implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuBalade_Responsable();
+			Main.showMenuBalade_Responsable(currentResponsable);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -148,10 +150,12 @@ public class Dashboard_Responsable implements ActionListener
 	private class CategorieButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Responsable currentResponsable;
 
-		public CategorieButtonListener(JFrame f)
+		public CategorieButtonListener(JFrame f, Responsable currentResponsable)
 		{
 			this.f = f;
+			this.currentResponsable = currentResponsable;
 		}
 		
 		@Override
@@ -159,7 +163,7 @@ public class Dashboard_Responsable implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuCategorie();
+			Main.showMenuCategorie_Responsable(currentResponsable);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

@@ -22,7 +22,7 @@ import gui.Main;
 public class Dashboard_Membre implements ActionListener 
 {
 	private Connection connect;
-	private JFrame controllingFrame; // needed for dialogs
+	private JFrame f; // needed for dialogs
 	private Membre currentMembre;
 	
 	JMenuBar menuBar = new JMenuBar();
@@ -42,7 +42,7 @@ public class Dashboard_Membre implements ActionListener
 
 	public Dashboard_Membre(JFrame f, Connection connect, Membre currentMembre) {
 		this.connect = connect;
-		controllingFrame = f;
+		this.f = f;
 		this.currentMembre = currentMembre;
 		labelBonjour = new JLabel("Bonjour, vous êtes connecté en tant que : " + currentMembre.getNom());
 		

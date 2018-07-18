@@ -51,6 +51,11 @@ public class Membre extends Personne
 		this.listCategorie = listCategorie;
 	}
 
+	public void AjouterCategorie(Categorie categorie)
+	{
+		listCategorie.add(categorie);
+	}
+	
 	@Override
 	public String toString() {
 		return "Membre [solde=" + solde + ", listCategorie=" + listCategorie + "]";
