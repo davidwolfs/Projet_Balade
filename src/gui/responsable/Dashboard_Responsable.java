@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -25,16 +27,15 @@ public class Dashboard_Responsable implements ActionListener
 	private JFrame f; // needed for dialogs
 	private Responsable currentResponsable;
 	private JLabel labelBonjour;
+	
+
+	
 	private JButton BaladeButton;
 	private JButton RemboursementeButton;
 	private JButton DisponibiliteButton;
 	private JButton CategorieButton;
 	private JButton PayementButton;
 	
-	private JButton creerBaladeButton;
-	private JButton modifierBaladeButton;
-	private JButton supprimerBaladeButton;
-	private JButton voirBaladeButton;
 	private JButton deconnexionButton;
 	private JPanel p;
 
@@ -55,19 +56,19 @@ public class Dashboard_Responsable implements ActionListener
 
 		p.add(labelBonjour);
 		p.add(BaladeButton);
-		p.add(RemboursementeButton);
-		p.add(DisponibiliteButton);
+		//p.add(RemboursementeButton);
+		//p.add(DisponibiliteButton);
 		p.add(CategorieButton);
-		p.add(PayementButton);
+		//p.add(PayementButton);
 		p.add(deconnexionButton);
 		
 		f.add(p);
 		
 		BaladeButton.addActionListener(new BaladeButtonListener(f, currentResponsable));
-		RemboursementeButton.addActionListener(new RemboursementeButtonListener(f));
-		DisponibiliteButton.addActionListener(new DisponibiliteButtonListener(f));
+		//RemboursementeButton.addActionListener(new RemboursementeButtonListener(f));
+		//DisponibiliteButton.addActionListener(new DisponibiliteButtonListener(f));
 		CategorieButton.addActionListener(new CategorieButtonListener(f, currentResponsable));
-		PayementButton.addActionListener(new PayementButtonListener(f));
+		//PayementButton.addActionListener(new PayementButtonListener(f));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
 		f.pack();
@@ -75,7 +76,7 @@ public class Dashboard_Responsable implements ActionListener
 
 	public void actionPerformed(ActionEvent arg0) {
 		JFrame frame = new JFrame();
-		ToDelete creerBalade = new ToDelete(frame, connect);
+		//ToDelete creerBalade = new ToDelete(frame, connect);
 		frame.setVisible(true);
 		System.out.println(connect);
 		
@@ -120,7 +121,7 @@ public class Dashboard_Responsable implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuRemboursement();
+			//Main.showMenuRemboursement();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -140,7 +141,7 @@ public class Dashboard_Responsable implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuDisponibilite();
+			//Main.showMenuDisponibilite();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -182,7 +183,7 @@ public class Dashboard_Responsable implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuPayement();
+			//Main.showMenuPayement();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

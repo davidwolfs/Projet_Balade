@@ -14,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -24,51 +23,50 @@ import javax.swing.event.ListSelectionListener;
 
 import dao.BaladeDAO;
 import dao.CategorieDAO;
-import dao.MembreDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
 import exo.Categorie;
 import exo.Membre;
 import exo.Responsable;
+import exo.Vehicule;
 import gui.Main;
 
-public class MenuCategorie_Membre extends JPanel implements ActionListener 
+public class MenuDisponibilite_Membre extends JPanel implements ActionListener 
 {
 	private Connection connect;
 	private JFrame f; // needed for dialogs
-	private JLabel labelCategorie;
+	private JLabel labelDisponibilite;
 	private JLabel labelMsgErreur;
 	private Membre currentMembre;
 	private ListSelectionModel listSelectionModel;
-	private JTextField libelleField;
+	private JTextField disponibiliteField;
 	private JTextField lieuDepartField;
 	private JTextField dateDepartField;
 	private JTextField forfaitField;
-	private JButton affilierCategorieButton;
+	private JButton posterDisponibiliteButton;
 	private JButton retourButton;
 	private JButton deconnexionButton;
 	private JPanel p;
 	private JPanel p2;
 	private Object categorieSelected;
 
-	public MenuCategorie_Membre(JFrame f, Connection connect, Membre currentMembre) 
+	public MenuDisponibilite_Membre(JFrame f, Connection connect, Membre currentMembre) 
 	{
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		CategorieDAO categorieDAO = new CategorieDAO(connect);
-		List<Categorie> listCategorie = categorieDAO.listCategorie();
-		//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
-		Object[] categories = listCategorie.toArray();
-		//Object[] vehicules = listVehicule.toArray();
+		//List<Categorie> listCategorie = categorieDAO.listCategorie(currentMembre);
+		List<Vehicule> listVehicule = vehiculeDAO.listVehiculeByMembre(currentMembre);
+		Object[] vehicules = listVehicule.toArray();
 		this.connect = connect;
 		this.f = f;
 		this.currentMembre = currentMembre;
-		labelCategorie = new JLabel("Catégorie : ");
+		labelDisponibilite = new JLabel("Disponibilite : ");
 		labelMsgErreur = new JLabel();
-		libelleField = new JTextField(15);
+		disponibiliteField = new JTextField(15);
 		lieuDepartField = new JTextField(15);
 		dateDepartField = new JTextField(15);
 		forfaitField = new JTextField(5);
-		affilierCategorieButton = new JButton("S'affilier à la catégorie");
+		posterDisponibiliteButton = new JButton("Poster ses disponibilités");
 		retourButton = new JButton("Retour");
 		deconnexionButton = new JButton("Déconnexion");
 		
@@ -77,7 +75,7 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 		p = new JPanel(new GridLayout(4, 1));
 		p2 = new JPanel(new GridLayout(1,1));
 		
-	    JList jlist1 = new JList(categories);
+	    JList jlist1 = new JList(vehicules);
 	    jlist1.setVisibleRowCount(4);
 	    
 	    DefaultListModel model = new DefaultListModel();
@@ -98,7 +96,7 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 	    f.setVisible(true);
 	    
 	    p.add(scrollPane1);
-	    p.add(affilierCategorieButton);
+	    p.add(posterDisponibiliteButton);
 		p.add(retourButton);
 		p.add(deconnexionButton);
 		f.add(p);
@@ -107,7 +105,7 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1));
-		affilierCategorieButton.addActionListener(new affilierCategorieButton(f, currentMembre, jlist1));
+		posterDisponibiliteButton.addActionListener(new posterDisponibiliteButton(f, currentMembre, jlist1));
 		retourButton.addActionListener(new retourButtonListener(f, currentMembre));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
@@ -116,26 +114,26 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 	
 	private class SharedListSelectionHandler implements ListSelectionListener 
 	{
-		private JList listeCategorie;
+		private JList listVehicule;
 		private JFrame f;
 		
 		public SharedListSelectionHandler(JFrame f, JList jlist1)
 		{
 			this.f = f;
-			this.listeCategorie = jlist1;
+			this.listVehicule = jlist1;
 		}
 
 		public void valueChanged(ListSelectionEvent e) {
 			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 
-			int index = listeCategorie.getSelectedIndex();
-			System.out.println("Categorie :" + (Categorie)listeCategorie.getSelectedValue());
-			System.out.println(listeCategorie.getSelectedValue().getClass());
-			categorieSelected = listeCategorie.getSelectedValue();
+			int index = listVehicule.getSelectedIndex();
+			System.out.println("Vehicule :" + (Vehicule)listVehicule.getSelectedValue());
+			System.out.println(listVehicule.getSelectedValue().getClass());
+			categorieSelected = listVehicule.getSelectedValue();
 		
 			
 			//listeVehicule.repaint();
-			Container container = listeCategorie.getParent();
+			Container container = listVehicule.getParent();
 			container.revalidate();
 			container.repaint();
 		}
@@ -143,7 +141,6 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 
 	public void actionPerformed(ActionEvent arg0) {
 		JFrame frame = new JFrame();
-		//ToDelete creerBalade = new ToDelete(frame, connect);
 		frame.setVisible(true);
 		System.out.println(connect);
 		
@@ -152,59 +149,49 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 		baladeDAO.create(balade);*/
 	}
 	
-	private class affilierCategorieButton implements ActionListener
+	private class posterDisponibiliteButton implements ActionListener
 	{
 		private JFrame f;
 		private Membre currentMembre;
-		private JList listeCategorie;
+		private JList jlist1;
 		
-		public affilierCategorieButton(JFrame f, Membre currentMembre, JList jlist1)
+		public posterDisponibiliteButton(JFrame f, Membre currentMembre, JList jlist1)
 		{
 			this.f = f;
 			this.currentMembre = currentMembre;
-			this.listeCategorie = jlist1;
+			this.jlist1 = jlist1;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			CategorieDAO categorieDAO = new CategorieDAO(connect);
-			MembreDAO membreDAO = new MembreDAO(connect);
-			System.out.println(currentMembre.getListCategorie());
-			Categorie categorie = (Categorie)listeCategorie.getSelectedValue();
-			
-			currentMembre = membreDAO.getSoldeMembre(currentMembre);
-			double soldeMembre = currentMembre.getSolde();
-			int supplement = categorie.getSupplement();
-					
-			if(listeCategorie.isSelectionEmpty())
+			if(jlist1.isSelectionEmpty())
 			{
-				labelMsgErreur.setText("Veuillez sélectionner une catégorie.");
+				labelMsgErreur.setText("Veuillez sélectionner un véhicule.");
 				p2.add(labelMsgErreur);
 				f.add(p2);
 				f.pack();
 			}
-			/*else if(categorieDAO.appartientCategorie(currentMembre))
+			else 
 			{
-				JOptionPane.showMessageDialog(null, "Vous appartenez déjà à cette catégorie.");
-			}*/
-			else
-			{
-				JOptionPane.showMessageDialog(null, "Vous venez de vous affilier à la catégorie : " + listeCategorie.getSelectedValue());
-				//currentMembre = membreDAO.findMembreByEmailPassword(currentMembre.getEmail(), currentMembre.getPassword());
-				System.out.println("Membre courant : " + currentMembre.getiD());
-				System.out.println("Solde avant : " + currentMembre.getSolde());
-				/*currentMembre.soustraitSolde(supplement);
-				membreDAO.update_solde(currentMembre);*/
-				System.out.println("Solde après : " + currentMembre.getSolde());
-				System.out.println(categorie.getNom());
-				System.out.println(currentMembre.getListCategorie());
-				currentMembre.AjouterCategorie(categorie);
-				System.out.println(currentMembre.getListCategorie());
-				categorieDAO.create_Categorie_Membre((Categorie)listeCategorie.getSelectedValue(), currentMembre);
+				System.out.println(jlist1.getSelectedValue());
+				Vehicule vehicule;
+				vehicule = (Vehicule)jlist1.getSelectedValue();
+				
+				int nombrePlaceMembre = vehicule.getNombrePlaceMembre();
+				int nombrePlaceVelo = vehicule.getNombrePlaceVelo();
+				VehiculeDAO categorieDAO = new VehiculeDAO(connect);
+				//categorieDAO.
+				/*Container cp = f.getContentPane();
+				cp.removeAll();
+				//f.removeAll();*/
+				//Main.showDashboard_Membre(currentMembre);
+				/*f.revalidate();*/
+				//f.getLayout().removeLayoutComponent(f);
 			}
 		}
 	}
+	
 	
 	private class retourButtonListener implements ActionListener
 	{

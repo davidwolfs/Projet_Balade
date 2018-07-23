@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import dao.CategorieDAO;
 import dao.MembreDAO;
 import dao.ResponsableDAO;
 import dao.TresorierDAO;
@@ -169,7 +170,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		{
 			if(champsVide())
 			{
-				Responsable responsable = new Responsable(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+				Responsable responsable = new Responsable(nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				ResponsableDAO responsableDAO = new ResponsableDAO(connect);
 				if(responsableDAO.alreadyExist(emailField.getText()))
 				{
@@ -193,8 +194,11 @@ public class CreerUser extends JPanel implements ActionListener {
 		{
 			if(champsVide())
 			{
-				Membre membre = new Membre(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+				Membre membre = new Membre(nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				MembreDAO membreDAO = new MembreDAO(connect);
+				/*CategorieDAO categorieDAO = new CategorieDAO(connect);
+				Categorie categorie = new Categorie();
+				categorie.setNom("VTT");*/
 				if(membreDAO.alreadyExist(emailField.getText()))
 				{
 					labelMsgErreur.setText("Cet adresse e-mail existe déjà.");
@@ -205,6 +209,8 @@ public class CreerUser extends JPanel implements ActionListener {
 				else
 				{
 					membreDAO.create(membre);
+					/*categorieDAO.create_Categorie_Membre(categorie, membre);
+					membre.AjouterCategorie(categorie);*/
 					Container cp = f.getContentPane();
 					cp.removeAll();
 					Main.showDashboard_Membre(membre);
@@ -219,7 +225,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		{
 			if(champsVide())
 			{
-				Tresorier tresorier = new Tresorier(1, nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+				Tresorier tresorier = new Tresorier(nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
 				TresorierDAO tresorierDAO = new TresorierDAO(connect);
 				if(tresorierDAO.alreadyExist(emailField.getText()))
 				{

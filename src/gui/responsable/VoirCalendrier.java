@@ -42,7 +42,7 @@ public class VoirCalendrier
 //	private JLabel labelDate;
 	private JLabel labelnombrePlaceVelo;
 	private JLabel labelMsgErreur;
-//	private JTextField dateField;
+	private JTextField dateField;
 	private JButton rejoindreButton;
 	private JButton ajoutButton;
 	private JButton retourButton;
@@ -52,7 +52,7 @@ public class VoirCalendrier
 	private JPanel p4;
 	private Object baladeSelected;
 	
-	public VoirCalendrier(JFrame f, Connection connect, Responsable currentResponsable) 
+	public VoirCalendrier(JFrame f, Connection connect, Responsable currentResponsable, Categorie categorieSelected) 
 	{
 		this.connect = connect;
 		this.f = f;
@@ -60,16 +60,11 @@ public class VoirCalendrier
 		
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		CalendrierDAO calendrierDAO = new CalendrierDAO(connect);
-		List<Calendrier> listCalendrier = calendrierDAO.listCalendrier();
-		//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
+		List<Calendrier> listCalendrier = calendrierDAO.listCalendrierByCategorie(categorieSelected);
 		Object[] calendriers = listCalendrier.toArray();
-		//Object[] vehicules = listVehicule.toArray();
 		
-		
-		
-		//labelDate = new JLabel("Date : ");
 		labelMsgErreur = new JLabel();
-		//dateField = new JTextField(2);
+		dateField = new JTextField(2);
 		
 		ajoutButton = new JButton("Ajouter");
 		retourButton = new JButton("Retour");
@@ -130,7 +125,7 @@ public class VoirCalendrier
 			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 
 			int index = listCalendrier.getSelectedIndex();
-			System.out.println("Calendrier :" + (Balade)listCalendrier.getSelectedValue());
+			System.out.println("Calendrier :" + (Calendrier)listCalendrier.getSelectedValue());
 			System.out.println(listCalendrier.getSelectedValue().getClass());
 			baladeSelected = listCalendrier.getSelectedValue();
 
@@ -179,19 +174,16 @@ public class VoirCalendrier
 				List<Balade> listBalade = baladeDAO.listBalade();
 				Balade balade;
 				balade = (Balade)baladeSelected;
-				Calendrier calendrier = new Calendrier(dateField.getText(), listBalade);
+				Calendrier calendrier = new Calendrier(dateField.getText());
 				calendrier.AjouterBalade(balade);
 				CalendrierDAO calendrierDAO = new CalendrierDAO(connect);
 				//calendrierDAO.create(calendrier, balade, categorie);
-				
-				categorie.getIdCat();
-				
 				
 				categorie.setCalendrier(calendrier);
 				
 				
 				System.out.println("Liste des balades dans le calendrier : " + calendrier.getListBalade());
-				System.out.println("Liste des calendrier dans la catégorie : " + categorie.getIdCat() + calendrier.getDateCal() + categorie.getCalendrier());
+				System.out.println("Liste des calendriers dans la catégorie : " + calendrier.getNomCal() + calendrier.getDateCal() + categorie.getCalendrier());
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				Main.showMenuCategorie_Responsable(currentResponsable);

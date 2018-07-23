@@ -29,11 +29,16 @@ public class Membre extends Personne
 		
 	}
 	
+	public Membre(String nom, String prenom, String dateNaiss, String email, String password) 
+	{
+		super(nom, prenom, dateNaiss, email, password);
+		//this.dateDebut = dateDebut;
+	}
+	
 	public Membre() 
 	{
 		
 	}
-
 	
 	public double getSolde() {
 		return solde;
@@ -41,6 +46,10 @@ public class Membre extends Personne
 
 	public void setSolde(double solde) {
 		this.solde = solde;
+	}
+	
+	public void soustraitSolde(double solde) {
+		this.solde -= solde;
 	}
 
 	public List<Categorie> getListCategorie() {
@@ -56,10 +65,13 @@ public class Membre extends Personne
 		listCategorie.add(categorie);
 	}
 	
-	@Override
-	public String toString() {
-		return "Membre [solde=" + solde + ", listCategorie=" + listCategorie + "]";
+	public double PayerCotisation(double solde)
+	{
+		return 0.00;
+		
 	}
-	
-	
+	public double CalculerCotisation(double solde)
+	{
+		return 0.00;
+	}
 }

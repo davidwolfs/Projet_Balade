@@ -15,6 +15,12 @@ public class Tresorier extends Personne {
 		super(iD, nom, prenom, dateNaiss, email, password);
 	}
 	
+	public Tresorier(String nom, String prenom, String dateNaiss, String email, String password) 
+	{
+		super(nom, prenom, dateNaiss, email, password);
+		//this.dateDebut = dateDebut;
+	}
+	
 	public Tresorier() 
 	{
 		

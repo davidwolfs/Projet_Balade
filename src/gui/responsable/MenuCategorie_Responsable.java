@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -38,11 +39,9 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	private JLabel labelMsgErreur;
 	private Responsable currentResponsable;
 	private ListSelectionModel listSelectionModel;
-	private JButton creerCategorieButton;
-	private JButton modifierCategorieButton;
-	private JButton supprimerCategorieButton;
 	private JButton organiserCalendrierButton;
 	private JButton voirCalendrierButton;
+	private JButton devenirResponsableButton;
 	private JButton retourButton;
 	private JButton deconnexionButton;
 	private JPanel p;
@@ -59,17 +58,15 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		CategorieDAO categorieDAO = new CategorieDAO(connect);
-		List<Categorie> listCategorie = categorieDAO.listCategorie(currentResponsable);
+		List<Categorie> listCategorie = categorieDAO.listCategorie();
 		//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
 		Object[] categories = listCategorie.toArray();
 		
 		labelCategorie = new JLabel("Catégorie : ");
 		labelMsgErreur = new JLabel();
-		creerCategorieButton = new JButton("Créer catégorie");
-		modifierCategorieButton = new JButton("Modifier catégorie");
-		supprimerCategorieButton = new JButton("Supprimer catégorie");
 		organiserCalendrierButton = new JButton("Organiser et publier le calendrier");
 		voirCalendrierButton = new JButton("Voir calendrier");
+		devenirResponsableButton = new JButton("Devenir responsable");
 		retourButton = new JButton("Retour");
 		deconnexionButton = new JButton("Déconnexion");
 		
@@ -101,11 +98,9 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	    f.setVisible(true);
 	    
 	    p.add(scrollPane1);
-		p2.add(creerCategorieButton);
-		p2.add(modifierCategorieButton);
-		p2.add(supprimerCategorieButton);
 		p2.add(organiserCalendrierButton);
-		p3.add(voirCalendrierButton);
+		p2.add(voirCalendrierButton);
+		p2.add(devenirResponsableButton);
 		p3.add(retourButton);
 		p3.add(deconnexionButton);
 		f.add(p);
@@ -115,11 +110,9 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1));
-		creerCategorieButton.addActionListener(new creerCategorieButtonListener(f));
-		modifierCategorieButton.addActionListener(new modifierCategorieButtonListener(f, jlist1));
-		supprimerCategorieButton.addActionListener(new supprimerCategorieButtonListener(f, jlist1, currentResponsable));
 		organiserCalendrierButton.addActionListener(new organiserCalendrierButtonListener(f, jlist1));
 		voirCalendrierButton.addActionListener(new voirCalendrierButtonListener(f, jlist1));
+		devenirResponsableButton.addActionListener(new devenirResponsableButtonListener(f, jlist1, currentResponsable));
 		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
@@ -162,107 +155,6 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		/*Balade balade = new Balade(1, listVehicule.getText(), prenomField.getText(), new Date(1994-02-18), emailField.getText(), passwordField.getText());
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
 		baladeDAO.create(balade);*/
-	}
-	
-	private class creerCategorieButtonListener implements ActionListener
-	{
-		private JFrame f;
-
-		public creerCategorieButtonListener(JFrame f)
-		{
-			this.f = f;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Container cp = f.getContentPane();
-			cp.removeAll();
-			//f.removeAll();*/
-			Main.CreerCategorie(currentResponsable);
-			/*f.revalidate();*/
-			//f.getLayout().removeLayoutComponent(f);
-		}
-	}
-	
-	private class modifierCategorieButtonListener implements ActionListener
-	{
-		private JList listeBalade;
-		private JFrame f;
-		
-		public modifierCategorieButtonListener(JFrame f, JList listeBalade)
-		{
-			this.f = f;
-			this.listeBalade = listeBalade;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			categorieSelected = listeBalade.getSelectedValue();
-			System.out.println("Catégorie : " + categorieSelected);
-			
-			BaladeDAO baladeDAO = new BaladeDAO(connect);
-			
-			if(categorieSelected != null)
-			{
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				//f.removeAll();*/
-				//Main.ModifierBalade(categorieSelected);
-				/*f.revalidate();*/
-				//f.getLayout().removeLayoutComponent(f);
-			}
-			else 
-			{
-				labelMsgErreur.setText("Veuillez sélectionner une balade.");
-				p4.add(labelMsgErreur);
-				f.add(p4);
-				f.pack();
-			}
-		}
-	}
-	
-	private class supprimerCategorieButtonListener implements ActionListener
-	{
-		private JList listeCategorie;
-		private JFrame f;
-		private Responsable currentResponsable;
-		
-		public supprimerCategorieButtonListener(JFrame f, JList listeCategorie, Responsable currentResponsable)
-		{
-			this.f = f;
-			this.listeCategorie = listeCategorie;
-			this.currentResponsable = currentResponsable;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) 
-		{
-			categorieSelected = listeCategorie.getSelectedValue();
-			System.out.println("Balade : " + categorieSelected);
-			
-			BaladeDAO baladeDAO = new BaladeDAO(connect);
-			
-			if(categorieSelected != null)
-			{
-				//categorieDAO.delete((Categorie)categorieSelected);
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				//f.removeAll();*/
-				Main.showMenuBalade_Responsable(currentResponsable);
-				/*f.revalidate();*/
-				//f.getLayout().removeLayoutComponent(f);
-				
-			}
-			else 
-			{
-				labelMsgErreur.setText("Veuillez sélectionner une balade.");
-				p4.add(labelMsgErreur);
-				f.add(p4);
-				f.pack();
-			}
-
-			
-		}
 	}
 	
 	private class organiserCalendrierButtonListener implements ActionListener
@@ -311,14 +203,62 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		}
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) 
+		{
+			if(listeCategorie.isSelectionEmpty())
+			{
+				labelMsgErreur.setText("Veuillez sélectionner une catégorie.");
+				p4.add(labelMsgErreur);
+				f.add(p4);
+				f.pack();
+			}
+			else
+			{
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.VoirCalendrier(currentResponsable);
+				Categorie categorie = (Categorie)categorieSelected;
+				Main.VoirCalendrier(currentResponsable, categorie);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
+		}
+	}
+	
+	private class devenirResponsableButtonListener implements ActionListener
+	{
+		private JFrame f;
+		private JList listeCategorie;
+		private Responsable currentResponsable;
+
+		public devenirResponsableButtonListener(JFrame f, JList listeCategorie, Responsable currentResponsable)
+		{
+			this.f = f;
+			this.listeCategorie = listeCategorie;
+			this.currentResponsable = currentResponsable;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			if(listeCategorie.isSelectionEmpty())
+			{
+				labelMsgErreur.setText("Veuillez sélectionner une catégorie.");
+				p4.add(labelMsgErreur);
+				f.add(p4);
+				f.pack();
+			}
+			else
+			{
+				System.out.println("Responsable actuel : " + currentResponsable);
+				JOptionPane.showMessageDialog(null, "Vous gérer la catégorie : " + listeCategorie.getSelectedValue());
+				Categorie categorie = (Categorie)listeCategorie.getSelectedValue();
+				categorie.setResponsable(currentResponsable);
+				currentResponsable.setCategorie(categorie);
+				CategorieDAO categorieDAO = new CategorieDAO(connect);
+				categorieDAO.update_Categorie_Responsable((Categorie)listeCategorie.getSelectedValue());
+			}
+		}
 	}
 	
 	private class retourButtonListener implements ActionListener

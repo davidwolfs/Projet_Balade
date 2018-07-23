@@ -17,6 +17,12 @@ public class Responsable extends Personne {
 		//this.dateDebut = dateDebut;
 	}
 	
+	public Responsable(String nom, String prenom, String dateNaiss, String email, String password) 
+	{
+		super(nom, prenom, dateNaiss, email, password);
+		//this.dateDebut = dateDebut;
+	}
+	
 	public Responsable() {
 		super();
 		//this.dateDebut = dateDebut;

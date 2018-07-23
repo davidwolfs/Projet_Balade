@@ -19,7 +19,8 @@ public class VTTDAO extends DAO<VTT>{
 
 	@Override
 	public boolean create(VTT obj) {
-		boolean statementResult;
+		return false;
+		/*boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
 			String query = "INSERT INTO VTT (IDT, nomT, prenomT, dateNaissT,  emailT, passwordT) VALUES ('" + obj.getiD() + "','" + obj.getNom() + "','" + obj.getPrenom() + "','" + "1994-02-18" + "','" + obj.getEmail() + "','" + obj.getPassword() + "')" + ";";
@@ -32,7 +33,7 @@ public class VTTDAO extends DAO<VTT>{
 			System.out.println(e);
 		}
 		System.out.println(statementResult);
-		return statementResult;
+		return statementResult;*/
 	}
 
 	@Override
@@ -54,8 +55,8 @@ public class VTTDAO extends DAO<VTT>{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM VTT WHERE IDVTT = " + id);
-			if(result.first())
-				vtt = new VTT(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
+			//if(result.first())
+				//vtt = new VTT(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();

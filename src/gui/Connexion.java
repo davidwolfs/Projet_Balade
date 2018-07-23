@@ -5,6 +5,7 @@ import javax.swing.*;
 import dao.MembreDAO;
 import dao.ResponsableDAO;
 import dao.TresorierDAO;
+import exo.Balade;
 import exo.Membre;
 import exo.Responsable;
 import exo.Tresorier;
@@ -274,7 +275,7 @@ public class Connexion extends JPanel implements ActionListener
 						cp.removeAll();
 						Main.showDashboard_Membre(currentMembre);
 					}
-					else 
+					else
 					{
 						loginpasswordIncorrect();
 					}

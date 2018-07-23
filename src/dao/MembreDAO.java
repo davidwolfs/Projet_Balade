@@ -76,7 +76,7 @@ public class MembreDAO extends DAO<Membre>
 	}
 	
 	public Membre findMembreByEmailPassword(String email, String password){
-		Membre membre = new Membre(1, null, null, null, email, password);
+		Membre membre = new Membre();
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -85,7 +85,6 @@ public class MembreDAO extends DAO<Membre>
 			{
 				membre = new Membre(result.getInt("IDM"), result.getString("nomM"), result.getString("prenomM"), result.getString("dateNaissM"), email, password);
 			}
-				
 		}
 		catch(SQLException e){
 			e.printStackTrace();
@@ -121,7 +120,7 @@ public class MembreDAO extends DAO<Membre>
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Membre INNER JOIN Ligne_Balade ON Membre.IDM = Ligne_Balade.IDM WHERE IDM = " + vehicule.getIDV());
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Membre INNER JOIN Ligne_Balade ON Membre.IDM = Ligne_Balade.IDM WHERE IDM = " + vehicule.getChauffeur().getiD());
 	System.out.println("after");
 			while(result.next())
 			{
@@ -134,5 +133,43 @@ public class MembreDAO extends DAO<Membre>
 		}
 		
 		return listMembre;
+	}
+	
+	public Membre getSoldeMembre(Membre membre)
+	{
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Membre WHERE IDM = " + membre.getiD());
+			if(result.next())
+			{
+				membre = new Membre(result.getInt("IDM"), result.getString("nomM"), result.getString("prenomM"), result.getString("dateNaissM"), result.getString("EmailM"), result.getString("PasswordM"), result.getDouble("Solde"));
+				double solde = result.getDouble("Solde");
+				membre.setSolde(solde);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return membre;
+	}
+	
+	public boolean update_solde(Membre membre){
+		System.out.println("Mon objet depuis la méthode update : " + membre);
+		boolean statementResult;
+		try {
+			Statement statement = connect.createStatement();
+			String query = "UPDATE Membre SET solde = " + membre.getSolde() + " WHERE IDM = " + membre.getiD() + ";";
+			System.out.println(query);
+			statementResult = true;
+			statementResult = statement.execute(query);
+		} catch (SQLException e) {
+			statementResult = false;
+			e.printStackTrace();
+			System.out.println(e);
+		}
+		System.out.println(statementResult);
+		return statementResult;
 	}
 }

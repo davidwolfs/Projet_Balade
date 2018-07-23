@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -21,8 +22,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import dao.BaladeDAO;
+import dao.MembreDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Categorie;
 import exo.Membre;
 import exo.Vehicule;
 import gui.Main;
@@ -32,7 +35,7 @@ public class RejoindreBalade
 	private Connection connect;
 	private JFrame controllingFrame; // needed for dialogs
 	private Membre currentMembre;
-	
+	private Balade baladeSelected;
 	private JLabel labelBalade;
 	private JLabel labelVehicule;
 	private JLabel labelMsgErreur;
@@ -41,10 +44,10 @@ public class RejoindreBalade
 	private ListSelectionModel listSelectionModel;
 	private JButton rejoindreButton;
 	private JButton ajoutVehiculeButton;
+	private JButton quitterButton;
 	private JButton retourButton;
 	private JPanel p;
 	private JPanel p2;
-	private Object baladeSelected;
 	private Object vehiculeSelected;
 	//String listVehicules = vehicules.toString();
 	//listeVehicule = new JList(vehicules);
@@ -54,15 +57,15 @@ public class RejoindreBalade
 	{
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
-		List<Balade> listBalade = baladeDAO.listBalade();
-		//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
+		List<Balade> listBalade = baladeDAO.listBaladeBylistCategorie(currentMembre.getListCategorie());
+				//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
 		Object[] balades = listBalade.toArray();
 		//Object[] vehicules = listVehicule.toArray();
 		this.connect = connect;
 		controllingFrame = f;
 		this.currentMembre = currentMembre;
 		labelMsgErreur = new JLabel();
-		labelBalade = new JLabel("Balades : ");
+		labelBalade = new JLabel("Balades pour la (les) catégorie(s) : " + currentMembre.getListCategorie());
 		labelVehicule = new JLabel("Véhicules pour la balade sélectionnée : ");
 		listeBalade = new JList(balades);
 		listeVehicule = new JList();
@@ -95,6 +98,7 @@ public class RejoindreBalade
 	    f.setVisible(true);
 	    
 		rejoindreButton = new JButton("Rejoindre");
+		quitterButton = new JButton("Quitter");
 		ajoutVehiculeButton = new JButton("Ajout véhicule");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(8, 2));
@@ -105,6 +109,7 @@ public class RejoindreBalade
 		p.add(labelVehicule);
 		p.add(scrollPane2);
 		p.add(rejoindreButton);
+		p.add(quitterButton);
 		p.add(ajoutVehiculeButton);
 		p.add(retourButton);
 
@@ -115,7 +120,8 @@ public class RejoindreBalade
 				new SharedListSelectionHandler(f, jlist1, listeVehicule));
 
 		rejoindreButton.addActionListener(new rejoindreButtonListener(f, currentMembre));
-		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, currentMembre, (Balade)baladeSelected));
+		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, currentMembre));
+		quitterButton.addActionListener(new quitterButtonListener(f, currentMembre, jlist1));
 		retourButton.addActionListener(new retourButtonListener(f, currentMembre));
 		f.add(p);
 		f.pack();
@@ -140,10 +146,10 @@ public class RejoindreBalade
 			int index = listeBalade.getSelectedIndex();
 			System.out.println("balade :" + listeBalade.getSelectedValue());
 			System.out.println(listeBalade.getSelectedValue().getClass());
-			baladeSelected = listeBalade.getSelectedValue();
+			baladeSelected = (Balade)listeBalade.getSelectedValue();
 			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 			
-			listeVehicule.setListData(vehiculeDAO.listVehicule((Balade)listeBalade.getSelectedValue()).toArray());
+			listeVehicule.setListData(vehiculeDAO.listVehiculeByBalade((Balade)listeBalade.getSelectedValue()).toArray());
 			
 			//listeVehicule.repaint();
 			Container container = listeVehicule.getParent();
@@ -166,9 +172,15 @@ public class RejoindreBalade
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// requete ajout insert into liste_balade
+			BaladeDAO baladeDAO = new BaladeDAO(connect);
+			MembreDAO membreDAO = new MembreDAO(connect);
 			Vehicule vehicule;
 			vehicule = (Vehicule)listeVehicule.getSelectedValue();
+			Balade balade;
 			
+			currentMembre = membreDAO.getSoldeMembre(currentMembre);
+			double soldeMembre = currentMembre.getSolde();
+			double forfait = baladeDAO.getForfait(baladeSelected);
 			if(listeVehicule.isSelectionEmpty())
 			{
 				labelMsgErreur.setText("Veuillez sélectionner un véhicule.");
@@ -176,15 +188,32 @@ public class RejoindreBalade
 				f.add(p2);
 				f.pack();
 			}
-			else if(vehicule.getNombrePlace() <= 0 || vehicule.getNombrePlaceVelo() <= 0)
+			else if(vehicule.getNombrePlaceMembre() <= 0 || vehicule.getNombrePlaceVelo() <= 0)
 			{
 				labelMsgErreur.setText("Il n'y a plus de place disponible.");
 				p2.add(labelMsgErreur);
 				f.add(p2);
 				f.pack();
 			}
-			else 
+			else if(baladeDAO.alreadyInBalade((Balade)baladeSelected, currentMembre))
 			{
+				JOptionPane.showMessageDialog(null, "Vous participer déjà à cette balade.");
+			}
+			else if(soldeMembre < forfait)
+			{
+				JOptionPane.showMessageDialog(null, "Vous n'avez pas les moyens pour participer à cette balade.");
+			}
+			else
+			{
+				System.out.println("Solde membre : " + currentMembre.getSolde());
+				System.out.println("ID Membre : " + currentMembre.getiD());
+				System.out.println("Forfait : " + forfait);
+				System.out.println("Solde avant : " + currentMembre.getSolde());
+				System.out.println("ID Membre courant : " + currentMembre.getiD());
+				currentMembre.soustraitSolde(forfait);
+				System.out.println("Solde après : " + currentMembre.getSolde());
+				double soldeSoustrait = currentMembre.getSolde();
+				membreDAO.update_solde(currentMembre);
 				System.out.println("Balade : " + baladeSelected);
 				System.out.println("Véhicule : " + listeVehicule.getSelectedValue());
 				System.out.println("Véhicule sélectionné : " + (Vehicule)listeVehicule.getSelectedValue());
@@ -192,27 +221,32 @@ public class RejoindreBalade
 				/*Membre membre = new Membre();
 				
 				(Vehicule)listeVehicule.getSelectedValue()).toArray()*/
-				
-				BaladeDAO baladeDAO = new BaladeDAO(connect);
+			
 				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 				baladeDAO.create((Balade)baladeSelected);
 				
-				
-				System.out.println("Liste balade : " + baladeDAO.listBalade());
-				
-				
-				System.out.println("Avant : "+  vehicule);
+				//System.out.println("Liste balade : " + baladeDAO.listBalade(currentMembre.getListCategorie()));
+				balade = (Balade) baladeSelected; 
+				System.out.println("Avant ajout véhicule : " +  balade.getListVehicule());
+				System.out.println("Balade toString Avant : " +  balade.toString());
+				balade.AjouterVehicule(vehicule);
 				vehicule.AjouterMembre(currentMembre);
-				vehicule.setNombrePlace(1);
+				System.out.println("Après ajout véhicule : " + balade.getListVehicule());
+				System.out.println("Balade toString Après : " +  balade.toString());
+				
+				System.out.println("Avant ajout membre : " +  vehicule.getListMembre());
+				System.out.println("Vehicule toString Avant : " +  vehicule.toString());
+				vehicule.AjouterMembre(currentMembre);
+				vehicule.setNombrePlaceMembre(1);
 				vehicule.setNombrePlaceVelo(1);
 				
-				System.out.println("Après : " + vehicule);
-				System.out.println("Numéro du véhicule : " + vehicule.getIDV());
-				System.out.println("Membre actuel : " + currentMembre);
-				System.out.println("Membre : " + vehicule.getListMembre());
-				
+				System.out.println("Après ajout membre : " +  vehicule.getListMembre());
+				System.out.println("Vehicule toString Après : " +  vehicule.toString());
+	
+				JOptionPane.showMessageDialog(null, "Vous avez rejoint la balade : " + balade.getLibelle() + " avec le véhicule immatriculé : " + vehicule.getImmatriculation());
 				baladeDAO.create_Ligne_Balade((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue(), currentMembre);
 				vehiculeDAO.update(vehicule);
+				
 				
 				Container cp = f.getContentPane();
 				cp.removeAll();
@@ -228,13 +262,11 @@ public class RejoindreBalade
 	{
 		private JFrame f;
 		private Membre currentMembre;
-		private Balade baladeSelected;
 
-		public ajoutVehiculeButtonListener(JFrame f, Membre currentMembre, Balade baladeSelected)
+		public ajoutVehiculeButtonListener(JFrame f, Membre currentMembre)
 		{
 			this.f = f;
 			this.currentMembre = currentMembre;
-			this.baladeSelected = baladeSelected;
 		}
 
 		@Override
@@ -245,7 +277,39 @@ public class RejoindreBalade
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.AjoutVehicule(currentMembre);
+			Main.AjoutVehicule(currentMembre, baladeSelected);
+			/*f.revalidate();*/
+			//f.getLayout().removeLayoutComponent(f);
+		}
+	}
+	
+	private class quitterButtonListener implements ActionListener
+	{
+		private JFrame f;
+		private Membre currentMembre;
+		private JList listeBalade;
+
+		public quitterButtonListener(JFrame f, Membre currentMembre, JList jlist1)
+		{
+			this.f = f;
+			this.currentMembre = currentMembre;
+			this.listeBalade = jlist1;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// requete ajout insert into liste_balade
+			BaladeDAO baladeDAO = new BaladeDAO(connect);
+			baladeSelected = (Balade)listeBalade.getSelectedValue();
+			Balade balade = (Balade)baladeSelected;
+			baladeDAO.delete_Ligne_Balade((Balade)baladeSelected, currentMembre);
+			System.out.println("Balade sélectionnée : " + baladeSelected);
+			System.out.println("La balade : " + baladeSelected + "a bien été supprimée.");
+			JOptionPane.showMessageDialog(null, "Vous avez quitté la balade : " + balade.getLibelle());
+			Container cp = f.getContentPane();
+			cp.removeAll();
+			//f.removeAll();*/
+			Main.AjoutVehicule(currentMembre, baladeSelected);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

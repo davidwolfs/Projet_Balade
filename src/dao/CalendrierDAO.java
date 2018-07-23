@@ -25,10 +25,11 @@ public class CalendrierDAO extends DAO<Calendrier>
 	}
 	
 	public boolean create(Calendrier calendrier, Balade balade, Categorie categorie){
+		System.out.println(calendrier.getDateCal() + balade.getLibelle() + categorie.getNom());
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Calendrier (IdCal, dateCal, IDB, Idcat) VALUES ('" + calendrier.getID() + "','" + calendrier.getDateCal() + "','" + balade.getIDB() + "','" + categorie.getIdCat() + "')" + ";";
+			String query = "INSERT INTO Calendrier (nom, dateCal, IDB) VALUES ('" + calendrier.getNomCal() + "','" + calendrier.getDateCal() + "','" + balade.getiDB() + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -41,11 +42,11 @@ public class CalendrierDAO extends DAO<Calendrier>
 		return statementResult;
 	}
 	
-	public boolean delete(Calendrier obj){
+	public boolean delete(Calendrier calendrier){
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "DELETE FROM Calendrier WHERE IDB = " + obj.getID() + ";";
+			String query = "DELETE FROM Calendrier WHERE IDB = " + calendrier.getiD() + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -84,11 +85,33 @@ public class CalendrierDAO extends DAO<Calendrier>
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendrier");
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendrier WHERE dateCal != \"N/A\" AND nom != \"N/A\"");
 	System.out.println("after");
 			while(result.next())
 			{
 				calendrier = new Calendrier(result.getInt("IdCal"), result.getString("dateCal"));
+				listCalendrier.add(calendrier);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listCalendrier;
+	}
+	
+	public List<Calendrier> listCalendrierByCategorie(Categorie categorie)
+	{
+		List<Calendrier> listCalendrier = new ArrayList<>();
+		Calendrier calendrier;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendrier WHERE dateCal != \"N/A\" AND nom != \"N/A\" AND nom = " + "\"" + categorie.getNom() + "\"");
+	System.out.println("after");
+			while(result.next())
+			{
+				calendrier = new Calendrier(result.getInt("IdCal"), result.getString("nom"), result.getString("dateCal"));
 				listCalendrier.add(calendrier);
 			}
 		}

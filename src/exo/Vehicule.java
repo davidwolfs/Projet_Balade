@@ -3,25 +3,30 @@ package exo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vehicule {
-	private int iDV;
-	private int nombrePlace;
+public class Vehicule 
+{
 	private String immatriculation;
+	private int nombrePlaceMembre;
 	private int nombrePlaceVelo;
+	private Membre chauffeur; 
 	private List<Membre> listMembre = new ArrayList<>();
 
-	public Vehicule(int iDV, int nombrePlace, String immatriculation,
-			int nombrePlaceVelo, List<Membre> listMembre) {
-		this.iDV = iDV;
-		this.nombrePlace = nombrePlace;
+	public Vehicule(String immatriculation, int nombrePlaceMembre,   
+			int nombrePlaceVelo, Membre chauffeur, List<Membre> listMembre) 
+	{
 		this.immatriculation = immatriculation;
+		this.nombrePlaceMembre = nombrePlaceMembre;
 		this.nombrePlaceVelo = nombrePlaceVelo;
+		this.chauffeur = chauffeur;
 		this.listMembre = listMembre;
 	}
 	
-	public Vehicule(int iDV, int nombrePlace, String immatriculation,
-			int nombrePlaceVelo) {
-		this(iDV, nombrePlace, immatriculation, nombrePlaceVelo, new ArrayList<Membre>());
+	public Vehicule(String immatriculation, int nombrePlaceMembre, int nombrePlaceVelo, Membre chauffeur) {
+		this(immatriculation, nombrePlaceMembre, nombrePlaceVelo, chauffeur, new ArrayList<Membre>());
+	}
+	
+	public Vehicule(String immatriculation, int nombrePlaceMembre, int nombrePlaceVelo) {
+		this(immatriculation, nombrePlaceMembre, nombrePlaceVelo, null, new ArrayList<Membre>());
 	}
 	
 	public Vehicule() 
@@ -29,28 +34,20 @@ public class Vehicule {
 		
 	}
 	
-	public int getIDV() {
-		return iDV;
-	}
-
-	public void setIDV(int iDV) {
-		this.iDV = iDV;
-	}
-
-	public int getNombrePlace() {
-		return nombrePlace;
-	}
-
-	public void setNombrePlace(int nombrePlace) {
-		this.nombrePlace -= nombrePlace;
-	}
-
 	public String getImmatriculation() {
 		return immatriculation;
 	}
 
 	public void setImmatriculation(String immatriculation) {
 		this.immatriculation = immatriculation;
+	}
+
+	public int getNombrePlaceMembre() {
+		return nombrePlaceMembre;
+	}
+
+	public void setNombrePlaceMembre(int nombrePlaceMembre) {
+		this.nombrePlaceMembre -= nombrePlaceMembre;
 	}
 
 	public int getNombrePlaceVelo() {
@@ -60,7 +57,15 @@ public class Vehicule {
 	public void setNombrePlaceVelo(int nombrePlaceVelo) {
 		this.nombrePlaceVelo -= nombrePlaceVelo;
 	}
-	
+
+	public Membre getChauffeur() {
+		return chauffeur;
+	}
+
+	public void setChauffeur(Membre chauffeur) {
+		this.chauffeur = chauffeur;
+	}
+
 	public List<Membre> getListMembre() {
 		return listMembre;
 	}
@@ -73,12 +78,11 @@ public class Vehicule {
 	{
 		listMembre.add(membre);
 	}
+
 	@Override
 	public String toString() {
-		return "Vehicule [iDV=" + iDV + ", nombrePlace=" + nombrePlace + ", immatriculation=" + immatriculation
-				+ ", nombrePlaceVelo=" + nombrePlaceVelo + ", listMembre=" + listMembre + "]";
+		return "Vehicule [immatriculation=" + immatriculation + ", nombrePlaceMembre=" + nombrePlaceMembre
+				+ ", nombrePlaceVelo=" + nombrePlaceVelo + ", chauffeur=" + chauffeur + ", listMembre=" + listMembre
+				+ "]";
 	}
-
-	
-	
 }

@@ -17,7 +17,8 @@ public class TrialisteDAO extends DAO<Trialiste>{
 
 	@Override
 	public boolean create(Trialiste obj) {
-		boolean statementResult;
+		return false;
+		/*boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
 			String query = "INSERT INTO Trialiste (IDT, nomT, prenomT, dateNaissT,  emailT, passwordT) VALUES ('" + obj.getiD() + "','" + obj.getNom() + "','" + obj.getPrenom() + "','" + "1994-02-18" + "','" + obj.getEmail() + "','" + obj.getPassword() + "')" + ";";
@@ -30,7 +31,7 @@ public class TrialisteDAO extends DAO<Trialiste>{
 			System.out.println(e);
 		}
 		System.out.println(statementResult);
-		return statementResult;
+		return statementResult;*/
 	}
 
 	@Override
@@ -52,8 +53,8 @@ public class TrialisteDAO extends DAO<Trialiste>{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Trialiste WHERE IDT = " + id);
-			if(result.first())
-				trialiste = new Trialiste(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
+			//if(result.first())
+				//trialiste = new Trialiste(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();

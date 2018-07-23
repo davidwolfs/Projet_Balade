@@ -57,7 +57,7 @@ public class CreerBalade implements ActionListener
 		this.currentResponsable = currentResponsable;
 		labelLibelle = new JLabel("Libellé");
 		labelLieuDepart = new JLabel("Lieu départ");
-		labelDateDepart = new JLabel("Date départ");
+		labelDateDepart = new JLabel("Date départ"); 
 		labelForfait = new JLabel("Forfait");
 		labelMsgErreur = new JLabel();
 		//String listVehicules = vehicules.toString();
@@ -114,13 +114,23 @@ public class CreerBalade implements ActionListener
 		else
 		{
 			Calendrier calendrier = new Calendrier();
-			Balade balade = new Balade(lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()), libelleField.getText());
+			Balade balade = new Balade(libelleField.getText(), lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()));
 			BaladeDAO baladeDAO = new BaladeDAO(connect);
-			baladeDAO.create(balade);
-			calendrier.AjouterBalade(balade);
-			Container cp = f.getContentPane();
-			cp.removeAll();
-			Main.showMenuBalade_Responsable(currentResponsable);
+			if(baladeDAO.alreadyExist(libelleField.getText()))
+			{
+				labelMsgErreur.setText("Cette balade existe déjà.");
+				p2.add(labelMsgErreur);
+				f.add(p2);
+				f.pack();
+			}
+			else
+			{
+				baladeDAO.create(balade);
+				calendrier.AjouterBalade(balade);
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				Main.showMenuBalade_Responsable(currentResponsable);
+			}
 		}
 	}
 	

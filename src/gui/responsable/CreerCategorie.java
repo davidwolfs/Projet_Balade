@@ -105,7 +105,7 @@ public class CreerCategorie implements ActionListener
 		{
 			Categorie categorie = new Categorie(Integer.parseInt(supplementField.getText()), typePneuField.getText(), nomField.getText());
 			CategorieDAO categorieDAO = new CategorieDAO(connect);
-			categorieDAO.create(categorie, currentResponsable, idMembre);
+			categorieDAO.create_Categorie_Responsable(categorie, currentResponsable);
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			Main.showMenuCategorie_Responsable(currentResponsable);

@@ -14,7 +14,8 @@ public class DescendeurDAO extends DAO<Descendeur>
 	}
 	
 	public boolean create(Descendeur obj){
-		boolean statementResult;
+		return false;
+		/*boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
 			String query = "INSERT INTO Descendeur (IDM, nomM, prenomM, dateNaissM,  emailM, passwordM) VALUES ('" + obj.getiD() + "','" + obj.getNom() + "','" + obj.getPrenom() + "','" + "1994-02-18" + "','" + obj.getEmail() + "','" + obj.getPassword() + "')" + ";";
@@ -27,7 +28,7 @@ public class DescendeurDAO extends DAO<Descendeur>
 			System.out.println(e);
 		}
 		System.out.println(statementResult);
-		return statementResult;
+		return statementResult;*/
 	}
 	
 	public boolean delete(Descendeur obj){
@@ -43,8 +44,8 @@ public class DescendeurDAO extends DAO<Descendeur>
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Descendeur WHERE IDDesc = " + id);
-			if(result.first())
-				descendeur = new Descendeur(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
+			//if(result.first())
+				//descendeur = new Descendeur(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();

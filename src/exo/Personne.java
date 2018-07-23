@@ -21,6 +21,15 @@ public abstract class Personne
 		this.password=password;
 	}
 	
+	public Personne(String nom, String prenom, String dateNaiss, String email, String password)
+	{
+		this.nom=nom;
+		this.prenom=prenom;
+		this.dateNaiss=dateNaiss;
+		this.email=email;
+		this.password=password;
+	}
+	
 	public Personne()
 	{
 		
@@ -74,5 +83,10 @@ public abstract class Personne
 
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
+	}
+
+	@Override
+	public String toString() {
+		return prenom + " " + nom;
 	}
 }

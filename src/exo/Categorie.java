@@ -1,30 +1,36 @@
 package exo;
 
 public class Categorie {
-	private int IdCat;
-	private int supplement;
+	private int iD;
+	private static final int cotisationAnnuelle = 20;
+	private static final int supplement = 5;
 	private String typePneu;
 	private String nom;
 	private Calendrier calendrier;
+	private Responsable responsable;
 
-	public Categorie(int IdCat, int supplement, String typePneu, String nom) 
-	{
-		this.IdCat = IdCat;
-		this.supplement = supplement;
-		this.typePneu = typePneu;
-		this.nom = nom;
-	}
-	
-	public Categorie(int supplement, String typePneu, String nom, Calendrier calendrier) {
-		this.supplement = supplement;
+	public Categorie(int iD, String typePneu, String nom, Calendrier calendrier, Responsable responsable) {
+		this.iD = iD;
 		this.typePneu = typePneu;
 		this.nom = nom;
 		this.calendrier = calendrier;
+		this.responsable = responsable;
 	}
 	
-	public Categorie(int supplement, String typePneu, String nom) {
-		this.supplement = supplement;
+	public Categorie(String typePneu, String nom) 
+	{
 		this.typePneu = typePneu;
+		this.nom = nom;
+	}
+	
+	public Categorie(int iD, String typePneu, String nom) 
+	{
+		this.iD = iD;
+		this.typePneu = typePneu;
+		this.nom = nom;
+	}
+	
+	public Categorie(String nom) {
 		this.nom = nom;
 	}
 	
@@ -32,22 +38,19 @@ public class Categorie {
 		
 	}
 	
-	public int getIdCat() {
-		return IdCat;
+	
+	public int getiD() {
+		return iD;
 	}
 
-	public void setIdCat(int idCat) {
-		IdCat = idCat;
+	public void setiD(int iD) {
+		this.iD = iD;
 	}
 
 	public int getSupplement() {
 		return supplement;
 	}
-
-	public void setSupplement(int supplement) {
-		this.supplement = supplement;
-	}
-
+	
 	public String getTypePneu() {
 		return typePneu;
 	}
@@ -71,11 +74,24 @@ public class Categorie {
 	public void setCalendrier(Calendrier calendrier) {
 		this.calendrier = calendrier;
 	}
+	
+	public Responsable getResponsable() {
+		return responsable;
+	}
 
+	public void setResponsable(Responsable responsable) {
+		this.responsable = responsable;
+	}
+
+	/*@Override
+	public String toString() {
+		return "Categorie [supplement=" + supplement + ", typePneu=" + typePneu + ", nom=" + nom + ", calendrier="
+				+ calendrier + "]";
+	}*/
+	
 	@Override
 	public String toString() {
-		return "Categorie [IdCat=" + IdCat + ", supplement=" + supplement + ", typePneu=" + typePneu + ", nom=" + nom
-				+ ", calendrier=" + calendrier + "]";
+		return nom;
 	}
 	
 	

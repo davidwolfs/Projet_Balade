@@ -24,6 +24,7 @@ import javax.swing.event.ListSelectionListener;
 import dao.BaladeDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Categorie;
 import exo.Responsable;
 import gui.Main;
 
@@ -34,6 +35,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	private JLabel labelBalade;
 	private JLabel labelMsgErreur;
 	private Responsable currentResponsable;
+	private Categorie categorieChoisie;
 	private ListSelectionModel listSelectionModel;
 	private JTextField libelleField;
 	private JTextField lieuDepartField;

@@ -15,7 +15,8 @@ public class CycloDAO extends DAO<Cyclo>
 	}
 	
 	public boolean create(Cyclo obj){
-		boolean statementResult;
+		return false;
+		/*boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
 			String query = "INSERT INTO Cyclo (IdCat, IDR, IDMl) VALUES ('" + obj.getIDCy() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "','" + 2 + "')" + ";";
@@ -28,11 +29,12 @@ public class CycloDAO extends DAO<Cyclo>
 			System.out.println(e);
 		}
 		System.out.println(statementResult);
-		return statementResult;
+		return statementResult;*/
 	}
 	
 	public boolean delete(Cyclo obj){
-		boolean statementResult;
+		return false;
+		/*boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
 			String query = "DELETE FROM Cyclo WHERE IdCat = " + obj.getIDCy() + ";";
@@ -45,11 +47,12 @@ public class CycloDAO extends DAO<Cyclo>
 			System.out.println(e);
 		}
 		System.out.println(statementResult);
-		return statementResult;
+		return statementResult;*/
 	}
 	
 	public boolean update(Categorie obj){
-		boolean statementResult;
+		return false;
+		/*boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
 			String query = "UPDATE Cyclo SET " + obj.getNom() + "WHERE" + obj.getIdCat() + "=" + obj.getIdCat();
@@ -62,7 +65,7 @@ public class CycloDAO extends DAO<Cyclo>
 			System.out.println(e);
 		}
 		System.out.println(statementResult);
-		return statementResult;
+		return statementResult;*/
 	}
 	public Cyclo find(int id){
 		Cyclo cyclo = new Cyclo();
@@ -78,5 +81,11 @@ public class CycloDAO extends DAO<Cyclo>
 			e.printStackTrace();
 		}
 		return cyclo;
+	}
+
+	@Override
+	public boolean update(Cyclo obj) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

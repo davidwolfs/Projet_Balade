@@ -64,7 +64,7 @@ public class MenuBalade2 extends JPanel implements ActionListener
 
 	public void actionPerformed(ActionEvent arg0) {
 		JFrame frame = new JFrame();
-		ToDelete creerBalade = new ToDelete(frame, connect);
+		//ToDelete creerBalade = new ToDelete(frame, connect);
 		frame.setVisible(true);
 		System.out.println(connect);
 		
@@ -87,7 +87,7 @@ public class MenuBalade2 extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.CreerBalade();
+			//Main.CreerBalade();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -167,7 +167,7 @@ public class MenuBalade2 extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showDashboard_Membre();
+			//Main.showDashboard_Membre();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

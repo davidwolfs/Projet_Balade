@@ -10,10 +10,13 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import dao.BaladeDAO;
+import dao.CategorieDAO;
+import dao.MembreDAO;
 import exo.Balade;
 import exo.Membre;
 import gui.Main;
@@ -23,7 +26,6 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 	private Connection connect;
 	private JFrame controllingFrame; // needed for dialogs
 	private Membre currentMembre;
-	
 	private JButton rechercherBaladeButton;
 	private JButton rejoindreBaladeButton;
 	private JButton supprimerBaladeButton;
@@ -85,7 +87,7 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.CreerBalade();
+			//Main.CreerBalade(currentResponsable);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -103,13 +105,22 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 		}
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			Container cp = f.getContentPane();
-			cp.removeAll();
-			//f.removeAll();*/
-			Main.RejoindreBalade(currentMembre);
-			/*f.revalidate();*/
-			//f.getLayout().removeLayoutComponent(f);
+		public void actionPerformed(ActionEvent e) 
+		{
+			CategorieDAO categorieDAO = new CategorieDAO(connect);
+			if(categorieDAO.appartientCategorie(currentMembre))
+			{
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				//f.removeAll();*/
+				Main.RejoindreBalade(currentMembre);
+				/*f.revalidate();*/
+				//f.getLayout().removeLayoutComponent(f);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Veuillez d'abord vous affilier à une catégorie.");
+			}
 		}
 	}
 	
@@ -124,6 +135,7 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			System.out.println("OK");
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/

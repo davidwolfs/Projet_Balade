@@ -2,13 +2,14 @@ package gui;
 
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import gui.membre.Dashboard_Membre;
-import gui.membre.MenuBalade_Membre;
+
 import gui.responsable.*;
 import gui.membre.*;
 import gui.tresorier.Dashboard_Tresorier;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -26,7 +27,7 @@ import exo.Tresorier;
 
 public class Main {
 	
-	private static JFrame frame = new JFrame();
+	private static JFrame frame = new JFrame("Projet Balade");
 	private static Connection connect = DriverACCESS.getInstance();
 	private Object baladeSelected;
 	private Object categorieSelected;
@@ -106,15 +107,21 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
+	public static void showMenuVehicule_Membre(Membre currentMembre)
+	{
+		MenuVehicule_Membre menuVehicule_Membre = new MenuVehicule_Membre(frame, connect, currentMembre);
+		frame.setVisible(true);
+	}
+	
 	public static void RejoindreBalade(Membre currentMembre)
 	{
 		RejoindreBalade rejoindreBalade = new RejoindreBalade(frame, connect, currentMembre);
 		frame.setVisible(true);
 	}
 	
-	public static void AjoutVehicule(Membre currentMembre)
+	public static void AjoutVehicule(Membre currentMembre, Balade baladeSelected)
 	{
-		AjouterVehicule ajouterBalade = new AjouterVehicule(frame, connect, currentMembre);
+		AjouterVehiculeBalade ajouterVehiculeBalade = new AjouterVehiculeBalade(frame, connect, currentMembre, baladeSelected);
 		frame.setVisible(true);
 	}
 	
@@ -124,9 +131,9 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void VoirCalendrier(Responsable currentResponsable)
+	public static void VoirCalendrier(Responsable currentResponsable, Categorie categorieSelected)
 	{
-		VoirCalendrier voirCalendrier = new VoirCalendrier(frame, connect, currentResponsable);
+		VoirCalendrier voirCalendrier = new VoirCalendrier(frame, connect, currentResponsable, categorieSelected);
 		frame.setVisible(true);
 	}
 	
@@ -134,15 +141,15 @@ public class Main {
 	{
 		MenuRemboursement = new MenuRemboursement(frame, connect);membre@membre.com	
 		frame.setVisible(true);
-	}
+	}*/
 	
-	public static void showMenuDisponibilite()
+	public static void showMenuDisponibilite(Membre currentMembre)
 	{
-		 MenuDisponibilite = new MenuDisponibilite(frame, connect);
+		MenuDisponibilite_Membre menuDisponibilite_Membre = new MenuDisponibilite_Membre(frame, connect, currentMembre);
 		frame.setVisible(true);
 	}
 	
-	public static void showMenuCategorie()
+	/*public static void showMenuCategorie()
 	{
 		MenuCategorie = new MenuCategorie(frame, connect);
 		frame.setVisible(true);
@@ -164,7 +171,7 @@ public class Main {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
 		creerConnexion();
-		frame.setSize(500,500);
+		//frame.setSize(500,500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		/*BaladeDAO baladeDAO = new BaladeDAO(connect);
 		Balade balade = new Balade();

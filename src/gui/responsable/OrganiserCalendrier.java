@@ -39,17 +39,19 @@ public class OrganiserCalendrier
 	private Responsable currentResponsable;
 	private Categorie categorieSelected;
 	private ListSelectionModel listSelectionModel;
+	private JLabel labelBalades;
 	private JLabel labelDate;
 	private JLabel labelnombrePlaceVelo;
 	private JLabel labelMsgErreur;
 	private JTextField dateField;
 	private JButton rejoindreButton;
-	private JButton ajoutButton;
 	private JButton retourButton;
+	private JButton ajoutButton;
 	private JPanel p;
 	private JPanel p2;
 	private JPanel p3;
 	private JPanel p4;
+	private JPanel p5;
 	private Object baladeSelected;
 	
 	public OrganiserCalendrier(JFrame f, Connection connect, Responsable currentResponsable, Categorie categorieSelected) 
@@ -67,7 +69,7 @@ public class OrganiserCalendrier
 		//Object[] vehicules = listVehicule.toArray();
 		
 		
-		
+		labelBalades = new JLabel("Balades : ");
 		labelDate = new JLabel("Date : ");
 		labelMsgErreur = new JLabel();
 		dateField = new JTextField(2);
@@ -75,9 +77,10 @@ public class OrganiserCalendrier
 		ajoutButton = new JButton("Ajouter");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(1, 1));
-		p2 = new JPanel(new GridLayout(1, 2));
-		p3 = new JPanel(new GridLayout(1, 1));
+		p2 = new JPanel(new GridLayout(1, 1));
+		p3 = new JPanel(new GridLayout(1, 2));
 		p4 = new JPanel(new GridLayout(1, 2));
+		p5 = new JPanel(new GridLayout(2, 1));
 		
 		JList jlist1 = new JList(balades);
 	    jlist1.setVisibleRowCount(4);
@@ -96,14 +99,15 @@ public class OrganiserCalendrier
 	    jlist1.setFixedCellWidth(200);
 
 
-	    f.setSize(300, 350);
+	    f.setSize(300, 450);
 	    f.setVisible(true);
 	    
-	    p.add(scrollPane1);
-		p2.add(labelDate);
-		p2.add(dateField);
-		p3.add(ajoutButton);
-		p3.add(retourButton);
+	    p.add(labelBalades);
+	    p2.add(scrollPane1);
+		p3.add(labelDate);
+		p3.add(dateField);
+		p4.add(ajoutButton);
+		p4.add(retourButton);
 		
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
@@ -113,6 +117,7 @@ public class OrganiserCalendrier
 		f.add(p);
 		f.add(p2);
 		f.add(p3);
+		f.add(p4);
 		f.pack();
 	}
 
@@ -161,15 +166,15 @@ public class OrganiserCalendrier
 			if(listeBalade.isSelectionEmpty())
 			{
 				labelMsgErreur.setText("Veuillez sélectionné une balade.");
-				p4.add(labelMsgErreur);
-				f.add(p4);
+				p5.add(labelMsgErreur);
+				f.add(p5);
 				f.pack();
 			}
 			else if(dateField.getText().isEmpty())
 			{
 				labelMsgErreur.setText("Veuillez entrer tous les champs.");
-				p4.add(labelMsgErreur);
-				f.add(p4);
+				p5.add(labelMsgErreur);
+				f.add(p5);
 				f.pack();
 			}
 			else 
@@ -183,24 +188,22 @@ public class OrganiserCalendrier
 				balade = (Balade)baladeSelected;
 				System.out.println("Balade : " + balade);
 				
-				Calendrier calendrier = new Calendrier(dateField.getText());
+				Calendrier calendrier = new Calendrier(categorie.getNom(), dateField.getText());
 				calendrier.AjouterBalade(balade);
 				CalendrierDAO calendrierDAO = new CalendrierDAO(connect);
 				calendrierDAO.create(calendrier, balade, categorie);
 				
 				System.out.println("Calendrier avant : " + categorie.toString());
-				categorie.setSupplement(500);
-				
 				categorie.setCalendrier(calendrier);
 				System.out.println("Calendrier après : " + categorie.toString());
 				
-				//System.out.println("Liste des balades dans le calendrier : " + calendrier.getListBalade());
 				System.out.println("Liste des calendrier dans la catégorie : " + categorie.getCalendrier());
 				
+				System.out.println("Liste des balades dans le calendrier : " + calendrier.getListBalade());
 				
-				Container cp = f.getContentPane();
+				/*Container cp = f.getContentPane();
 				cp.removeAll();
-				Main.showMenuCategorie_Responsable(currentResponsable);
+				Main.showMenuCategorie_Responsable(currentResponsable);*/
 			}
 		}
 	}

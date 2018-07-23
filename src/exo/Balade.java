@@ -5,49 +5,47 @@ import java.util.Date;
 import java.util.List;
 
 public class Balade {
-	private int IDB;
-	private List<Vehicule> listVehicule = new ArrayList<>();
+	private int iDB;
+	private String libelle;
 	private String lieuDepart;
 	private String dateDepart;
 	private double forfait;
-	private String libelle;
+	private List<Vehicule> listVehicule = new ArrayList<>();
 
-	public Balade(int IDB, String lieuDepart, String dateDepart, double forfait,
-			String libelle) {
-		this.IDB = IDB;
-		//this.listVehicule = listVehicule;
+	public Balade(int iDB, String libelle, String lieuDepart, String dateDepart, double forfait, List<Vehicule> listVehicule) {
+		this.iDB = iDB;
+		this.libelle = libelle;
 		this.lieuDepart = lieuDepart;
 		this.dateDepart = dateDepart;
 		this.forfait = forfait;
-		this.libelle = libelle;
+		this.listVehicule = listVehicule;
 	}
 	
-	public Balade(String lieuDepart, String dateDepart, double forfait,
-			String libelle) {
-		//this.listVehicule = listVehicule;
+	public Balade(int iDB, String libelle, String lieuDepart, String dateDepart, double forfait) {
+		this.iDB = iDB;
+		this.libelle = libelle;
 		this.lieuDepart = lieuDepart;
 		this.dateDepart = dateDepart;
 		this.forfait = forfait;
+	}
+	
+	public Balade(String libelle, String lieuDepart, String dateDepart, double forfait) 
+	{
 		this.libelle = libelle;
+		this.lieuDepart = lieuDepart;
+		this.dateDepart = dateDepart;
+		this.forfait = forfait;
 	}
 
 	public Balade() {
 	}
-
-	public int getIDB() {
-		return IDB;
+	
+	public int getiDB() {
+		return iDB;
 	}
 
-	public void setIDB(int iDB) {
-		IDB = iDB;
-	}
-
-	public List<Vehicule> getListVehicule() {
-		return listVehicule;
-	}
-
-	public void setListVehicule(List<Vehicule> listVehicule) {
-		this.listVehicule = listVehicule;
+	public void setiDB(int iDB) {
+		this.iDB = iDB;
 	}
 
 	public String getLieuDepart() {
@@ -81,7 +79,15 @@ public class Balade {
 	public void setLibelle(String libelle) {
 		this.libelle = libelle;
 	}
-	
+
+	public List<Vehicule> getListVehicule() {
+		return listVehicule;
+	}
+
+	public void setListVehicule(List<Vehicule> listVehicule) {
+		this.listVehicule = listVehicule;
+	}
+
 	public void AjouterVehicule(Vehicule vehicule)
 	{
 		listVehicule.add(vehicule);
@@ -89,9 +95,7 @@ public class Balade {
 
 	@Override
 	public String toString() {
-		return "Balade [IDB=" + IDB + ", listVehicule=" + listVehicule + ", lieuDepart=" + lieuDepart + ", dateDepart="
-				+ dateDepart + ", forfait=" + forfait + ", libelle=" + libelle + "]";
+		return "Balade [libelle=" + libelle + ", lieuDepart=" + lieuDepart + ", dateDepart="
+				+ dateDepart + ", forfait=" + forfait + ", listVehicule=" + listVehicule + "]";
 	}
-	
-	
 }

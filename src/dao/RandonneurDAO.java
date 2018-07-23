@@ -16,7 +16,8 @@ public class RandonneurDAO extends DAO<Randonneur>{
 
 	@Override
 	public boolean create(Randonneur obj) {
-		boolean statementResult;
+		return false;
+		/*boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
 			String query = "INSERT INTO Randonneur (IDR, nomR, prenomR, dateNaissR,  emailR, passwordR) VALUES ('" + obj.getiD() + "','" + obj.getNom() + "','" + obj.getPrenom() + "','" + "1994-02-18" + "','" + obj.getEmail() + "','" + obj.getPassword() + "')" + ";";
@@ -29,7 +30,7 @@ public class RandonneurDAO extends DAO<Randonneur>{
 			System.out.println(e);
 		}
 		System.out.println(statementResult);
-		return statementResult;
+		return statementResult;*/
 	}
 
 	@Override
@@ -51,8 +52,8 @@ public class RandonneurDAO extends DAO<Randonneur>{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Randonneur WHERE IDR = " + id);
-			if(result.first())
-				randonneur = new Randonneur(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
+			//if(result.first())
+				//randonneur = new Randonneur(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();

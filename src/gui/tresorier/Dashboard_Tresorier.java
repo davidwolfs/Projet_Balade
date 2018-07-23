@@ -17,7 +17,6 @@ import dao.BaladeDAO;
 import exo.Balade;
 import exo.Tresorier;
 import gui.Main;
-import gui.ToDelete;
 
 public class Dashboard_Tresorier implements ActionListener 
 {
@@ -25,16 +24,16 @@ public class Dashboard_Tresorier implements ActionListener
 	private JFrame f; // needed for dialogs
 	private Tresorier currentTresorier;
 	private JLabel labelBonjour;
-	private JButton BaladeButton;
+//	private JButton BaladeButton;
 	private JButton RemboursementeButton;
 	private JButton DisponibiliteButton;
-	private JButton CategorieButton;
+//	private JButton CategorieButton;
 	private JButton PayementButton;
 	
-	private JButton creerBaladeButton;
+/*	private JButton creerBaladeButton;
 	private JButton modifierBaladeButton;
 	private JButton supprimerBaladeButton;
-	private JButton voirBaladeButton;
+	private JButton voirBaladeButton;*/
 	private JButton deconnexionButton;
 	private JPanel p;
 
@@ -43,28 +42,28 @@ public class Dashboard_Tresorier implements ActionListener
 		this.f = f;
 		this.currentTresorier = currentTresorier;
 		labelBonjour = new JLabel("Bonjour " + currentTresorier.getPrenom() + " " + currentTresorier.getNom() + ", vous êtes connecté en tant que : Trésorier");
-		BaladeButton = new JButton("Balade");
+	//	BaladeButton = new JButton("Balade");
 		RemboursementeButton = new JButton("Remboursement");
 		DisponibiliteButton = new JButton("Disponibilité");
-		CategorieButton = new JButton("Catégorie");
+	//	CategorieButton = new JButton("Catégorie");
 		PayementButton = new JButton("Payement");
 		deconnexionButton = new JButton("Déconnexion");
 		p = new JPanel(new GridLayout(0, 1));
 
 		p.add(labelBonjour);
-		p.add(BaladeButton);
+	//	p.add(BaladeButton);
 		p.add(RemboursementeButton);
 		p.add(DisponibiliteButton);
-		p.add(CategorieButton);
+	//	p.add(CategorieButton);
 		p.add(PayementButton);
 		p.add(deconnexionButton);
 		
 		f.add(p);
 		
-		BaladeButton.addActionListener(this);
+	//	BaladeButton.addActionListener(this);
 		RemboursementeButton.addActionListener(this);
 		DisponibiliteButton.addActionListener(this);
-		CategorieButton.addActionListener(new CategorieButtonListener(f));
+	//	CategorieButton.addActionListener(new CategorieButtonListener(f));
 		PayementButton.addActionListener(new PayementButtonListener(f));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
@@ -73,7 +72,6 @@ public class Dashboard_Tresorier implements ActionListener
 
 	public void actionPerformed(ActionEvent arg0) {
 		JFrame frame = new JFrame();
-		ToDelete creerBalade = new ToDelete(frame, connect);
 		frame.setVisible(true);
 		System.out.println(connect);
 		
@@ -96,7 +94,7 @@ public class Dashboard_Tresorier implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuBalade();
+			//Main.showMenuBalade();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -116,7 +114,7 @@ public class Dashboard_Tresorier implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuRemboursement();
+			//Main.showMenuRemboursement();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -136,7 +134,7 @@ public class Dashboard_Tresorier implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuDisponibilite();
+			//Main.showMenuDisponibilite();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -156,7 +154,7 @@ public class Dashboard_Tresorier implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuCategorie();
+			//Main.showMenuCategorie();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -176,7 +174,7 @@ public class Dashboard_Tresorier implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuPayement();
+		//	Main.showMenuPayement();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
