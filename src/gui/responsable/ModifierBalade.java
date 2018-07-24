@@ -33,11 +33,11 @@ public class ModifierBalade implements ActionListener
 	private JFrame f; // needed for dialogs
 	private Responsable currentResponsable;
 	private JLabel labelLibelle;
+	private JLabel labelLibelleValeur;
 	private JLabel labelLieuDepart;
 	private JLabel labelDateDepart;
 	private JLabel labelForfait;
 	private JLabel labelMsgErreur;
-	private JTextField libelleField;
 	private JTextField lieuDepartField;
 	private JTextField dateDepartField;
 	private JTextField forfaitField;
@@ -57,17 +57,17 @@ public class ModifierBalade implements ActionListener
 		this.baladeSelected = baladeSelected;
 		this.currentResponsable = currentResponsable;
 		labelLibelle = new JLabel("Libellé");
+		labelLibelleValeur = new JLabel();
 		labelLieuDepart = new JLabel("Lieu départ");
 		labelDateDepart = new JLabel("Date départ");
 		labelForfait = new JLabel("Forfait");
 		labelMsgErreur = new JLabel();
 		//String listVehicules = vehicules.toString();
-		libelleField = new JTextField(15);
 		lieuDepartField = new JTextField(15);
 		dateDepartField = new JTextField(15);
 		forfaitField = new JTextField(5);
 		
-		libelleField.setText(((Balade)baladeSelected).getLibelle());
+		labelLibelleValeur.setText(((Balade)baladeSelected).getLibelle());
 		lieuDepartField.setText(((Balade)baladeSelected).getLieuDepart());
 		dateDepartField.setText(((Balade)baladeSelected).getDateDepart());
 		forfaitField.setText(Double.toString(((Balade)baladeSelected).getForfait()));
@@ -78,7 +78,7 @@ public class ModifierBalade implements ActionListener
 		p2 = new JPanel(new GridLayout(1,1));
 		
 		p.add(labelLibelle);
-		p.add(libelleField);
+		p.add(labelLibelleValeur);
 		p.add(labelLieuDepart);
 		p.add(lieuDepartField);
 		p.add(labelDateDepart);
@@ -102,7 +102,7 @@ public class ModifierBalade implements ActionListener
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(forfaitField.getText());
 		
-		if(libelleField.getText().isEmpty() || lieuDepartField.getText().isEmpty() || dateDepartField.getText().isEmpty() || forfaitField.getText().isEmpty())
+		if(lieuDepartField.getText().isEmpty() || dateDepartField.getText().isEmpty() || forfaitField.getText().isEmpty())
 		{
 			labelMsgErreur.setText("Veuillez remplir tous les champs.");
 			p2.add(labelMsgErreur);
@@ -119,7 +119,6 @@ public class ModifierBalade implements ActionListener
 		}
 		else
 		{
-			((Balade)baladeSelected).setLibelle(libelleField.getText());
 			((Balade)baladeSelected).setLieuDepart(lieuDepartField.getText());
 			((Balade)baladeSelected).setDateDepart(dateDepartField.getText());
 			((Balade)baladeSelected).setForfait(Double.parseDouble(forfaitField.getText()));

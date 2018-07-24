@@ -47,7 +47,8 @@ public class VehiculeDAO extends DAO<Vehicule>{
 
 	@Override
 	public boolean update(Vehicule obj) {
-		boolean statementResult;
+		return false;
+		/*boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
 			String query = "UPDATE Vehicule SET nombrePlaceMembre = " + obj.getNombrePlaceMembre() + "-1" + ", " + "nombrePlaceVelo = " + obj.getNombrePlaceVelo() + "-1" + " WHERE Immatriculation = " + "\"" + obj.getImmatriculation() + "\"" + ";";
@@ -60,7 +61,7 @@ public class VehiculeDAO extends DAO<Vehicule>{
 			System.out.println(e);
 		}
 		System.out.println(statementResult);
-		return statementResult;
+		return statementResult;*/
 	}
 
 	@Override

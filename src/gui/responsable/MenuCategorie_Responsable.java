@@ -186,7 +186,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 			}
 			else
 			{
-				System.out.println((Categorie)categorieSelected + " " + currentResponsable.getiD());
+				System.out.println((Categorie)categorieSelected + " " + currentResponsable.getNom());
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/

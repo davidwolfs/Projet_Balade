@@ -171,12 +171,6 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 			CategorieDAO categorieDAO = new CategorieDAO(connect);
 			MembreDAO membreDAO = new MembreDAO(connect);
 			System.out.println(currentMembre.getListCategorie());
-			Categorie categorie = (Categorie)listeCategorie.getSelectedValue();
-			
-			currentMembre = membreDAO.getSoldeMembre(currentMembre);
-			double soldeMembre = currentMembre.getSolde();
-			int supplement = categorie.getSupplement();
-					
 			if(listeCategorie.isSelectionEmpty())
 			{
 				labelMsgErreur.setText("Veuillez sélectionner une catégorie.");
@@ -192,13 +186,12 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 			{
 				JOptionPane.showMessageDialog(null, "Vous venez de vous affilier à la catégorie : " + listeCategorie.getSelectedValue());
 				//currentMembre = membreDAO.findMembreByEmailPassword(currentMembre.getEmail(), currentMembre.getPassword());
-				System.out.println("Membre courant : " + currentMembre.getiD());
-				System.out.println("Solde avant : " + currentMembre.getSolde());
-				/*currentMembre.soustraitSolde(supplement);
-				membreDAO.update_solde(currentMembre);*/
-				System.out.println("Solde après : " + currentMembre.getSolde());
-				System.out.println(categorie.getNom());
-				System.out.println(currentMembre.getListCategorie());
+				Categorie categorie = (Categorie)listeCategorie.getSelectedValue();
+				System.out.println("Nom de la catégorie choisie : " + categorie.getNom());
+				//System.out.println(currentMembre.getListCategorie());
+				System.out.println("Categorie : " + categorie.toString());
+				System.out.println("Membre : " + currentMembre);
+				System.out.println("Catégorie : " + categorie);
 				currentMembre.AjouterCategorie(categorie);
 				System.out.println(currentMembre.getListCategorie());
 				categorieDAO.create_Categorie_Membre((Categorie)listeCategorie.getSelectedValue(), currentMembre);

@@ -67,7 +67,7 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Ligne_Balade (IDB, Immatriculation, IDM) VALUES (" + balade.getiDB() + "," + "\"" + vehicule.getImmatriculation() + "\"" + "," + 1 + ");";
+			String query = "INSERT INTO Ligne_Balade (IDB, Immatriculation, IDM) VALUES (" + balade.getiDB() + "," + "\"" + vehicule.getImmatriculation() + "\"" + "," + 29 + ");";
 			for(int i = 0; i < balade.getListVehicule().size() ; i++)
 			{
 				//String query2 = "INSERT INTO Liste_Balade (ID, IDB, IDV, IDM) VALUES ('" + 1 + "','" + obj.getIDB() + "','" + obj.getListVehicule().get(i).getIDV() + "','" + obj."
@@ -351,9 +351,11 @@ public class BaladeDAO extends DAO<Balade>
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT COUNT(*) FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND Immatriculation = " + vehicule.getImmatriculation() + " AND IDM IS NOT 1");
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT COUNT(*) AS nbrPlaces FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND Immatriculation = " + "\"" + vehicule.getImmatriculation() + "\"");
 			if(result.next())
 			{
+				nombrePlaceUtilisees = result.getInt("nbrPlaces");
+				System.out.println("Nombre de places utilisées : " + nombrePlaceUtilisees);
 				/*balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
 				solde = result.getDouble("forfait");*/
 			}

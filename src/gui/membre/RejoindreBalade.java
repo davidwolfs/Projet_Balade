@@ -57,6 +57,7 @@ public class RejoindreBalade
 	{
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
+		System.out.println(currentMembre.getEmail());
 		List<Balade> listBalade = baladeDAO.listBaladeBylistCategorie(currentMembre.getListCategorie());
 				//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
 		Object[] balades = listBalade.toArray();
@@ -178,6 +179,8 @@ public class RejoindreBalade
 			vehicule = (Vehicule)listeVehicule.getSelectedValue();
 			Balade balade;
 			
+			int nombrePlacesUtilisees;
+			
 			currentMembre = membreDAO.getSoldeMembre(currentMembre);
 			double soldeMembre = currentMembre.getSolde();
 			double forfait = baladeDAO.getForfait(baladeSelected);
@@ -188,12 +191,9 @@ public class RejoindreBalade
 				f.add(p2);
 				f.pack();
 			}
-			else if(vehicule.getNombrePlaceMembre() <= 0 || vehicule.getNombrePlaceVelo() <= 0)
+			else if(baladeDAO.getPlaceUtilisee((Vehicule)listeVehicule.getSelectedValue(), baladeSelected) >= vehicule.getNombrePlaceMembre())
 			{
-				labelMsgErreur.setText("Il n'y a plus de place disponible.");
-				p2.add(labelMsgErreur);
-				f.add(p2);
-				f.pack();
+				JOptionPane.showMessageDialog(null, "Il n'y a plus de place dans ce véhicule.");
 			}
 			else if(baladeDAO.alreadyInBalade((Balade)baladeSelected, currentMembre))
 			{
@@ -206,10 +206,10 @@ public class RejoindreBalade
 			else
 			{
 				System.out.println("Solde membre : " + currentMembre.getSolde());
-				System.out.println("ID Membre : " + currentMembre.getiD());
+				System.out.println("Nom membre : " + currentMembre.getNom());
 				System.out.println("Forfait : " + forfait);
 				System.out.println("Solde avant : " + currentMembre.getSolde());
-				System.out.println("ID Membre courant : " + currentMembre.getiD());
+				System.out.println("Nom Membre courant : " + currentMembre.getNom());
 				currentMembre.soustraitSolde(forfait);
 				System.out.println("Solde après : " + currentMembre.getSolde());
 				double soldeSoustrait = currentMembre.getSolde();
@@ -217,7 +217,7 @@ public class RejoindreBalade
 				System.out.println("Balade : " + baladeSelected);
 				System.out.println("Véhicule : " + listeVehicule.getSelectedValue());
 				System.out.println("Véhicule sélectionné : " + (Vehicule)listeVehicule.getSelectedValue());
-				System.out.println("Membre : " + currentMembre.getiD());
+				System.out.println("Membre : " + currentMembre.getNom());
 				/*Membre membre = new Membre();
 				
 				(Vehicule)listeVehicule.getSelectedValue()).toArray()*/
@@ -245,7 +245,7 @@ public class RejoindreBalade
 	
 				JOptionPane.showMessageDialog(null, "Vous avez rejoint la balade : " + balade.getLibelle() + " avec le véhicule immatriculé : " + vehicule.getImmatriculation());
 				baladeDAO.create_Ligne_Balade((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue(), currentMembre);
-				vehiculeDAO.update(vehicule);
+				//vehiculeDAO.update(vehicule);
 				
 				
 				Container cp = f.getContentPane();

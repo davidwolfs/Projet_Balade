@@ -17,11 +17,11 @@ public class TresorierDAO extends DAO<Tresorier>{
 	}
 
 	@Override
-	public boolean create(Tresorier obj) {
+	public boolean create(Tresorier tresorier) {
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Tresorier (IDT, nomT, prenomT, dateNaissT,  emailT, passwordT) VALUES ('" + obj.getiD() + "','" + obj.getNom() + "','" + obj.getPrenom() + "','" + "1994-02-18" + "','" + obj.getEmail() + "','" + obj.getPassword() + "')" + ";";
+			String query = "INSERT INTO Tresorier (nomT, prenomT, dateNaissT,  emailT, passwordT) VALUES ('" + tresorier.getNom() + "','" + tresorier.getPrenom() + "','" + "1994-02-18" + "','" + tresorier.getEmail() + "','" + tresorier.getPassword() + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -48,13 +48,13 @@ public class TresorierDAO extends DAO<Tresorier>{
 
 	@Override
 	public Tresorier find(int id) {
-		Tresorier tresorier = new Tresorier(id, null, null, null, null, null);
+		Tresorier tresorier = new Tresorier(null, null, null, null, null);
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Tresorier WHERE IDT = " + id);
 			if(result.first())
-				tresorier = new Tresorier(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
+				tresorier = new Tresorier(result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();
@@ -64,14 +64,14 @@ public class TresorierDAO extends DAO<Tresorier>{
 	
 	public boolean findByEmailPassword(String email, String password){
 		boolean existe = false;
-		Tresorier tresorier= new Tresorier(1, null, null, null, email, password);
+		Tresorier tresorier= new Tresorier(null, null, null, email, password);
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Tresorier WHERE emailT = " + "\"" + email + "\" AND passwordT = " + "\"" + password + "\"");
 			if(result.first())
 			{
-				tresorier = new Tresorier(1, result.getString("nomT"), result.getString("prenomT"), result.getString("dateNaissT"), email, password);
+				tresorier = new Tresorier(result.getString("nomT"), result.getString("prenomT"), result.getString("dateNaissT"), email, password);
 				existe = true;
 			}
 				
@@ -83,14 +83,14 @@ public class TresorierDAO extends DAO<Tresorier>{
 	}
 	
 	public Tresorier findTresorierByEmailPassword(String email, String password){
-		Tresorier tresorier = new Tresorier(1, null, null, null, email, password);
+		Tresorier tresorier = new Tresorier(null, null, null, email, password);
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Tresorier WHERE emailT = " + "\"" + email + "\" AND passwordT = " + "\"" + password + "\"");
 			if(result.first())
 			{
-				tresorier = new Tresorier(result.getInt("IDT"), result.getString("nomT"), result.getString("prenomT"), result.getString("dateNaissT"), email, password);
+				tresorier = new Tresorier(result.getString("nomT"), result.getString("prenomT"), result.getString("dateNaissT"), email, password);
 			}
 				
 		}
@@ -110,7 +110,7 @@ public class TresorierDAO extends DAO<Tresorier>{
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Tresorier WHERE emailT = " + "\"" + email + "\"");
 			if(result.first())
 			{
-				tresorier = new Tresorier(result.getInt("IDT"), result.getString("nomT"), result.getString("prenomT"), result.getString("dateNaissT"), email, result.getString("passwordT"));
+				tresorier = new Tresorier(result.getString("nomT"), result.getString("prenomT"), result.getString("dateNaissT"), email, result.getString("passwordT"));
 				exist = true;
 			}
 				

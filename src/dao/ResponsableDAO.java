@@ -20,7 +20,7 @@ public class ResponsableDAO extends DAO<Responsable>{
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Responsable (IDR, nomR, prenomR, dateNaissR,  emailR, passwordR) VALUES ('" + obj.getiD() + "','" + obj.getNom() + "','" + obj.getPrenom() + "','" + "1994-02-18" + "','" + obj.getEmail() + "','" + obj.getPassword() + "')" + ";";
+			String query = "INSERT INTO Responsable (nomR, prenomR, dateNaissR,  emailR, passwordR) VALUES ('" + obj.getNom() + "','" + obj.getPrenom() + "','" + "1994-02-18" + "','" + obj.getEmail() + "','" + obj.getPassword() + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -44,16 +44,15 @@ public class ResponsableDAO extends DAO<Responsable>{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	@Override
-	public Responsable find(int id) {
-		Responsable responsable = new Responsable(id, null, null, null, null, null);
+	
+	public Responsable find(String email) {
+		Responsable responsable = null;
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Responsable WHERE IDR = " + id);
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Responsable WHERE emailR = " + email);
 			if(result.first())
-				responsable = new Responsable(id, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
+				responsable = new Responsable(result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), result.getString("emailR"), result.getString("passwordR"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();
@@ -63,14 +62,14 @@ public class ResponsableDAO extends DAO<Responsable>{
 	
 	public boolean findByEmailPassword(String email, String password){
 		boolean existe = false;
-		Responsable responsable = new Responsable(1, null, null, null, email, password);
+		Responsable responsable = new Responsable(null, null, null, email, password);
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Responsable WHERE emailR = " + "\"" + email + "\" AND passwordR = " + "\"" + password + "\"");
 			if(result.first())
 			{
-				responsable = new Responsable(1, result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), email, password);
+				responsable = new Responsable(result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), email, password);
 				existe = true;
 			}
 				
@@ -82,14 +81,14 @@ public class ResponsableDAO extends DAO<Responsable>{
 	}
 	
 	public Responsable findResponsableByEmailPassword(String email, String password){
-		Responsable responsable = new Responsable(1, null, null, null, email, password);
+		Responsable responsable = new Responsable(null, null, null, email, password);
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Responsable WHERE emailR = " + "\"" + email + "\" AND passwordR = " + "\"" + password + "\"");
 			if(result.first())
 			{
-				responsable = new Responsable(result.getInt("IDR"), result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), email, password);
+				responsable = new Responsable(result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), email, password);
 			}
 				
 		}
@@ -109,7 +108,7 @@ public class ResponsableDAO extends DAO<Responsable>{
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Responsable WHERE emailR = " + "\"" + email + "\"");
 			if(result.first())
 			{
-				responsable = new Responsable(result.getInt("IDR"), result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), email, result.getString("passwordR"));
+				responsable = new Responsable(result.getString("nomR"), result.getString("prenomR"), result.getString("dateNaissR"), email, result.getString("passwordR"));
 				exist = true;
 			}
 				
@@ -118,5 +117,11 @@ public class ResponsableDAO extends DAO<Responsable>{
 			e.printStackTrace();
 		}
 		return exist;
+	}
+
+	@Override
+	public Responsable find(int id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
