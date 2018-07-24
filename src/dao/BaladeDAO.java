@@ -303,6 +303,28 @@ public class BaladeDAO extends DAO<Balade>
 		return listBalade;
 	}
 	
+	public List<Balade> listBaladeDisponible()
+	{
+		List<Balade> listBalade = new ArrayList<>();
+		Balade balade = null;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Balade WHERE IDB NOT IN (SELECT IDB FROM Calendrier) AND libelleB != \"N/A\"");
+	System.out.println("after");
+			while(result.next())
+			{
+				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
+				listBalade.add(balade);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listBalade;
+	}
+	
 	public double getForfait(Balade balade)
 	{
 		double solde = 0;
@@ -321,5 +343,25 @@ public class BaladeDAO extends DAO<Balade>
 		}
 		
 		return solde;
+	}
+	
+	public int getPlaceUtilisee(Vehicule vehicule, Balade balade)
+	{
+		int nombrePlaceUtilisees = 0;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT COUNT(*) FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND Immatriculation = " + vehicule.getImmatriculation() + " AND IDM IS NOT 1");
+			if(result.next())
+			{
+				/*balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
+				solde = result.getDouble("forfait");*/
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return nombrePlaceUtilisees;
 	}
 }

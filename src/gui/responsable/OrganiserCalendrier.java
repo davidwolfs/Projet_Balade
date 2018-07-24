@@ -63,7 +63,7 @@ public class OrganiserCalendrier
 		
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
-		List<Balade> listBalade = baladeDAO.listBalade();
+		List<Balade> listBalade = baladeDAO.listBaladeDisponible();
 		//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
 		Object[] balades = listBalade.toArray();
 		//Object[] vehicules = listVehicule.toArray();
@@ -80,7 +80,7 @@ public class OrganiserCalendrier
 		p2 = new JPanel(new GridLayout(1, 1));
 		p3 = new JPanel(new GridLayout(1, 2));
 		p4 = new JPanel(new GridLayout(1, 2));
-		p5 = new JPanel(new GridLayout(2, 1));
+		p5 = new JPanel(new GridLayout(1, 1));
 		
 		JList jlist1 = new JList(balades);
 	    jlist1.setVisibleRowCount(4);
@@ -201,9 +201,9 @@ public class OrganiserCalendrier
 				
 				System.out.println("Liste des balades dans le calendrier : " + calendrier.getListBalade());
 				
-				/*Container cp = f.getContentPane();
+				Container cp = f.getContentPane();
 				cp.removeAll();
-				Main.showMenuCategorie_Responsable(currentResponsable);*/
+				Main.showMenuCategorie_Responsable(currentResponsable);
 			}
 		}
 	}

@@ -31,10 +31,14 @@ public class MenuVehicule_Membre
 	private Membre currentMembre;
 	private JLabel labelNombrePlacesMembre;
 	private JLabel labelImmatriculation;
+	private JLabel labelMarque;
+	private JLabel labelModele;
 	private JLabel labelnombrePlacesVelo;
 	private JLabel labelMsgErreur;
 	private JTextField nombrePlacesMembreField;
 	private JTextField immatriculationField;
+	private JTextField marqueField;
+	private JTextField modeleField;
 	private JTextField nombrePlacesVeloField;
 	private JButton rejoindreButton;
 	private JButton ajoutButton;
@@ -48,20 +52,28 @@ public class MenuVehicule_Membre
 		this.f = f;
 		this.currentMembre = currentMembre;
 		labelImmatriculation = new JLabel("Immatriculation : ");
+		labelMarque = new JLabel("Marque : ");
+		labelModele = new JLabel("Modèle : ");
 		labelNombrePlacesMembre = new JLabel("Nombre de places membres : ");
 		labelnombrePlacesVelo = new JLabel("Nombre de places vélos : ");
 		labelMsgErreur = new JLabel();
 		nombrePlacesMembreField = new JTextField(2);
 		immatriculationField = new JTextField(15);
 		nombrePlacesVeloField = new JTextField(2);
+		marqueField = new JTextField(15);
+		modeleField = new JTextField(15);
 		
 		ajoutButton = new JButton("Ajouter");
 		retourButton = new JButton("Retour");
-		p = new JPanel(new GridLayout(5, 2));
+		p = new JPanel(new GridLayout(7, 2));
 		p2 = new JPanel(new GridLayout(5, 2));
 
 		p.add(labelImmatriculation);
 		p.add(immatriculationField);
+		p.add(labelMarque);
+		p.add(marqueField);
+		p.add(labelModele);
+		p.add(modeleField);
 		p.add(labelNombrePlacesMembre);
 		p.add(nombrePlacesMembreField);
 		p.add(labelnombrePlacesVelo);
@@ -97,7 +109,7 @@ public class MenuVehicule_Membre
 			}
 			else 
 			{
-				Vehicule vehicule = new Vehicule(immatriculationField.getText(), Integer.parseInt(nombrePlacesMembreField.getText()), Integer.parseInt(nombrePlacesVeloField.getText()), currentMembre);
+				Vehicule vehicule = new Vehicule(immatriculationField.getText(), marqueField.getText(), modeleField.getText(), Integer.parseInt(nombrePlacesMembreField.getText()), Integer.parseInt(nombrePlacesVeloField.getText()), currentMembre);
 				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 				if(vehiculeDAO.alreadyExist(immatriculationField.getText()))
 				{

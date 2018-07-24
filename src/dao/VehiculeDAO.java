@@ -26,7 +26,7 @@ public class VehiculeDAO extends DAO<Vehicule>{
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Vehicule (Immatriculation, nombrePlaceMembre, nombrePlaceVelo, IDM) VALUES ('" + vehicule.getImmatriculation() + "','" + vehicule.getNombrePlaceMembre() + "','" + vehicule.getNombrePlaceVelo() + "','" + vehicule.getChauffeur().getiD() + "')" + ";";
+			String query = "INSERT INTO Vehicule (Immatriculation, Marque, Modele, NombrePlaceMembre, NombrePlaceVelo, IDM) VALUES ('" + vehicule.getImmatriculation() + "','" + vehicule.getMarque() + "','" + vehicule.getModele() + "'," + vehicule.getNombrePlaceMembre() + "," + vehicule.getNombrePlaceVelo() + "," + vehicule.getChauffeur().getiD() + ")" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -90,7 +90,7 @@ public class VehiculeDAO extends DAO<Vehicule>{
 			{
 				Membre membre = new Membre();
 				membre.setiD(result.getInt("IDM"));
-				vehicule = new Vehicule(result.getString("Immatriculation"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);
+				vehicule = new Vehicule(result.getString("Immatriculation"), result.getString("Marque"), result.getString("Modele"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);
 			}
 		}
 		catch(SQLException e){
@@ -102,7 +102,7 @@ public class VehiculeDAO extends DAO<Vehicule>{
 	public boolean alreadyExist(String immatriculation)
 	{
 		boolean exist = false;
-		Vehicule vehicule = new Vehicule();
+		Vehicule vehicule = null;
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -123,7 +123,7 @@ public class VehiculeDAO extends DAO<Vehicule>{
 	public List<Vehicule> listVehiculeByBalade(Balade balade)
 	{
 		List<Vehicule> listVehicule = new ArrayList<>();
-		Vehicule vehicule = null;
+		Vehicule vehicule;
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -132,7 +132,7 @@ public class VehiculeDAO extends DAO<Vehicule>{
 			{
 				Membre membre = new Membre();
 				membre.setiD(result.getInt("IDM"));
-				vehicule = new Vehicule(result.getString("Immatriculation"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);
+				vehicule = new Vehicule(result.getString("Immatriculation"), result.getString("Marque"), result.getString("Modele"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);;
 				listVehicule.add(vehicule);
 			}
 		}
@@ -154,7 +154,7 @@ public class VehiculeDAO extends DAO<Vehicule>{
 			while(result.next())
 			{
 				membre.setiD(result.getInt("IDM"));
-				vehicule = new Vehicule(result.getString("Immatriculation"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);
+				vehicule = new Vehicule(result.getString("Immatriculation"), result.getString("Marque"), result.getString("Modele"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);;
 				listVehicule.add(vehicule);
 			}
 		}
@@ -177,7 +177,7 @@ public class VehiculeDAO extends DAO<Vehicule>{
 			{
 				Membre membre = new Membre();
 				membre.setiD(result.getInt("IDM"));
-				vehicule = new Vehicule(result.getString("Immatriculation"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);
+				vehicule = new Vehicule(result.getString("Immatriculation"), result.getString("Marque"), result.getString("Modele"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);;
 				listVehicule.add(vehicule);
 			}
 		}

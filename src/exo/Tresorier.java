@@ -11,8 +11,10 @@ public class Tresorier extends Personne {
 		this.numCompteCourant = numCompteCourant;
 	}
 	
-	public Tresorier(int iD, String nom, String prenom, String dateNaiss, String email, String password) {
+	public Tresorier(int iD, String nom, String prenom, String dateNaiss, String email, String password) 
+	{
 		super(iD, nom, prenom, dateNaiss, email, password);
+		//this.dateDebut = dateDebut;
 	}
 	
 	public Tresorier(String nom, String prenom, String dateNaiss, String email, String password) 

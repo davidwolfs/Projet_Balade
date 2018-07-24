@@ -207,6 +207,24 @@ public class CategorieDAO extends DAO<Categorie>
 		return appartient;
 	}
 	
+	public boolean isNotResponsable(Categorie categorie, Responsable responsable)
+	{
+		boolean appartient = true;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie_Responsable WHERE nom = " + "\"" + categorie.getNom() + "\"" + " AND IDR = " + responsable.getiD());
+			if(result.first())
+			{
+				appartient = false;
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return appartient;
+	}
+	
 	@Override
 	public boolean create(Categorie obj) {
 		// TODO Auto-generated method stub

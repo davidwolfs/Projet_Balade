@@ -6,27 +6,31 @@ import java.util.List;
 public class Vehicule 
 {
 	private String immatriculation;
+	private String marque;
+	private String modele;
 	private int nombrePlaceMembre;
 	private int nombrePlaceVelo;
 	private Membre chauffeur; 
 	private List<Membre> listMembre = new ArrayList<>();
 
-	public Vehicule(String immatriculation, int nombrePlaceMembre,   
+	public Vehicule(String immatriculation, String marque, String modele, int nombrePlaceMembre,   
 			int nombrePlaceVelo, Membre chauffeur, List<Membre> listMembre) 
 	{
 		this.immatriculation = immatriculation;
+		this.marque = marque;
+		this.modele = modele;
 		this.nombrePlaceMembre = nombrePlaceMembre;
 		this.nombrePlaceVelo = nombrePlaceVelo;
 		this.chauffeur = chauffeur;
 		this.listMembre = listMembre;
 	}
 	
-	public Vehicule(String immatriculation, int nombrePlaceMembre, int nombrePlaceVelo, Membre chauffeur) {
-		this(immatriculation, nombrePlaceMembre, nombrePlaceVelo, chauffeur, new ArrayList<Membre>());
+	public Vehicule(String immatriculation, String marque, String modele, int nombrePlaceMembre, int nombrePlaceVelo, Membre chauffeur) {
+		this(immatriculation, marque, modele, nombrePlaceMembre, nombrePlaceVelo, chauffeur, new ArrayList<Membre>());
 	}
 	
-	public Vehicule(String immatriculation, int nombrePlaceMembre, int nombrePlaceVelo) {
-		this(immatriculation, nombrePlaceMembre, nombrePlaceVelo, null, new ArrayList<Membre>());
+	public Vehicule(String immatriculation, String marque, String modele, int nombrePlaceMembre, int nombrePlaceVelo) {
+		this(immatriculation, marque, modele, nombrePlaceMembre, nombrePlaceVelo, null, new ArrayList<Membre>());
 	}
 	
 	public Vehicule() 
@@ -40,6 +44,22 @@ public class Vehicule
 
 	public void setImmatriculation(String immatriculation) {
 		this.immatriculation = immatriculation;
+	}
+	
+	public String getMarque() {
+		return marque;
+	}
+
+	public void setMarque(String marque) {
+		this.marque = marque;
+	}
+
+	public String getModele() {
+		return modele;
+	}
+
+	public void setModele(String modele) {
+		this.modele = modele;
 	}
 
 	public int getNombrePlaceMembre() {

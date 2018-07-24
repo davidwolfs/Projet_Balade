@@ -40,11 +40,11 @@ public class VoirCalendrier
 	private Categorie categorieSelected;
 	private ListSelectionModel listSelectionModel;
 //	private JLabel labelDate;
+	private JLabel labelCalendriers;
 	private JLabel labelnombrePlaceVelo;
 	private JLabel labelMsgErreur;
 	private JTextField dateField;
 	private JButton rejoindreButton;
-	private JButton ajoutButton;
 	private JButton retourButton;
 	private JPanel p;
 	private JPanel p2;
@@ -63,15 +63,15 @@ public class VoirCalendrier
 		List<Calendrier> listCalendrier = calendrierDAO.listCalendrierByCategorie(categorieSelected);
 		Object[] calendriers = listCalendrier.toArray();
 		
+		labelCalendriers = new JLabel("Calendriers pour la catégorie : " + categorieSelected);
 		labelMsgErreur = new JLabel();
 		dateField = new JTextField(2);
 		
-		ajoutButton = new JButton("Ajouter");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(1, 1));
-		p2 = new JPanel(new GridLayout(1, 2));
-		p3 = new JPanel(new GridLayout(1, 1));
-		p4 = new JPanel(new GridLayout(1, 2));
+		p2 = new JPanel(new GridLayout(1, 1));
+		p3 = new JPanel(new GridLayout(1, 2));
+		p4 = new JPanel(new GridLayout(1, 1));
 		
 		JList jlist1 = new JList(calendriers);
 	    jlist1.setVisibleRowCount(4);
@@ -93,16 +93,15 @@ public class VoirCalendrier
 	    f.setSize(300, 350);
 	    f.setVisible(true);
 	    
-	    p.add(scrollPane1);
+	    p.add(labelCalendriers);
+	    p2.add(scrollPane1);
 		/*p2.add(labelDate);
 		p2.add(dateField);*/
-		p3.add(ajoutButton);
 		p3.add(retourButton);
 		
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1));
-		ajoutButton.addActionListener(new ajoutButtonListener(f, jlist1, currentResponsable));
 		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
 		f.add(p);
 		f.add(p2);
@@ -137,7 +136,7 @@ public class VoirCalendrier
 		}
 	}
 
-	private class ajoutButtonListener implements ActionListener 
+	/*private class ajoutButtonListener implements ActionListener 
 	{
 		private JFrame f;
 		private Responsable currentResponsable;
@@ -189,7 +188,7 @@ public class VoirCalendrier
 				Main.showMenuCategorie_Responsable(currentResponsable);
 			}
 		}
-	}
+	}*/
 	
 	private class retourButtonListener implements ActionListener
 	{

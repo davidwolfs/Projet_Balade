@@ -161,7 +161,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	{
 		private JFrame f;
 		private JList listeCategorie;
-
+		
 		public organiserCalendrierButtonListener(JFrame f, JList listeCategorie)
 		{
 			this.f = f;
@@ -170,6 +170,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			CategorieDAO categorieDAO = new CategorieDAO(connect);
 			System.out.println("Categorie sélectionnée : " + categorieSelected);
 			
 			if(listeCategorie.isSelectionEmpty())
@@ -179,8 +180,13 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 				f.add(p4);
 				f.pack();
 			}
+			else if(categorieDAO.isNotResponsable((Categorie)categorieSelected, currentResponsable))
+			{
+				JOptionPane.showMessageDialog(null, "Vous devez d'abord devenir responsable de cette catégorie.");
+			}
 			else
 			{
+				System.out.println((Categorie)categorieSelected + " " + currentResponsable.getiD());
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
@@ -205,12 +211,18 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			CategorieDAO categorieDAO = new CategorieDAO(connect);
+			System.out.println("Categorie sélectionnée : " + categorieSelected);
 			if(listeCategorie.isSelectionEmpty())
 			{
 				labelMsgErreur.setText("Veuillez sélectionner une catégorie.");
 				p4.add(labelMsgErreur);
 				f.add(p4);
 				f.pack();
+			}
+			else if(categorieDAO.isNotResponsable((Categorie)categorieSelected, currentResponsable))
+			{
+				JOptionPane.showMessageDialog(null, "Vous devez d'abord devenir responsable de cette catégorie.");
 			}
 			else
 			{

@@ -31,7 +31,6 @@ public class Responsable extends Personne {
 	/*public Date getDateDebut() {
 		return dateDebut;
 	}
-
 	public void setDateDebut(Date dateDebut) {
 		this.dateDebut = dateDebut;
 	}*/
