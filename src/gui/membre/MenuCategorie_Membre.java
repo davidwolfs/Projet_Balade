@@ -195,6 +195,14 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 				currentMembre.AjouterCategorie(categorie);
 				System.out.println(currentMembre.getListCategorie());
 				categorieDAO.create_Categorie_Membre((Categorie)listeCategorie.getSelectedValue(), currentMembre);
+				currentMembre = membreDAO.getSoldeMembre(currentMembre);
+				double soldeMembre = currentMembre.getSolde();
+				System.out.println("Solde membre : " + soldeMembre);
+				double supplement = categorie.getSupplement();
+				double soldeSoustrait = soldeMembre - supplement;
+				currentMembre.setSolde(soldeSoustrait); 
+				System.out.println("NOUVEAU SOLDE : " + currentMembre.getSolde());
+				membreDAO.update_solde(currentMembre);
 			}
 		}
 	}
