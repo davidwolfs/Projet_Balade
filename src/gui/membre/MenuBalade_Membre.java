@@ -108,7 +108,9 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 		public void actionPerformed(ActionEvent e) 
 		{
 			CategorieDAO categorieDAO = new CategorieDAO(connect);
-			if(categorieDAO.appartientCategorie(currentMembre))
+			/*if(categorieDAO.appartientCategorie(currentMembre))
+			{*/
+			if(currentMembre.getListCategorie().size() > 0 )
 			{
 				Container cp = f.getContentPane();
 				cp.removeAll();

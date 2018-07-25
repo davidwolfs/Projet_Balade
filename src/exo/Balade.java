@@ -95,7 +95,7 @@ public class Balade {
 
 	@Override
 	public String toString() {
-		return "Balade [libelle=" + libelle + ", lieuDepart=" + lieuDepart + ", dateDepart="
-				+ dateDepart + ", forfait=" + forfait + ", listVehicule=" + listVehicule + "]";
+		return "Libelle=" + libelle + ", Lieu de départ=" + lieuDepart + ", Date de départ="
+				+ dateDepart + ", Forfait=" + forfait + "€";
 	}
 }

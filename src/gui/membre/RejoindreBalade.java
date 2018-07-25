@@ -38,16 +38,21 @@ public class RejoindreBalade
 	private Balade baladeSelected;
 	private JLabel labelBalade;
 	private JLabel labelVehicule;
+	private JLabel labelPlaceDisponibleMsgVehicule;
+	private JLabel labelPlaceDisponibleAffichageVehicule;
 	private JLabel labelMsgErreur;
 	private JList listeBalade;
 	private JList listeVehicule;
 	private ListSelectionModel listSelectionModel;
+	private ListSelectionModel listSelectionModel2;
 	private JButton rejoindreButton;
 	private JButton ajoutVehiculeButton;
 	private JButton quitterButton;
 	private JButton retourButton;
 	private JPanel p;
 	private JPanel p2;
+	private JPanel p3;
+	private JPanel p4;
 	private Object vehiculeSelected;
 	//String listVehicules = vehicules.toString();
 	//listeVehicule = new JList(vehicules);
@@ -68,6 +73,8 @@ public class RejoindreBalade
 		labelMsgErreur = new JLabel();
 		labelBalade = new JLabel("Balades pour la (les) catégorie(s) : " + currentMembre.getListCategorie());
 		labelVehicule = new JLabel("Véhicules pour la balade sélectionnée : ");
+		labelPlaceDisponibleMsgVehicule = new JLabel("Places disponibles pour le véhicule sélectionné : ");
+		labelPlaceDisponibleAffichageVehicule = new JLabel();
 		listeBalade = new JList(balades);
 		listeVehicule = new JList();
 		//String listVehicules = vehicules.toString();
@@ -102,17 +109,21 @@ public class RejoindreBalade
 		quitterButton = new JButton("Quitter");
 		ajoutVehiculeButton = new JButton("Ajout véhicule");
 		retourButton = new JButton("Retour");
-		p = new JPanel(new GridLayout(8, 2));
-		p2 = new JPanel(new GridLayout(1,1));
+		p = new JPanel(new GridLayout(4, 2));
+		p2 = new JPanel(new GridLayout(1,2));
+		p3 = new JPanel(new GridLayout(4,1));
+		p4 = new JPanel(new GridLayout(1,1));
 		
 		p.add(labelBalade);
 		p.add(scrollPane1);
 		p.add(labelVehicule);
 		p.add(scrollPane2);
-		p.add(rejoindreButton);
-		p.add(quitterButton);
-		p.add(ajoutVehiculeButton);
-		p.add(retourButton);
+		p2.add(labelPlaceDisponibleMsgVehicule);
+		p2.add(labelPlaceDisponibleAffichageVehicule);
+		p3.add(rejoindreButton);
+		p3.add(quitterButton);
+		p3.add(ajoutVehiculeButton);
+		p3.add(retourButton);
 
 
 
@@ -121,10 +132,12 @@ public class RejoindreBalade
 				new SharedListSelectionHandler(f, jlist1, listeVehicule));
 
 		rejoindreButton.addActionListener(new rejoindreButtonListener(f, currentMembre));
-		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, currentMembre));
+		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, currentMembre, jlist1));
 		quitterButton.addActionListener(new quitterButtonListener(f, currentMembre, jlist1));
 		retourButton.addActionListener(new retourButtonListener(f, currentMembre));
 		f.add(p);
+		f.add(p2);
+		f.add(p3);
 		f.pack();
 	}
 
@@ -152,6 +165,10 @@ public class RejoindreBalade
 			
 			listeVehicule.setListData(vehiculeDAO.listVehiculeByBalade((Balade)listeBalade.getSelectedValue()).toArray());
 			
+			listSelectionModel2  = listeVehicule.getSelectionModel();
+			listSelectionModel2.addListSelectionListener(
+					new SharedListSelectionHandler2(f, baladeSelected, listeVehicule));
+			
 			//listeVehicule.repaint();
 			Container container = listeVehicule.getParent();
 			container.revalidate();
@@ -159,6 +176,44 @@ public class RejoindreBalade
 		}
 	}
 
+	private class SharedListSelectionHandler2 implements ListSelectionListener 
+	{
+		private JList listeVehicule;
+		private Balade baladeSelected;
+		private JFrame f;
+		
+		public SharedListSelectionHandler2(JFrame f, Balade baladeSelected, JList jlist1)
+		{
+			this.f = f;
+			this.baladeSelected = baladeSelected;
+			this.listeVehicule = jlist1;
+		}
+
+		public void valueChanged(ListSelectionEvent e) {
+			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
+			BaladeDAO baladeDAO = new BaladeDAO(connect);
+			
+			int index = listeVehicule.getSelectedIndex();
+			System.out.println(listeVehicule.getSelectedValue().getClass());
+			vehiculeSelected = (Vehicule)listeVehicule.getSelectedValue();
+			Vehicule vehicule = (Vehicule)vehiculeSelected;
+			int nombrePlaceMembre = vehicule.getNombrePlaceMembre();
+			int nombrePlaceMembreUtilisee = baladeDAO.getPlaceUtilisee((Vehicule)vehiculeSelected, baladeSelected);
+			int nombrePlaceMembreLibre = nombrePlaceMembre - nombrePlaceMembreUtilisee;
+			labelPlaceDisponibleAffichageVehicule.setText("" + nombrePlaceMembreLibre + " place(s) restante(s).");
+			
+			
+			//labelPlaceDisponibleMsgVehicule.setText(baladeDAO.getPlaceUtilisee());
+			
+			
+			//listeVehicule.repaint();
+			Container container = listeVehicule.getParent();
+			container.revalidate();
+			container.repaint();
+		}
+	}
+	
 	private class rejoindreButtonListener implements ActionListener
 	{
 		private JFrame f;
@@ -187,8 +242,8 @@ public class RejoindreBalade
 			if(listeVehicule.isSelectionEmpty())
 			{
 				labelMsgErreur.setText("Veuillez sélectionner un véhicule.");
-				p2.add(labelMsgErreur);
-				f.add(p2);
+				p4.add(labelMsgErreur);
+				f.add(p4);
 				f.pack();
 			}
 			else if(baladeDAO.getPlaceUtilisee((Vehicule)listeVehicule.getSelectedValue(), baladeSelected) >= vehicule.getNombrePlaceMembre())
@@ -262,24 +317,34 @@ public class RejoindreBalade
 	{
 		private JFrame f;
 		private Membre currentMembre;
+		private JList listeBalade;
 
-		public ajoutVehiculeButtonListener(JFrame f, Membre currentMembre)
+		public ajoutVehiculeButtonListener(JFrame f, Membre currentMembre, JList jlist1)
 		{
 			this.f = f;
 			this.currentMembre = currentMembre;
+			this.listeBalade = jlist1;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// requete ajout insert into liste_balade
-			
-
-			Container cp = f.getContentPane();
-			cp.removeAll();
-			//f.removeAll();*/
-			Main.AjoutVehicule(currentMembre, baladeSelected);
-			/*f.revalidate();*/
-			//f.getLayout().removeLayoutComponent(f);
+			if(listeBalade.isSelectionEmpty())
+			{
+				labelMsgErreur.setText("Veuillez sélectionner une balade.");
+				p4.add(labelMsgErreur);
+				f.add(p4);
+				f.pack();
+			}
+			else
+			{
+				Container cp = f.getContentPane();
+				cp.removeAll();
+				//f.removeAll();*/
+				Main.AjoutVehicule(currentMembre, baladeSelected);
+				/*f.revalidate();*/
+				//f.getLayout().removeLayoutComponent(f);
+			}
 		}
 	}
 	

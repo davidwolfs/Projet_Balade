@@ -55,6 +55,20 @@ public class MembreDAO extends DAO<Membre>
 		return membre;
 	}
 	
+	public Membre findMembre(Membre membre){
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Membre WHERE IDM = " + membre.getiD());
+			if(result.first())
+				membre = new Membre(result.getInt("IDM"), result.getString("nomM"), result.getString("prenomM"), result.getString("dateNaissM"), result.getString("emailM"), result.getString("PasswordM"), result.getDouble("Solde"));
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return membre;
+	}
+	
 	public boolean findByEmailPassword(String email, String password){
 		boolean existe = false;
 		Membre membre = new Membre(1, null, null, null, email, password);

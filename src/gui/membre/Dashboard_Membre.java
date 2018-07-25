@@ -48,7 +48,7 @@ public class Dashboard_Membre implements ActionListener
 		VehiculeButton = new JButton("Véhicule");
 		DisponibiliteButton = new JButton("Disponibilité");
 		CategorieButton = new JButton("Catégorie");
-		PayementButton = new JButton("Payement");
+		//PayementButton = new JButton("Payement");
 		deconnexionButton = new JButton("Déconnexion");
 		p = new JPanel(new GridLayout(0, 1));
 
@@ -57,7 +57,7 @@ public class Dashboard_Membre implements ActionListener
 		p.add(VehiculeButton);
 		p.add(DisponibiliteButton);
 		p.add(CategorieButton);
-		p.add(PayementButton);
+		//p.add(PayementButton);
 		p.add(deconnexionButton);
 		
 		f.add(p);
@@ -66,7 +66,7 @@ public class Dashboard_Membre implements ActionListener
 		VehiculeButton.addActionListener(new VehiculeButtonListener(f, currentMembre));
 		DisponibiliteButton.addActionListener(new DisponibiliteButtonListener(f, currentMembre));
 		CategorieButton.addActionListener(new CategorieButtonListener(f, currentMembre));
-		PayementButton.addActionListener(new PayementButtonListener(f));
+		//PayementButton.addActionListener(new PayementButtonListener(f));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
 		f.pack();
@@ -170,7 +170,7 @@ public class Dashboard_Membre implements ActionListener
 		}
 	}
 	
-	private class PayementButtonListener implements ActionListener
+	/*private class PayementButtonListener implements ActionListener
 	{
 		private JFrame f;
 
@@ -187,8 +187,8 @@ public class Dashboard_Membre implements ActionListener
 			//Main.showMenuPayement();
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
-		}
-	}
+		/*}
+	}*/
 	
 	private class deconnexionButtonListener implements ActionListener
 	{

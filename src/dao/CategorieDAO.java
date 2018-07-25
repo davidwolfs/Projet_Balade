@@ -22,7 +22,7 @@ public class CategorieDAO extends DAO<Categorie>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Categorie_Responsable (nom, IDR) VALUES ('" + categorie.getNom() + "','" + responsable.getiD() + "')" + ";";
+			String query = "INSERT INTO Categorie_Responsable (nom, EmailR) VALUES ('" + categorie.getNom() + "','" + responsable.getEmail() + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -74,7 +74,7 @@ public class CategorieDAO extends DAO<Categorie>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "UPDATE Categorie_Responsable SET IDR = " + "'" + categorie.getResponsable().getiD() + "'" + " WHERE nom = " + "'" + categorie.getNom() + "'";
+			String query = "UPDATE Categorie_Responsable SET EmailR = " + "'" + categorie.getResponsable().getEmail() + "'" + " WHERE nom = " + "'" + categorie.getNom() + "'";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -93,7 +93,7 @@ public class CategorieDAO extends DAO<Categorie>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Categorie_Membre (nom, IDM) VALUES (" + "'" + categorie.getNom() + "'" + membre.getiD() + ")";
+			String query = "INSERT INTO Categorie_Membre (nom, EmailR) VALUES (" + "'" + categorie.getNom() + "'" + "','" + membre.getEmail() + "'" + ")";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -150,7 +150,7 @@ public class CategorieDAO extends DAO<Categorie>
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie_Responsable WHERE IDR = " + responsable.getiD());
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie_Responsable WHERE EmailR = " + "\"" + responsable.getEmail() + "\"");
 	System.out.println("after");
 			while(result.next())
 			{
@@ -213,7 +213,7 @@ public class CategorieDAO extends DAO<Categorie>
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie_Responsable WHERE nom = " + "\"" + categorie.getNom() + "\"" + " AND IDR = " + responsable.getiD());
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie_Responsable WHERE nom = " + "\"" + categorie.getNom() + "\"" + " AND EmailR = " + "\"" + responsable.getEmail() + "\"");
 			if(result.first())
 			{
 				appartient = false;

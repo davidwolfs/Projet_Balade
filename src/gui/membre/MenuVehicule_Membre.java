@@ -123,6 +123,8 @@ public class MenuVehicule_Membre
 					Container cp = f.getContentPane();
 					cp.removeAll();
 					vehiculeDAO.create(vehicule);
+					vehicule.AjouterMembre(currentMembre);
+					System.out.println("Chauffeur du véhicule : " + vehicule.getChauffeur());
 					Main.RejoindreBalade(currentMembre);
 				}
 			}

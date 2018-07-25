@@ -6,19 +6,13 @@ public class Responsable extends Personne {
 	private String dateDebut;
 	private Categorie categorie;
 	
-	public Responsable(int iD, String nom, String prenom, String dateNaiss, String email, String password, Categorie categorie/*,
+	public Responsable(String nom, String prenom, String dateNaiss, String email, String password, Categorie categorie/*,
 			Date dateDebut*/) {
-		super(iD, nom, prenom, dateNaiss, email, password);
+		super(nom, prenom, dateNaiss, email, password);
 		//this.dateDebut = dateDebut;
 	}
 	
-	public Responsable(int iD, String nom, String prenom, String dateNaiss, String email, String password) {
-		super(iD, nom, prenom, dateNaiss, email, password);
-		//this.dateDebut = dateDebut;
-	}
-	
-	public Responsable(String nom, String prenom, String dateNaiss, String email, String password) 
-	{
+	public Responsable(String nom, String prenom, String dateNaiss, String email, String password) {
 		super(nom, prenom, dateNaiss, email, password);
 		//this.dateDebut = dateDebut;
 	}
