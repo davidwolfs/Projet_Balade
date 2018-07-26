@@ -87,6 +87,24 @@ public class CategorieDAO extends DAO<Categorie>
 		return statementResult;
 	}
 	
+	public boolean delete_Categorie_Responsable(Categorie categorie)
+	{
+		boolean statementResult;
+		try {
+			Statement statement = connect.createStatement();
+			String query = "UPDATE Categorie_Responsable SET EmailR = " + "\"N/A\"" + " WHERE nom = " + "\"" + categorie.getNom() + "\"";
+			System.out.println(query);
+			statementResult = true;
+			statementResult = statement.execute(query);
+		} catch (SQLException e) {
+			statementResult = false;
+			e.printStackTrace();
+			System.out.println(e);
+		}
+		System.out.println(statementResult);
+		return statementResult;
+	}
+	
 	public boolean create_Categorie_Categorie_Membre(Categorie categorie, Membre membre)
 	{
 
@@ -217,6 +235,42 @@ public class CategorieDAO extends DAO<Categorie>
 			if(result.first())
 			{
 				appartient = false;
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return appartient;
+	}
+	
+	public boolean isResponsable(Categorie categorie, Responsable responsable)
+	{
+		boolean appartient = false;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie_Responsable WHERE nom = " + "\"" + categorie.getNom() + "\"" + " AND EmailR = " + "\"" + responsable.getEmail() + "\"");
+			if(result.first())
+			{
+				appartient = true;
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return appartient;
+	}
+	
+	public boolean haveAlreadyResponsable(Categorie categorie, Responsable responsable)
+	{
+		boolean appartient = false;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie_Responsable WHERE Categorie_Responsable.nom  = " + "\"" + categorie.getNom() + "\"" + " AND Categorie_Responsable.EmailR != " + "'N/A'");
+			if(result.first())
+			{
+				appartient = true;
 			}
 		}
 		catch(SQLException e){

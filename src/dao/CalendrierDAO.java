@@ -46,7 +46,7 @@ public class CalendrierDAO extends DAO<Calendrier>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "DELETE FROM Calendrier WHERE IDB = " + calendrier.getiD() + ";";
+			String query = "DELETE FROM Calendrier WHERE IdCal = " + calendrier.getiD() + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);

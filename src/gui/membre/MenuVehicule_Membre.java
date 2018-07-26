@@ -125,7 +125,7 @@ public class MenuVehicule_Membre
 					vehiculeDAO.create(vehicule);
 					vehicule.AjouterMembre(currentMembre);
 					System.out.println("Chauffeur du véhicule : " + vehicule.getChauffeur());
-					Main.RejoindreBalade(currentMembre);
+					Main.showDashboard_Membre(currentMembre);
 				}
 			}
 		}

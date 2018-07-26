@@ -27,7 +27,7 @@ public class Dashboard_Membre implements ActionListener
 	private JLabel labelBonjour;
 	private JButton BaladeButton;
 	private JButton VehiculeButton;
-	private JButton DisponibiliteButton;
+	//private JButton DisponibiliteButton;
 	private JButton CategorieButton;
 	private JButton PayementButton;
 	
@@ -46,7 +46,7 @@ public class Dashboard_Membre implements ActionListener
 		labelBonjour = new JLabel("Bonjour " + currentMembre.getPrenom() + " " + currentMembre.getNom() + ", vous êtes connecté en tant que : Membre");
 		BaladeButton = new JButton("Balade");
 		VehiculeButton = new JButton("Véhicule");
-		DisponibiliteButton = new JButton("Disponibilité");
+		//DisponibiliteButton = new JButton("Disponibilité");
 		CategorieButton = new JButton("Catégorie");
 		//PayementButton = new JButton("Payement");
 		deconnexionButton = new JButton("Déconnexion");
@@ -55,7 +55,7 @@ public class Dashboard_Membre implements ActionListener
 		p.add(labelBonjour);
 		p.add(BaladeButton);
 		p.add(VehiculeButton);
-		p.add(DisponibiliteButton);
+		//p.add(DisponibiliteButton);
 		p.add(CategorieButton);
 		//p.add(PayementButton);
 		p.add(deconnexionButton);
@@ -64,7 +64,7 @@ public class Dashboard_Membre implements ActionListener
 		
 		BaladeButton.addActionListener(new BaladeButtonListener(f));
 		VehiculeButton.addActionListener(new VehiculeButtonListener(f, currentMembre));
-		DisponibiliteButton.addActionListener(new DisponibiliteButtonListener(f, currentMembre));
+		//DisponibiliteButton.addActionListener(new DisponibiliteButtonListener(f, currentMembre));
 		CategorieButton.addActionListener(new CategorieButtonListener(f, currentMembre));
 		//PayementButton.addActionListener(new PayementButtonListener(f));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
@@ -126,7 +126,7 @@ public class Dashboard_Membre implements ActionListener
 		}
 	}
 	
-	private class DisponibiliteButtonListener implements ActionListener
+	/*private class DisponibiliteButtonListener implements ActionListener
 	{
 		private JFrame f;
 		private Membre currentMembre;
@@ -142,11 +142,11 @@ public class Dashboard_Membre implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuDisponibilite(currentMembre);
+			//Main.showMenuDisponibilite(currentMembre);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
-		}
-	}
+		/*}
+	}*/
 	
 	private class CategorieButtonListener implements ActionListener
 	{

@@ -23,6 +23,7 @@ import javax.swing.event.ListSelectionListener;
 import dao.BaladeDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Categorie;
 import exo.Membre;
 import exo.Vehicule;
 import gui.Main;
@@ -48,9 +49,11 @@ public class AjouterVehiculeBalade
 	private JButton retourButton;
 	private JPanel p;
 	private JPanel p2;
+	private List<Categorie> listCategorie;
 	
-	public AjouterVehiculeBalade(JFrame f, Connection connect, Membre currentMembre, Balade baladeSelected) 
+	public AjouterVehiculeBalade(JFrame f, Connection connect, Membre currentMembre, List<Categorie> listCategorie, Balade baladeSelected) 
 	{
+		System.out.println("LISTE CATEGORIE : " + listCategorie);
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		List<Vehicule> listVehicule = vehiculeDAO.listVehiculeByMembre(currentMembre);
 		Object[] vehicules = listVehicule.toArray();
@@ -102,7 +105,7 @@ public class AjouterVehiculeBalade
 		
 		ajouterVehiculeBaladeButton.addActionListener(new ajouterVehiculeBaladeButtonListener(f, jlist1, currentMembre, baladeSelected));
 		ajouterVehiculeButton.addActionListener(new ajouterVehiculeButtonListener(f, currentMembre));
-		retourButton.addActionListener(new retourButtonListener(f, currentMembre));
+		retourButton.addActionListener(new retourButtonListener(f, listCategorie, currentMembre));
 		f.add(p);
 		f.add(p2);
 		f.pack();
@@ -178,7 +181,7 @@ public class AjouterVehiculeBalade
 				vehicule.AjouterMembre(currentMembre);
 				baladeDAO.create_Ligne_Balade_SansMembre((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue());
 				System.out.println("vehicule selectionne : " + listeVehicule.getSelectedValue());
-				Main.RejoindreBalade(currentMembre);
+				Main.RejoindreBalade(listCategorie, currentMembre);
 			}
 			
 			/*if(nombrePlacesField.getText().isEmpty() || immatriculationField.getText().isEmpty() || nombrePlaceVeloField.getText().isEmpty())
@@ -253,19 +256,29 @@ public class AjouterVehiculeBalade
 	{
 		private JFrame f;
 		private Membre currentMembre;
+		private List<Categorie> listCategorie;
 
-		public retourButtonListener(JFrame f, Membre currentMembre)
+		public retourButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre)
 		{
 			this.f = f;
+			this.listCategorie = listCategorie;
 			this.currentMembre = currentMembre;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			System.out.println("LISTE CATEGORIE RETOUR : " + listCategorie);
+			
+			for(Categorie cat : listCategorie)
+			{
+				currentMembre.AjouterCategorie(cat);
+				
+			}
+			
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.RejoindreBalade(currentMembre);
+			Main.RejoindreBalade(listCategorie, currentMembre);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

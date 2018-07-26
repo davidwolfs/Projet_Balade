@@ -128,7 +128,7 @@ public class VehiculeDAO extends DAO<Vehicule>{
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicule INNER JOIN Ligne_Balade ON Vehicule.Immatriculation = Ligne_Balade.Immatriculation WHERE IDB = " + balade.getiDB());
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicule INNER JOIN Ligne_Balade ON Vehicule.Immatriculation = Ligne_Balade.Immatriculation WHERE IDB = " + balade.getiDB() + " AND type != \"membre\"" + " AND type!= \"velo\"" + " OR type IS NULL" + " OR type IS NULL");
 			while(result.next())
 			{
 				Membre membre = new Membre();

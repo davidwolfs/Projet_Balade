@@ -84,6 +84,11 @@ public class Calendrier
 		listBalade.add(balade);
 	}
 	
+	public void SupprimerBalade(Balade balade)
+	{
+		listBalade.remove(balade);
+	}
+	
 	@Override
 	public String toString() {
 		return "Calendrier [iD=" + iD + ", nomCal=" + nomCal + ", dateCal=" + dateCal + ", listBalade=" + listBalade

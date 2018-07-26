@@ -42,6 +42,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	private JButton organiserCalendrierButton;
 	private JButton voirCalendrierButton;
 	private JButton devenirResponsableButton;
+	private JButton NePlusEtreResponsableButton;
 	private JButton retourButton;
 	private JButton deconnexionButton;
 	private JPanel p;
@@ -64,9 +65,10 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		
 		labelCategorie = new JLabel("Catégorie : ");
 		labelMsgErreur = new JLabel();
-		organiserCalendrierButton = new JButton("Organiser et publier le calendrier");
+		organiserCalendrierButton = new JButton("Publier le calendrier");
 		voirCalendrierButton = new JButton("Voir calendrier");
 		devenirResponsableButton = new JButton("Devenir responsable");
+		NePlusEtreResponsableButton = new JButton("Ne plus être responsable");
 		retourButton = new JButton("Retour");
 		deconnexionButton = new JButton("Déconnexion");
 		
@@ -101,6 +103,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		p2.add(organiserCalendrierButton);
 		p2.add(voirCalendrierButton);
 		p2.add(devenirResponsableButton);
+		p2.add(NePlusEtreResponsableButton);
 		p3.add(retourButton);
 		p3.add(deconnexionButton);
 		f.add(p);
@@ -113,6 +116,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		organiserCalendrierButton.addActionListener(new organiserCalendrierButtonListener(f, jlist1));
 		voirCalendrierButton.addActionListener(new voirCalendrierButtonListener(f, jlist1));
 		devenirResponsableButton.addActionListener(new devenirResponsableButtonListener(f, jlist1, currentResponsable));
+		NePlusEtreResponsableButton.addActionListener(new NePlusEtreResponsableButtonListener(f, jlist1, currentResponsable));
 		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
@@ -242,7 +246,8 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		private JFrame f;
 		private JList listeCategorie;
 		private Responsable currentResponsable;
-
+		CategorieDAO categorieDAO = new CategorieDAO(connect);
+		
 		public devenirResponsableButtonListener(JFrame f, JList listeCategorie, Responsable currentResponsable)
 		{
 			this.f = f;
@@ -260,6 +265,14 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 				f.add(p4);
 				f.pack();
 			}
+			else if(categorieDAO.isResponsable((Categorie)listeCategorie.getSelectedValue(), currentResponsable))
+			{
+				JOptionPane.showMessageDialog(null, "Vous êtes déjà responsable pour cette catégorie.");
+			}
+			else if(categorieDAO.haveAlreadyResponsable((Categorie)listeCategorie.getSelectedValue(), currentResponsable))
+			{
+				JOptionPane.showMessageDialog(null, "Il y a déjà un responsable pour cette catégorie.");
+			}
 			else
 			{
 				System.out.println("Responsable actuel : " + currentResponsable);
@@ -269,6 +282,47 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 				currentResponsable.setCategorie(categorie);
 				CategorieDAO categorieDAO = new CategorieDAO(connect);
 				categorieDAO.update_Categorie_Responsable((Categorie)listeCategorie.getSelectedValue());
+			}
+		}
+	}
+	
+	private class NePlusEtreResponsableButtonListener implements ActionListener
+	{
+		private JFrame f;
+		private JList listeCategorie;
+		private Responsable currentResponsable;
+		CategorieDAO categorieDAO = new CategorieDAO(connect);
+		
+		public NePlusEtreResponsableButtonListener(JFrame f, JList listeCategorie, Responsable currentResponsable)
+		{
+			this.f = f;
+			this.listeCategorie = listeCategorie;
+			this.currentResponsable = currentResponsable;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			if(listeCategorie.isSelectionEmpty())
+			{
+				labelMsgErreur.setText("Veuillez sélectionner une catégorie.");
+				p4.add(labelMsgErreur);
+				f.add(p4);
+				f.pack();
+			}
+			else if(categorieDAO.isNotResponsable((Categorie)listeCategorie.getSelectedValue(), currentResponsable))
+			{
+				JOptionPane.showMessageDialog(null, "Vous n'êtes pas responsable de cette catégorie.");
+			}
+			else
+			{
+				System.out.println("Vous n'êtes plus reponsable de cette catégorie.");
+				JOptionPane.showMessageDialog(null, "Vous n'êtes plus reponsable de cette catégorie.");
+				Categorie categorie = (Categorie)listeCategorie.getSelectedValue();
+				categorie.setResponsable(null);
+				currentResponsable.setCategorie(null);
+				CategorieDAO categorieDAO = new CategorieDAO(connect);
+				categorieDAO.delete_Categorie_Responsable(categorie);
 			}
 		}
 	}

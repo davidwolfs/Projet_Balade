@@ -56,7 +56,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	{
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
-		List<Balade> listBalade = baladeDAO.listBalade();
+		List<Balade> listBalade = baladeDAO.listBaladeDisponible();
 		//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
 		Object[] balades = listBalade.toArray();
 		//Object[] vehicules = listVehicule.toArray();

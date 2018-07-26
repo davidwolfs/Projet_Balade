@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.util.List;
 
 import gui.responsable.*;
 import gui.membre.*;
@@ -34,6 +35,7 @@ public class Main {
 	private Responsable currentResponsable;
 	private Membre currentMembre;
 	private Tresorier currentTresorier;
+	private List<Categorie> listCategorie;
 	
 	public static void creerConnexion()
 	{
@@ -113,15 +115,16 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void RejoindreBalade(Membre currentMembre)
+	public static void RejoindreBalade(List<Categorie> listCategorie, Membre currentMembre)
 	{
-		RejoindreBalade rejoindreBalade = new RejoindreBalade(frame, connect, currentMembre);
+		System.out.println("LISTE MAIN : " + listCategorie);
+		RejoindreBalade rejoindreBalade = new RejoindreBalade(frame, connect, listCategorie, currentMembre);
 		frame.setVisible(true);
 	}
 	
-	public static void AjoutVehicule(Membre currentMembre, Balade baladeSelected)
+	public static void AjoutVehicule(Membre currentMembre, List<Categorie> listCategorie, Balade baladeSelected)
 	{
-		AjouterVehiculeBalade ajouterVehiculeBalade = new AjouterVehiculeBalade(frame, connect, currentMembre, baladeSelected);
+		AjouterVehiculeBalade ajouterVehiculeBalade = new AjouterVehiculeBalade(frame, connect, currentMembre, listCategorie, baladeSelected);
 		frame.setVisible(true);
 	}
 	

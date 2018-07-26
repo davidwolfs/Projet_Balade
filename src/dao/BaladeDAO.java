@@ -40,12 +40,34 @@ public class BaladeDAO extends DAO<Balade>
 		return statementResult;
 	}
 	
-	public boolean create_Ligne_Balade(Balade balade, Vehicule vehicule, Membre membre)
+	public boolean create_Ligne_Balade_Membre(Balade balade, Vehicule vehicule, Membre membre)
 	{
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Ligne_Balade (IDB, Immatriculation, IDM) VALUES (" + balade.getiDB() + "," + "\"" + vehicule.getImmatriculation() + "\"" + "," + membre.getiD() + ");";
+			String query = "INSERT INTO Ligne_Balade (IDB, Immatriculation, IDM, type) VALUES (" + balade.getiDB() + "," + "\"" + vehicule.getImmatriculation() + "\"" + "," + membre.getiD() + "," + "\"membre\"" + ");";
+			for(int i = 0; i < balade.getListVehicule().size() ; i++)
+			{
+				//String query2 = "INSERT INTO Liste_Balade (ID, IDB, IDV, IDM) VALUES ('" + 1 + "','" + obj.getIDB() + "','" + obj.getListVehicule().get(i).getIDV() + "','" + obj."
+			}
+			System.out.println(query);
+			statementResult = true;
+			statementResult = statement.execute(query);
+		} catch (SQLException e) {
+			statementResult = false;
+			e.printStackTrace();
+			System.out.println(e);
+		}
+		System.out.println(statementResult);
+		return statementResult;
+	}
+	
+	public boolean create_Ligne_Balade_Velo(Balade balade, Vehicule vehicule, Membre membre)
+	{
+		boolean statementResult;
+		try {
+			Statement statement = connect.createStatement();
+			String query = "INSERT INTO Ligne_Balade (IDB, Immatriculation, IDM, type) VALUES (" + balade.getiDB() + "," + "\"" + vehicule.getImmatriculation() + "\"" + "," + membre.getiD() + "," + "\"velo\"" + ");";
 			for(int i = 0; i < balade.getListVehicule().size() ; i++)
 			{
 				//String query2 = "INSERT INTO Liste_Balade (ID, IDB, IDV, IDM) VALUES ('" + 1 + "','" + obj.getIDB() + "','" + obj.getListVehicule().get(i).getIDV() + "','" + obj."
@@ -105,7 +127,41 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "DELETE FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND IDM = " + membre.getiD() + ";";
+			String query = "DELETE FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND IDM = " + membre.getiD();
+			System.out.println(query);
+			statementResult = true;
+			statementResult = statement.execute(query);
+		} catch (SQLException e) {
+			statementResult = false;
+			e.printStackTrace();
+			System.out.println(e);
+		}
+		System.out.println(statementResult);
+		return statementResult;
+	}
+	
+	public boolean delete_Membre_Ligne_Balade(Balade balade, Membre membre){
+		boolean statementResult;
+		try {
+			Statement statement = connect.createStatement();
+			String query = "DELETE FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND IDM = " + membre.getiD() + " AND type = " + "\"membre\"";
+			System.out.println(query);
+			statementResult = true;
+			statementResult = statement.execute(query);
+		} catch (SQLException e) {
+			statementResult = false;
+			e.printStackTrace();
+			System.out.println(e);
+		}
+		System.out.println(statementResult);
+		return statementResult;
+	}
+	
+	public boolean delete_Velo_Ligne_Balade(Balade balade, Membre membre){
+		boolean statementResult;
+		try {
+			Statement statement = connect.createStatement();
+			String query = "DELETE FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND IDM = " + membre.getiD() + " AND type = " + "\"velo\"";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -189,13 +245,13 @@ public class BaladeDAO extends DAO<Balade>
 		return exist;
 	}
 	
-	public boolean alreadyInBalade(Balade baladeSelected, Membre currentMembre)
+	public boolean membrealreadyInBalade(Balade baladeSelected, Membre currentMembre)
 	{
 		boolean exist = false;
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Ligne_Balade WHERE IDB = " + baladeSelected.getiDB() + " AND IDM = " + currentMembre.getiD() + "");
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Ligne_Balade WHERE IDB = " + baladeSelected.getiDB() + " AND IDM = " + currentMembre.getiD() + " AND type = " + "\"membre\"");
 			if(result.first())
 			{
 				exist = true;
@@ -207,6 +263,25 @@ public class BaladeDAO extends DAO<Balade>
 		}
 		return exist;
 	}
+	
+	/*public boolean veloalreadyInBalade(Balade baladeSelected, Membre currentMembre)
+	{
+		boolean exist = false;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Ligne_Balade WHERE IDB = " + baladeSelected.getiDB() + " AND IDM = " + currentMembre.getiD() + " AND type = " + "\"velo\" + ");
+			if(result.first())
+			{
+				exist = true;
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return exist;
+	}*/
 	
 	public List<Balade> listBalade()
 	{
@@ -345,17 +420,17 @@ public class BaladeDAO extends DAO<Balade>
 		return solde;
 	}
 	
-	public int getPlaceUtilisee(Vehicule vehicule, Balade balade)
+	public int getPlaceMembreUtilisee(Vehicule vehicule, Balade balade)
 	{
-		int nombrePlaceUtilisees = 0;
+		int nombrePlaceMembreUtilisees = 0;
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT COUNT(*) AS nbrPlaces FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND Immatriculation = " + "\"" + vehicule.getImmatriculation() + "\"");
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT COUNT(*) AS nbrPlacesMembres FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND Immatriculation = " + "\"" + vehicule.getImmatriculation() + "\"" + " AND type = " + "\"membre\"");
 			if(result.next())
 			{
-				nombrePlaceUtilisees = result.getInt("nbrPlaces");
-				System.out.println("Nombre de places utilisées : " + nombrePlaceUtilisees);
+				nombrePlaceMembreUtilisees = result.getInt("nbrPlacesMembres");
+				System.out.println("Nombre de places membres utilisées : " + nombrePlaceMembreUtilisees);
 				/*balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
 				solde = result.getDouble("forfait");*/
 			}
@@ -364,6 +439,28 @@ public class BaladeDAO extends DAO<Balade>
 			e.printStackTrace();
 		}
 		
-		return nombrePlaceUtilisees;
+		return nombrePlaceMembreUtilisees;
+	}
+	
+	public int getPlaceVeloUtilisee(Vehicule vehicule, Balade balade)
+	{
+		int nombrePlaceVeloUtilisees = 0;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT COUNT(*) AS nbrPlacesVelos FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND Immatriculation = " + "\"" + vehicule.getImmatriculation() + "\"" + " AND type = " + "\"velo\"");
+			if(result.next())
+			{
+				nombrePlaceVeloUtilisees = result.getInt("nbrPlacesVelos");
+				System.out.println("Nombre de places vélos utilisées : " + nombrePlaceVeloUtilisees);
+				/*balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
+				solde = result.getDouble("forfait");*/
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return nombrePlaceVeloUtilisees;
 	}
 }

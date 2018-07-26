@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -46,11 +47,12 @@ public class VoirCalendrier
 	private JTextField dateField;
 	private JButton rejoindreButton;
 	private JButton retourButton;
+	private JButton supprimerButton;
 	private JPanel p;
 	private JPanel p2;
 	private JPanel p3;
 	private JPanel p4;
-	private Object baladeSelected;
+	private Object calendrierSelected;
 	
 	public VoirCalendrier(JFrame f, Connection connect, Responsable currentResponsable, Categorie categorieSelected) 
 	{
@@ -67,6 +69,7 @@ public class VoirCalendrier
 		labelMsgErreur = new JLabel();
 		dateField = new JTextField(2);
 		
+		supprimerButton = new JButton("Supprimer"); 
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(1, 1));
 		p2 = new JPanel(new GridLayout(1, 1));
@@ -97,11 +100,13 @@ public class VoirCalendrier
 	    p2.add(scrollPane1);
 		/*p2.add(labelDate);
 		p2.add(dateField);*/
+	    p3.add(supprimerButton);
 		p3.add(retourButton);
 		
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1));
+		supprimerButton.addActionListener(new supprimerButtonListener(f, jlist1, currentResponsable));
 		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
 		f.add(p);
 		f.add(p2);
@@ -126,7 +131,7 @@ public class VoirCalendrier
 			int index = listCalendrier.getSelectedIndex();
 			System.out.println("Calendrier :" + (Calendrier)listCalendrier.getSelectedValue());
 			System.out.println(listCalendrier.getSelectedValue().getClass());
-			baladeSelected = listCalendrier.getSelectedValue();
+			calendrierSelected = listCalendrier.getSelectedValue();
 
 			
 			//listeVehicule.repaint();
@@ -136,59 +141,45 @@ public class VoirCalendrier
 		}
 	}
 
-	/*private class ajoutButtonListener implements ActionListener 
+	private class supprimerButtonListener implements ActionListener 
 	{
 		private JFrame f;
 		private Responsable currentResponsable;
-		private JList listeBalade;
+		private JList listeCalendrier;
 		
-		public ajoutButtonListener(JFrame f, JList listeBalade, Responsable currentResponsable)
+		public supprimerButtonListener(JFrame f, JList listeCalendrier, Responsable currentResponsable)
 		{
 			this.f = f;
-			this.listeBalade = listeBalade;
+			this.listeCalendrier = listeCalendrier;
 			this.currentResponsable = currentResponsable;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(listeBalade.isSelectionEmpty())
+			if(listeCalendrier.isSelectionEmpty())
 			{
-				labelMsgErreur.setText("Veuillez sélectionné une balade.");
-				p4.add(labelMsgErreur);
-				f.add(p4);
-				f.pack();
-			}
-			else if(dateField.getText().isEmpty())
-			{
-				labelMsgErreur.setText("Veuillez entrer tous les champs.");
+				labelMsgErreur.setText("Veuillez sélectionné un calendrier.");
 				p4.add(labelMsgErreur);
 				f.add(p4);
 				f.pack();
 			}
 			else 
 			{
-				Categorie categorie;
-				categorie = (Categorie)categorieSelected;
-				BaladeDAO baladeDAO = new BaladeDAO(connect);
-				List<Balade> listBalade = baladeDAO.listBalade();
-				Balade balade;
-				balade = (Balade)baladeSelected;
-				Calendrier calendrier = new Calendrier(dateField.getText());
-				calendrier.AjouterBalade(balade);
+				Calendrier calendrier;
+				calendrier = (Calendrier)calendrierSelected;
 				CalendrierDAO calendrierDAO = new CalendrierDAO(connect);
-				//calendrierDAO.create(calendrier, balade, categorie);
-				
-				categorie.setCalendrier(calendrier);
-				
-				
-				System.out.println("Liste des balades dans le calendrier : " + calendrier.getListBalade());
-				System.out.println("Liste des calendriers dans la catégorie : " + calendrier.getNomCal() + calendrier.getDateCal() + categorie.getCalendrier());
+				calendrier = (Calendrier)calendrierSelected;
+				//Calendrier calendrier = new Calendrier(dateField.getText());
+				calendrierDAO.delete(calendrier);
+				/*Categorie categorie = null;
+				categorie.setCalendrier(null);*/
+				JOptionPane.showMessageDialog(null, "Le calendrier a bien été supprimé.");
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				Main.showMenuCategorie_Responsable(currentResponsable);
 			}
 		}
-	}*/
+	}
 	
 	private class retourButtonListener implements ActionListener
 	{
