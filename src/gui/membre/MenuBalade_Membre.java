@@ -21,6 +21,7 @@ import dao.MembreDAO;
 import exo.Balade;
 import exo.Categorie;
 import exo.Membre;
+import exo.Vehicule;
 import gui.Main;
 
 public class MenuBalade_Membre extends JPanel implements ActionListener 
@@ -36,6 +37,7 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 	private JButton deconnexionButton;
 	private JPanel p;
 	private List<Categorie> listCategorie;
+	private Vehicule vehicule;
 
 	public MenuBalade_Membre(JFrame f, Connection connect, Membre currentMembre) {
 		this.connect = connect;
@@ -58,7 +60,7 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 		f.add(p);
 	
 	//	rechercherBaladeButton.addActionListener(new rechercherBaladeButtonListener(f));
-		rejoindreBaladeButton.addActionListener(new rejoindreBaladeButtonListener(f, listCategorie, currentMembre));
+		rejoindreBaladeButton.addActionListener(new rejoindreBaladeButtonListener(f, listCategorie, vehicule, currentMembre));
 		retourButton.addActionListener(new retourButtonListener(f));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
@@ -101,11 +103,13 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 		private JFrame f;
 		private Membre currentMembre;
 		private List<Categorie> listCategorie;
+		private Vehicule vehicule;
 
-		public rejoindreBaladeButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre)
+		public rejoindreBaladeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
+			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
 		}
 		

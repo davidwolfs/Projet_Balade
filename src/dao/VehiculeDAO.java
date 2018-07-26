@@ -121,20 +121,31 @@ public class VehiculeDAO extends DAO<Vehicule>{
 		return exist;
 	}
 	
-	public List<Vehicule> listVehiculeByBalade(Balade balade)
+	public List<Vehicule> listVehiculeByBalade(Balade balade, Vehicule vehicule)
 	{
 		List<Vehicule> listVehicule = new ArrayList<>();
-		Vehicule vehicule;
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicule INNER JOIN Ligne_Balade ON Vehicule.Immatriculation = Ligne_Balade.Immatriculation WHERE IDB = " + balade.getiDB() + " AND type != \"membre\"" + " AND type!= \"velo\"" + " OR type IS NULL" + " OR type IS NULL");
 			while(result.next())
 			{
-				Membre membre = new Membre();
-				membre.setiD(result.getInt("IDM"));
-				vehicule = new Vehicule(result.getString("Immatriculation"), result.getString("Marque"), result.getString("Modele"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);;
-				listVehicule.add(vehicule);
+				if(vehicule != null)
+				{
+					Membre membre = new Membre();
+					membre.setiD(result.getInt("IDM"));
+					vehicule.setImmatriculation(result.getString("Immatriculation"));
+					vehicule.setMarque(result.getString("Marque"));
+					vehicule.setModele(result.getString("Modele"));
+					listVehicule.add(vehicule);
+				}
+				else
+				{
+					Membre membre = new Membre();
+					membre.setiD(result.getInt("IDM"));
+					vehicule = new Vehicule(result.getString("Immatriculation"), result.getString("Marque"), result.getString("Modele"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);
+					listVehicule.add(vehicule);
+				}
 			}
 		}
 		catch(SQLException e){

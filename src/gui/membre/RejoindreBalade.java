@@ -62,12 +62,14 @@ public class RejoindreBalade
 	private JPanel p5;
 	private Object vehiculeSelected;
 	private List<Categorie> listCategorie;
+	private Vehicule vehicule;
 	//String listVehicules = vehicules.toString();
 	//listeVehicule = new JList(vehicules);
 
 
 	public RejoindreBalade(JFrame f, Connection connect, List<Categorie> listCategorie, Membre currentMembre) 
 	{
+		System.out.println("infos vehicule dans rejoindre balade : " + vehicule);
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
 		System.out.println(currentMembre.getEmail());
@@ -151,12 +153,12 @@ public class RejoindreBalade
 
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
-				new SharedListSelectionHandler(f, jlist1, listeVehicule));
+				new SharedListSelectionHandler(f, jlist1, vehicule, listeVehicule));
 
-		rejoindreButton.addActionListener(new rejoindreButtonListener(f, listCategorie, currentMembre));
-		rejoindreMembreButton.addActionListener(new rejoindreMembreButtonListener(f, listCategorie, currentMembre));
-		rejoindreVehiculeButton.addActionListener(new rejoindreVehiculeButtonListener(f, listCategorie, currentMembre));
-		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, listCategorie, currentMembre, jlist1));
+		rejoindreButton.addActionListener(new rejoindreButtonListener(f, listCategorie, vehicule, currentMembre));
+		rejoindreMembreButton.addActionListener(new rejoindreMembreButtonListener(f, listCategorie, vehicule, currentMembre));
+		rejoindreVehiculeButton.addActionListener(new rejoindreVehiculeButtonListener(f, listCategorie, vehicule, currentMembre));
+		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, listCategorie, vehicule, currentMembre, jlist1));
 		quitterButton.addActionListener(new quitterButtonListener(f, currentMembre, jlist1));
 		quitterMembreButton.addActionListener(new quitterMembreButtonListener(f, currentMembre, jlist1));
 		quitterVeloButton.addActionListener(new quitterVeloButtonListener(f, currentMembre, jlist1));
@@ -172,11 +174,13 @@ public class RejoindreBalade
 		private JList listeBalade;
 		private JList listeVehicule;
 		private JFrame f;
+		private Vehicule vehicule;
 		
-		public SharedListSelectionHandler(JFrame f, JList jlist1, JList listeVehicule)
+		public SharedListSelectionHandler(JFrame f, JList jlist1, Vehicule vehicule, JList listeVehicule)
 		{
 			this.f = f;
 			this.listeBalade = jlist1;
+			this.vehicule = vehicule;
 			this.listeVehicule = listeVehicule;
 		}
 
@@ -189,7 +193,7 @@ public class RejoindreBalade
 			baladeSelected = (Balade)listeBalade.getSelectedValue();
 			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 			
-			listeVehicule.setListData(vehiculeDAO.listVehiculeByBalade((Balade)listeBalade.getSelectedValue()).toArray());
+			listeVehicule.setListData(vehiculeDAO.listVehiculeByBalade((Balade)listeBalade.getSelectedValue(), vehicule).toArray());
 			
 			listSelectionModel2  = listeVehicule.getSelectionModel();
 			listSelectionModel2.addListSelectionListener(
@@ -248,11 +252,12 @@ public class RejoindreBalade
 		private JFrame f;
 		private Membre currentMembre;
 		private List<Categorie> listCategorie;
-
-		public rejoindreButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre)
+		private Vehicule vehicule;
+		public rejoindreButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
+			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
 		}
 
@@ -342,7 +347,7 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, baladeSelected);
+				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -354,11 +359,13 @@ public class RejoindreBalade
 		private JFrame f;
 		private Membre currentMembre;
 		private List<Categorie> listCategorie;
-
-		public rejoindreMembreButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre)
+		private Vehicule vehicule;
+		
+		public rejoindreMembreButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
+			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
 		}
 
@@ -448,7 +455,7 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, baladeSelected);
+				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -460,11 +467,13 @@ public class RejoindreBalade
 		private JFrame f;
 		private Membre currentMembre;
 		private List<Categorie> listCategorie;
-
-		public rejoindreVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre)
+		private Vehicule vehicule;
+		
+		public rejoindreVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
+			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
 		}
 
@@ -546,7 +555,7 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, baladeSelected);
+				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -559,11 +568,13 @@ public class RejoindreBalade
 		private Membre currentMembre;
 		private JList listeBalade;
 		private List<Categorie> listCategorie;
+		private Vehicule vehicule;
 		
-		public ajoutVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, JList jlist1)
+		public ajoutVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, JList jlist1)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
+			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
 			this.listeBalade = jlist1;
 		}
@@ -583,7 +594,7 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, baladeSelected);
+				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}

@@ -24,6 +24,7 @@ import exo.Categorie;
 import exo.Membre;
 import exo.Responsable;
 import exo.Tresorier;
+import exo.Vehicule;
 
 
 public class Main {
@@ -35,7 +36,6 @@ public class Main {
 	private Responsable currentResponsable;
 	private Membre currentMembre;
 	private Tresorier currentTresorier;
-	private List<Categorie> listCategorie;
 	
 	public static void creerConnexion()
 	{
@@ -117,14 +117,13 @@ public class Main {
 	
 	public static void RejoindreBalade(List<Categorie> listCategorie, Membre currentMembre)
 	{
-		System.out.println("LISTE MAIN : " + listCategorie);
 		RejoindreBalade rejoindreBalade = new RejoindreBalade(frame, connect, listCategorie, currentMembre);
 		frame.setVisible(true);
 	}
 	
-	public static void AjoutVehicule(Membre currentMembre, List<Categorie> listCategorie, Balade baladeSelected)
+	public static void AjoutVehicule(Membre currentMembre, List<Categorie> listCategorie, Vehicule vehicule, Balade baladeSelected)
 	{
-		AjouterVehiculeBalade ajouterVehiculeBalade = new AjouterVehiculeBalade(frame, connect, currentMembre, listCategorie, baladeSelected);
+		AjouterVehiculeBalade ajouterVehiculeBalade = new AjouterVehiculeBalade(frame, connect, currentMembre, listCategorie, vehicule, baladeSelected);
 		frame.setVisible(true);
 	}
 	

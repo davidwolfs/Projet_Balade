@@ -50,8 +50,9 @@ public class AjouterVehiculeBalade
 	private JPanel p;
 	private JPanel p2;
 	private List<Categorie> listCategorie;
+	private Vehicule vehicule;
 	
-	public AjouterVehiculeBalade(JFrame f, Connection connect, Membre currentMembre, List<Categorie> listCategorie, Balade baladeSelected) 
+	public AjouterVehiculeBalade(JFrame f, Connection connect, Membre currentMembre, List<Categorie> listCategorie, Vehicule vehicule, Balade baladeSelected) 
 	{
 		System.out.println("LISTE CATEGORIE : " + listCategorie);
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
@@ -105,7 +106,7 @@ public class AjouterVehiculeBalade
 		
 		ajouterVehiculeBaladeButton.addActionListener(new ajouterVehiculeBaladeButtonListener(f, jlist1, currentMembre, baladeSelected));
 		ajouterVehiculeButton.addActionListener(new ajouterVehiculeButtonListener(f, currentMembre));
-		retourButton.addActionListener(new retourButtonListener(f, listCategorie, currentMembre));
+		retourButton.addActionListener(new retourButtonListener(f, listCategorie, vehicule, currentMembre));
 		f.add(p);
 		f.add(p2);
 		f.pack();
@@ -181,6 +182,7 @@ public class AjouterVehiculeBalade
 				vehicule.AjouterMembre(currentMembre);
 				baladeDAO.create_Ligne_Balade_SansMembre((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue());
 				System.out.println("vehicule selectionne : " + listeVehicule.getSelectedValue());
+				System.out.println("INFOS VEHICULE : " + vehicule);
 				Main.RejoindreBalade(listCategorie, currentMembre);
 			}
 			
@@ -257,18 +259,20 @@ public class AjouterVehiculeBalade
 		private JFrame f;
 		private Membre currentMembre;
 		private List<Categorie> listCategorie;
-
-		public retourButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre)
+		private Vehicule vehicule;
+		
+		public retourButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
+			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("LISTE CATEGORIE RETOUR : " + listCategorie);
-			
+			System.out.println(vehicule);
 			for(Categorie cat : listCategorie)
 			{
 				currentMembre.AjouterCategorie(cat);
