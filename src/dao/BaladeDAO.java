@@ -23,7 +23,7 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Balade (IDB, libelleB, lieuDepart, dateDepart, forfait) VALUES ('" + obj.getiDB() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfait() + "')" + ";";
+			String query = "INSERT INTO Balade (IDB, libelleB, lieuDepart, dateDepart, forfaitBalade, forfaitRemboursement) VALUES ('" + obj.getiDB() + "','" + obj.getLibelle() + "','" + obj.getLieuDepart() + "','" + obj.getDateDepart() + "','" + obj.getForfaitBalade() + "','" + obj.getForfaitRemboursement() + "')" + ";";
 			for(int i = 0; i < obj.getListVehicule().size() ; i++)
 			{
 				//String query2 = "INSERT INTO Ligne_Balade (ID, IDB, IDV, IDM) VALUES ('" + 1 + "','" + obj.getIDB() + "','" + obj.getListVehicule().get(i).getIDV() + "','" + obj."
@@ -161,7 +161,7 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "DELETE FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND IDM = " + membre.getiD() + " AND type = " + "\"velo\"";
+			String query = "DELETE FROM Ligne_Balade WHERE ID = (SELECT MAX(ID) AS VeloSelected FROM Ligne_Balade WHERE type = \"velo\" AND IDM = " + membre.getiD() + " AND IDB = " + balade.getiDB()+")";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -179,7 +179,7 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "UPDATE Balade SET libelleB = " + "'" + obj.getLibelle() +  "', " + "lieuDepart = " + "'" + obj.getLieuDepart() + "', " +  "dateDepart = " + "'" + obj.getDateDepart() + "', " + "forfait = " + "'" + obj.getForfait() + "'" + " WHERE IDB = " + obj.getiDB() + ";";
+			String query = "UPDATE Balade SET libelleB = " + "'" + obj.getLibelle() +  "', " + "lieuDepart = " + "'" + obj.getLieuDepart() + "', " +  "dateDepart = " + "'" + obj.getDateDepart() + "', " + "forfaitBalade = " + "'" + obj.getForfaitBalade() + "', " + "forfaitRemboursement : " + "'" + obj.getForfaitRemboursement() + "'" + " WHERE IDB = " + obj.getiDB() + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -218,7 +218,7 @@ public class BaladeDAO extends DAO<Balade>
 				ResultSet.TYPE_SCROLL_INSENSITIVE,
 				ResultSet.CONCUR_READ_ONLY	).executeQuery("SELECT * FROM Balade WHERE IDB = " + id);
 			if(result.first())
-				balade = new Balade(id, result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), Double.parseDouble(result.getString("forfait")));
+				balade = new Balade(id, result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), Double.parseDouble(result.getString("forfaitBalade")), Double.parseDouble(result.getString("forfaitRemboursement")));
 		}
 		catch(SQLException e){
 			e.printStackTrace();
@@ -293,7 +293,7 @@ public class BaladeDAO extends DAO<Balade>
 					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Balade WHERE libelleB != \"N/A\"");
 			while(result.next())
 			{
-				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
+				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfaitBalade"), result.getDouble("forfaitRemboursement"));
 				listBalade.add(balade);
 			}
 		}
@@ -314,7 +314,7 @@ public class BaladeDAO extends DAO<Balade>
 					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Balade INNER JOIN Calendrier ON Balade.IDB = Calendrier.IDB INNER JOIN Categorie_Responsable ON Calendrier.nom = Categorie_Responsable.nom WHERE Categorie_Responsable.nom = " + "\"" + categorie.getNom() + "\"" + "AND Ligne_Balade.IDM = " + 1);
 			while(result.next())
 			{
-				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
+				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfaitBalade"), result.getDouble("forfaitRemboursement"));
 				listBalade.add(balade);
 			}
 		}
@@ -343,7 +343,7 @@ public class BaladeDAO extends DAO<Balade>
 						ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Balade INNER JOIN Calendrier ON Balade.IDB = Calendrier.IDB INNER JOIN Categorie_Responsable ON Calendrier.nom = Categorie_Responsable.nom WHERE Categorie_Responsable.nom = " + "\"" + categorie.getNom() + "\"");
 				while(result.next())
 				{
-					balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
+					balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfaitBalade"), result.getDouble("forfaitRemboursement"));
 					listBalade.add(balade);
 					System.out.println(result);
 				}
@@ -367,7 +367,7 @@ public class BaladeDAO extends DAO<Balade>
 	System.out.println("after");
 			while(result.next())
 			{
-				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
+				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfaitBalade"), result.getDouble("forfaitRemboursement"));
 				listBalade.add(balade);
 			}
 		}
@@ -389,7 +389,7 @@ public class BaladeDAO extends DAO<Balade>
 	System.out.println("after");
 			while(result.next())
 			{
-				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
+				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfaitBalade"), result.getDouble("forfaitRemboursement"));
 				listBalade.add(balade);
 			}
 		}
@@ -409,7 +409,7 @@ public class BaladeDAO extends DAO<Balade>
 					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Balade WHERE IDB = " + balade.getiDB());
 			if(result.next())
 			{
-				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfait"));
+				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfaitBalade"), result.getDouble("forfaitRemboursement"));
 				solde = result.getDouble("forfait");
 			}
 		}

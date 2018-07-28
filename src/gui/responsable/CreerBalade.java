@@ -36,12 +36,14 @@ public class CreerBalade implements ActionListener
 	private JLabel labelLibelle;
 	private JLabel labelLieuDepart;
 	private JLabel labelDateDepart;
-	private JLabel labelForfait;
+	private JLabel labelForfaitBalade;
+	private JLabel labelForfaitRemboursement;
 	private JLabel labelMsgErreur;
 	private JTextField libelleField;
 	private JTextField lieuDepartField;
 	private JTextField dateDepartField;
-	private JTextField forfaitField;
+	private JTextField forfaitBaladeField;
+	private JTextField forfaitRemboursementField;
 	private JButton createBaladeButton;
 	private JButton retourButton;
 	private	JPanel p;
@@ -58,13 +60,16 @@ public class CreerBalade implements ActionListener
 		labelLibelle = new JLabel("Libellé");
 		labelLieuDepart = new JLabel("Lieu départ");
 		labelDateDepart = new JLabel("Date départ"); 
-		labelForfait = new JLabel("Forfait");
+		labelForfaitBalade = new JLabel("Forfait balade");
+		labelForfaitRemboursement = new JLabel("Forfait remboursement");
+		
 		labelMsgErreur = new JLabel();
 		//String listVehicules = vehicules.toString();
 		libelleField = new JTextField(15);
 		lieuDepartField = new JTextField(15);
 		dateDepartField = new JTextField(15);
-		forfaitField = new JTextField(5);
+		forfaitBaladeField = new JTextField(5);
+		forfaitRemboursementField = new JTextField(5);
 		
 		createBaladeButton = new JButton("Créer");
 		retourButton = new JButton("Retour");
@@ -77,8 +82,10 @@ public class CreerBalade implements ActionListener
 		p.add(lieuDepartField);
 		p.add(labelDateDepart);
 		p.add(dateDepartField);
-		p.add(labelForfait);
-		p.add(forfaitField);
+		p.add(labelForfaitBalade);
+		p.add(forfaitBaladeField);
+		p.add(labelForfaitRemboursement);
+		p.add(forfaitRemboursementField);
 		p.add(createBaladeButton);
 		p.add(retourButton);
 		
@@ -94,9 +101,10 @@ public class CreerBalade implements ActionListener
 		String regex = "^(-?)(0|([1-9][0-9]*))(\\.[0-9]+)?$";
 		 
 		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(forfaitField.getText());
+		Matcher matcher = pattern.matcher(forfaitBaladeField.getText());
+		Matcher matcher2 = pattern.matcher(forfaitRemboursementField.getText());
 		
-		if(libelleField.getText().isEmpty() || lieuDepartField.getText().isEmpty() || dateDepartField.getText().isEmpty() || forfaitField.getText().isEmpty())
+		if(libelleField.getText().isEmpty() || lieuDepartField.getText().isEmpty() || dateDepartField.getText().isEmpty() || forfaitBaladeField.getText().isEmpty() || forfaitRemboursementField.getText().isEmpty())
 		{
 			labelMsgErreur.setText("Veuillez remplir tous les champs.");
 			p2.add(labelMsgErreur);
@@ -106,7 +114,14 @@ public class CreerBalade implements ActionListener
 		}
 		else if(!(matcher.matches()))
 		{
-			labelMsgErreur.setText("Le champs forfait ne peut contenir que des chiffres");
+			labelMsgErreur.setText("Le champs forfait balade ne peut contenir que des chiffres");
+			p2.add(labelMsgErreur);
+			f.add(p2);
+			f.pack();
+		}
+		else if(!(matcher2.matches()))
+		{
+			labelMsgErreur.setText("Le champs forfait remboursement ne peut contenir que des chiffres");
 			p2.add(labelMsgErreur);
 			f.add(p2);
 			f.pack();
@@ -114,7 +129,7 @@ public class CreerBalade implements ActionListener
 		else
 		{
 			Calendrier calendrier = new Calendrier();
-			Balade balade = new Balade(libelleField.getText(), lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitField.getText()));
+			Balade balade = new Balade(libelleField.getText(), lieuDepartField.getText(), dateDepartField.getText(), Double.parseDouble(forfaitBaladeField.getText()), Double.parseDouble(forfaitRemboursementField.getText()));
 			BaladeDAO baladeDAO = new BaladeDAO(connect);
 			if(baladeDAO.alreadyExist(libelleField.getText()))
 			{

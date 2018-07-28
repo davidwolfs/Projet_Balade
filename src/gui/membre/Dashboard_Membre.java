@@ -62,7 +62,7 @@ public class Dashboard_Membre implements ActionListener
 		
 		f.add(p);
 		
-		BaladeButton.addActionListener(new BaladeButtonListener(f));
+		BaladeButton.addActionListener(new BaladeButtonListener(f, currentMembre));
 		VehiculeButton.addActionListener(new VehiculeButtonListener(f, currentMembre));
 		//DisponibiliteButton.addActionListener(new DisponibiliteButtonListener(f, currentMembre));
 		CategorieButton.addActionListener(new CategorieButtonListener(f, currentMembre));
@@ -86,10 +86,12 @@ public class Dashboard_Membre implements ActionListener
 	private class BaladeButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Membre currentMembre;
 
-		public BaladeButtonListener(JFrame f)
+		public BaladeButtonListener(JFrame f, Membre currentMembre)
 		{
 			this.f = f;
+			this.currentMembre = currentMembre;
 		}
 		
 		@Override

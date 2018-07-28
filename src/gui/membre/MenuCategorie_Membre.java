@@ -170,7 +170,9 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 		{
 			CategorieDAO categorieDAO = new CategorieDAO(connect);
 			MembreDAO membreDAO = new MembreDAO(connect);
-			System.out.println(currentMembre.getListCategorie());
+			Categorie categorie = (Categorie)listeCategorie.getSelectedValue();
+			System.out.println("Nom de la catégorie choisie : " + categorie.getNom());
+			System.out.println("LISTE DES CATEGORIES DU MEMBRE : " + currentMembre.getListCategorie());
 			if(listeCategorie.isSelectionEmpty())
 			{
 				labelMsgErreur.setText("Veuillez sélectionner une catégorie.");
@@ -178,15 +180,15 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 				f.add(p2);
 				f.pack();
 			}
-			/*else if(categorieDAO.appartientCategorie(currentMembre))
+			else if(categorieDAO.appartientCategorieDonnee(categorie, currentMembre))
 			{
 				JOptionPane.showMessageDialog(null, "Vous appartenez déjà à cette catégorie.");
-			}*/
+			}
 			else
 			{
 				JOptionPane.showMessageDialog(null, "Vous venez de vous affilier à la catégorie : " + listeCategorie.getSelectedValue());
 				//currentMembre = membreDAO.findMembreByEmailPassword(currentMembre.getEmail(), currentMembre.getPassword());
-				Categorie categorie = (Categorie)listeCategorie.getSelectedValue();
+				//Categorie categorie = (Categorie)listeCategorie.getSelectedValue();
 				System.out.println("Nom de la catégorie choisie : " + categorie.getNom());
 				//System.out.println(currentMembre.getListCategorie());
 				System.out.println("Categorie : " + categorie.toString());

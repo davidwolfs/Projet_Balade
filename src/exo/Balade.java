@@ -9,32 +9,36 @@ public class Balade {
 	private String libelle;
 	private String lieuDepart;
 	private String dateDepart;
-	private double forfait;
+	private double forfaitBalade;
+	private double forfaitRemboursement;
 	private List<Vehicule> listVehicule = new ArrayList<>();
 
-	public Balade(int iDB, String libelle, String lieuDepart, String dateDepart, double forfait, List<Vehicule> listVehicule) {
+	public Balade(int iDB, String libelle, String lieuDepart, String dateDepart, double forfaitBalade, double forfaitRemboursement, List<Vehicule> listVehicule) {
 		this.iDB = iDB;
 		this.libelle = libelle;
 		this.lieuDepart = lieuDepart;
 		this.dateDepart = dateDepart;
-		this.forfait = forfait;
+		this.forfaitBalade = forfaitBalade;
+		this.forfaitRemboursement = forfaitRemboursement;
 		this.listVehicule = listVehicule;
 	}
 	
-	public Balade(int iDB, String libelle, String lieuDepart, String dateDepart, double forfait) {
+	public Balade(int iDB, String libelle, String lieuDepart, String dateDepart, double forfaitBalade, double forfaitRemboursement) {
 		this.iDB = iDB;
 		this.libelle = libelle;
 		this.lieuDepart = lieuDepart;
 		this.dateDepart = dateDepart;
-		this.forfait = forfait;
+		this.forfaitBalade = forfaitBalade;
+		this.forfaitRemboursement = forfaitRemboursement;
 	}
 	
-	public Balade(String libelle, String lieuDepart, String dateDepart, double forfait) 
+	public Balade(String libelle, String lieuDepart, String dateDepart, double forfaitBalade, double forfaitRemboursement) 
 	{
 		this.libelle = libelle;
 		this.lieuDepart = lieuDepart;
 		this.dateDepart = dateDepart;
-		this.forfait = forfait;
+		this.forfaitBalade = forfaitBalade;
+		this.forfaitRemboursement = forfaitRemboursement;
 	}
 
 	public Balade() {
@@ -63,13 +67,21 @@ public class Balade {
 	public void setDateDepart(String dateDepart) {
 		this.dateDepart = dateDepart;
 	}
-
-	public double getForfait() {
-		return forfait;
+	
+	public double getForfaitBalade() {
+		return forfaitBalade;
 	}
 
-	public void setForfait(double forfait) {
-		this.forfait = forfait;
+	public void setForfaitBalade(double forfaitBalade) {
+		this.forfaitBalade = forfaitBalade;
+	}
+
+	public double getForfaitRemboursement() {
+		return forfaitRemboursement;
+	}
+
+	public void setForfaitRemboursement(double forfaitRemboursement) {
+		this.forfaitRemboursement = forfaitRemboursement;
 	}
 
 	public String getLibelle() {
@@ -96,6 +108,6 @@ public class Balade {
 	@Override
 	public String toString() {
 		return "Libelle=" + libelle + ", Lieu de départ=" + lieuDepart + ", Date de départ="
-				+ dateDepart + ", Forfait=" + forfait + "€";
+				+ dateDepart + ", Forfait=" + forfaitBalade + "€";
 	}
 }

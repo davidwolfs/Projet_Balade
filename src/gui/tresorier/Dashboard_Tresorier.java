@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 
 import dao.BaladeDAO;
 import exo.Balade;
+import exo.Membre;
 import exo.Tresorier;
 import gui.Main;
 
@@ -43,28 +44,28 @@ public class Dashboard_Tresorier implements ActionListener
 		this.currentTresorier = currentTresorier;
 		labelBonjour = new JLabel("Bonjour " + currentTresorier.getPrenom() + " " + currentTresorier.getNom() + ", vous êtes connecté en tant que : Trésorier");
 	//	BaladeButton = new JButton("Balade");
-		RemboursementeButton = new JButton("Remboursement");
-		DisponibiliteButton = new JButton("Disponibilité");
+		RemboursementeButton = new JButton("Remboursement et payement");
+	//	DisponibiliteButton = new JButton("Disponibilité");
 	//	CategorieButton = new JButton("Catégorie");
-		PayementButton = new JButton("Payement");
+	//	PayementButton = new JButton("Payement");
 		deconnexionButton = new JButton("Déconnexion");
 		p = new JPanel(new GridLayout(0, 1));
 
 		p.add(labelBonjour);
 	//	p.add(BaladeButton);
 		p.add(RemboursementeButton);
-		p.add(DisponibiliteButton);
+	//	p.add(DisponibiliteButton);
 	//	p.add(CategorieButton);
-		p.add(PayementButton);
+	//	p.add(PayementButton);
 		p.add(deconnexionButton);
 		
 		f.add(p);
 		
 	//	BaladeButton.addActionListener(this);
-		RemboursementeButton.addActionListener(this);
-		DisponibiliteButton.addActionListener(this);
+		RemboursementeButton.addActionListener(new RemboursementeButtonListener(f, connect, currentTresorier));
+	//	DisponibiliteButton.addActionListener(this);
 	//	CategorieButton.addActionListener(new CategorieButtonListener(f));
-		PayementButton.addActionListener(new PayementButtonListener(f));
+	//	PayementButton.addActionListener(new PayementButtonListener(f));
 		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
 		
 		f.pack();
@@ -80,33 +81,17 @@ public class Dashboard_Tresorier implements ActionListener
 		baladeDAO.create(balade);*/
 	}
 	
-	private class BaladeButtonListener implements ActionListener
-	{
-		private JFrame f;
-
-		public BaladeButtonListener(JFrame f)
-		{
-			this.f = f;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Container cp = f.getContentPane();
-			cp.removeAll();
-			//f.removeAll();*/
-			//Main.showMenuBalade();
-			/*f.revalidate();*/
-			//f.getLayout().removeLayoutComponent(f);
-		}
-	}
-	
 	private class RemboursementeButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Connection connect;
+		private Tresorier currentTresorier;
 
-		public RemboursementeButtonListener(JFrame f)
+		public RemboursementeButtonListener(JFrame f, Connection connect, Tresorier currentTresorier)
 		{
 			this.f = f;
+			this.connect = connect;
+			this.currentTresorier = currentTresorier;
 		}
 		
 		@Override
@@ -114,67 +99,7 @@ public class Dashboard_Tresorier implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			//Main.showMenuRemboursement();
-			/*f.revalidate();*/
-			//f.getLayout().removeLayoutComponent(f);
-		}
-	}
-	
-	private class DisponibiliteButtonListener implements ActionListener
-	{
-		private JFrame f;
-
-		public DisponibiliteButtonListener(JFrame f)
-		{
-			this.f = f;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Container cp = f.getContentPane();
-			cp.removeAll();
-			//f.removeAll();*/
-			//Main.showMenuDisponibilite();
-			/*f.revalidate();*/
-			//f.getLayout().removeLayoutComponent(f);
-		}
-	}
-	
-	private class CategorieButtonListener implements ActionListener
-	{
-		private JFrame f;
-
-		public CategorieButtonListener(JFrame f)
-		{
-			this.f = f;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Container cp = f.getContentPane();
-			cp.removeAll();
-			//f.removeAll();*/
-			//Main.showMenuCategorie();
-			/*f.revalidate();*/
-			//f.getLayout().removeLayoutComponent(f);
-		}
-	}
-	
-	private class PayementButtonListener implements ActionListener
-	{
-		private JFrame f;
-
-		public PayementButtonListener(JFrame f)
-		{
-			this.f = f;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Container cp = f.getContentPane();
-			cp.removeAll();
-			//f.removeAll();*/
-		//	Main.showMenuPayement();
+			Main.showMenuRemboursement_Tresorier(currentTresorier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

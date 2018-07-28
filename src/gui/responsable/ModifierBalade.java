@@ -70,7 +70,7 @@ public class ModifierBalade implements ActionListener
 		labelLibelleValeur.setText(((Balade)baladeSelected).getLibelle());
 		lieuDepartField.setText(((Balade)baladeSelected).getLieuDepart());
 		dateDepartField.setText(((Balade)baladeSelected).getDateDepart());
-		forfaitField.setText(Double.toString(((Balade)baladeSelected).getForfait()));
+		forfaitField.setText(Double.toString(((Balade)baladeSelected).getForfaitBalade()));
 		
 		modifierBaladeButton = new JButton("Modifier");
 		retourButton = new JButton("Retour");
@@ -121,7 +121,7 @@ public class ModifierBalade implements ActionListener
 		{
 			((Balade)baladeSelected).setLieuDepart(lieuDepartField.getText());
 			((Balade)baladeSelected).setDateDepart(dateDepartField.getText());
-			((Balade)baladeSelected).setForfait(Double.parseDouble(forfaitField.getText()));
+			((Balade)baladeSelected).setForfaitBalade(Double.parseDouble(forfaitField.getText()));
 			System.out.println("Mon nouvel objet balade : " + ((Balade)baladeSelected));
 			BaladeDAO baladeDAO = new BaladeDAO(connect);
 			 //new Balade(1, , , Double.parseDouble(forfaitField.getText()), libelleField.getText());

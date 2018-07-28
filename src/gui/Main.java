@@ -7,6 +7,7 @@ import java.util.List;
 import gui.responsable.*;
 import gui.membre.*;
 import gui.tresorier.Dashboard_Tresorier;
+import gui.tresorier.MenuRemboursement_Tresorier;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -115,9 +116,15 @@ public class Main {
 		frame.setVisible(true);
 	}
 	
-	public static void RejoindreBalade(List<Categorie> listCategorie, Membre currentMembre)
+	public static void showMenuRemboursement_Tresorier(Tresorier currentTresorier)
 	{
-		RejoindreBalade rejoindreBalade = new RejoindreBalade(frame, connect, listCategorie, currentMembre);
+		MenuRemboursement_Tresorier menuRemboursement_Tresorier = new MenuRemboursement_Tresorier(frame, connect, currentTresorier);
+		frame.setVisible(true);
+	}
+	
+	public static void RejoindreBalade(List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
+	{
+		RejoindreBalade rejoindreBalade = new RejoindreBalade(frame, connect, listCategorie, vehicule, currentMembre);
 		frame.setVisible(true);
 	}
 	

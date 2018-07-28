@@ -1,4 +1,4 @@
-package gui.membre;
+package gui.tresorier;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -27,32 +27,25 @@ import dao.VehiculeDAO;
 import exo.Balade;
 import exo.Categorie;
 import exo.Membre;
+import exo.Tresorier;
 import exo.Vehicule;
 import gui.Main;
 
-public class RejoindreBalade 
+public class MenuRemboursement_Tresorier 
 {
 	private Connection connect;
 	private JFrame controllingFrame; // needed for dialogs
-	private Membre currentMembre;
+	private Tresorier currentTresorier;
 	private Balade baladeSelected;
 	private JLabel labelBalade;
-	private JLabel labelVehicule;
-	private JLabel labelPlaceDisponibleMsgMembre;
-	private JLabel labelPlaceDisponibleAffichageMembre;
-	private JLabel labelPlaceDisponibleMsgVelo;
-	private JLabel labelPlaceDisponibleAffichageVelo;
+	private JLabel labelChauffeur;
+	private JLabel labelPassager;
 	private JLabel labelMsgErreur;
 	private JList listeBalade;
 	private JList listeVehicule;
+	private JList listePassager;
 	private ListSelectionModel listSelectionModel;
 	private ListSelectionModel listSelectionModel2;
-	private JButton rejoindreButton;
-	private JButton rejoindreMembreButton;
-	private JButton rejoindreVehiculeButton;
-	private JButton ajoutVehiculeButton;
-	private JButton quitterButton;
-	private JButton quitterMembreButton;
 	private JButton quitterVeloButton;
 	private JButton retourButton;
 	private JPanel p;
@@ -67,29 +60,27 @@ public class RejoindreBalade
 	//listeVehicule = new JList(vehicules);
 
 
-	public RejoindreBalade(JFrame f, Connection connect, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre) 
+	public MenuRemboursement_Tresorier(JFrame f, Connection connect, Tresorier currentTresorier) 
 	{
 		System.out.println("infos vehicule dans rejoindre balade : " + vehicule);
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
+		List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
-		System.out.println(currentMembre.getEmail());
-		List<Balade> listBalade = baladeDAO.listBaladeBylistCategorie(currentMembre.getListCategorie());
-		listCategorie = currentMembre.getListCategorie();
+		System.out.println(currentTresorier.getEmail());
+		List<Balade> listBalade = baladeDAO.listBalade();
 				//List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
 		Object[] balades = listBalade.toArray();
 		//Object[] vehicules = listVehicule.toArray();
 		this.connect = connect;
 		controllingFrame = f;
-		this.currentMembre = currentMembre;
+		this.currentTresorier = currentTresorier;
+		labelBalade = new JLabel("Liste des balades : ");
+		labelChauffeur = new JLabel("Liste des chauffeurs : ");
+		labelPassager = new JLabel("Liste des passagers : ");
 		labelMsgErreur = new JLabel();
-		labelBalade = new JLabel("Balades pour la (les) catégorie(s) : " + currentMembre.getListCategorie());
-		labelVehicule = new JLabel("Véhicules pour la balade sélectionnée : ");
-		labelPlaceDisponibleMsgMembre = new JLabel();
-		labelPlaceDisponibleAffichageMembre = new JLabel();
-		labelPlaceDisponibleMsgVelo = new JLabel();
-		labelPlaceDisponibleAffichageVelo = new JLabel();
 		listeBalade = new JList(balades);
 		listeVehicule = new JList();
+		listePassager = new JList();
 		//String listVehicules = vehicules.toString();
 
 		//Vehicule vehiculeSelectionne = (Vehicule) listeVehicule.getSelectedValue();
@@ -109,6 +100,9 @@ public class RejoindreBalade
 
 	    JScrollPane scrollPane2 = new JScrollPane(listeVehicule);
 		f.add(scrollPane2, BorderLayout.NORTH);
+		
+		JScrollPane scrollPane3 = new JScrollPane(listePassager);
+		f.add(scrollPane3, BorderLayout.NORTH);
 		 
 	    jlist1.setVisibleRowCount(4);
 	    jlist1.setFixedCellHeight(12);
@@ -117,14 +111,7 @@ public class RejoindreBalade
 
 	    f.setSize(300, 350);
 	    f.setVisible(true);
-	    
-	    rejoindreButton = new JButton("Rejoindre la balade");
-	    rejoindreMembreButton = new JButton("S'ajouter comme membre");
-		rejoindreVehiculeButton = new JButton("Ajouter mon vélo");
-		quitterButton = new JButton("Quitter la balade");
-		quitterMembreButton = new JButton("Retirer membre");
-		quitterVeloButton = new JButton("Retirer vélo");
-		ajoutVehiculeButton = new JButton("Ajout véhicule");
+
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(4, 2));
 		p2 = new JPanel(new GridLayout(1,2));
@@ -134,19 +121,11 @@ public class RejoindreBalade
 		
 		p.add(labelBalade);
 		p.add(scrollPane1);
-		p.add(labelVehicule);
+		p.add(labelChauffeur);
 		p.add(scrollPane2);
-		p2.add(labelPlaceDisponibleMsgMembre);
-		p2.add(labelPlaceDisponibleAffichageMembre);
-		p2.add(labelPlaceDisponibleMsgVelo);
-		p2.add(labelPlaceDisponibleAffichageVelo);
-		p3.add(rejoindreButton);
-		p3.add(rejoindreMembreButton);
-		p3.add(rejoindreVehiculeButton);
-		p3.add(quitterButton);
-		p3.add(quitterMembreButton);
-		p3.add(quitterVeloButton);
-		p3.add(ajoutVehiculeButton);
+		p.add(labelPassager);
+		p.add(scrollPane3);
+		
 		p3.add(retourButton);
 
 
@@ -154,15 +133,12 @@ public class RejoindreBalade
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1, vehicule, listeVehicule));
-
-		rejoindreButton.addActionListener(new rejoindreButtonListener(f, listCategorie, vehicule, currentMembre));
-		rejoindreMembreButton.addActionListener(new rejoindreMembreButtonListener(f, listCategorie, vehicule, currentMembre));
-		rejoindreVehiculeButton.addActionListener(new rejoindreVehiculeButtonListener(f, listCategorie, vehicule, currentMembre));
-		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, listCategorie, vehicule, currentMembre, jlist1));
-		quitterButton.addActionListener(new quitterButtonListener(f, listCategorie, currentMembre, vehicule, jlist1));
-		quitterMembreButton.addActionListener(new quitterMembreButtonListener(f, listCategorie, currentMembre, vehicule, jlist1));
-		quitterVeloButton.addActionListener(new quitterVeloButtonListener(f, listCategorie, currentMembre, vehicule, jlist1));
-		retourButton.addActionListener(new retourButtonListener(f, listCategorie, vehicule, currentMembre));
+		
+		listSelectionModel2  = jlist1.getSelectionModel();
+		listSelectionModel2.addListSelectionListener(
+				new SharedListSelectionHandler2(f, jlist1, vehicule, listePassager));
+		
+		retourButton.addActionListener(new retourButtonListener(f, listCategorie, vehicule, currentTresorier));
 		f.add(p);
 		f.add(p2);
 		f.add(p3);
@@ -189,15 +165,12 @@ public class RejoindreBalade
 
 			int index = listeBalade.getSelectedIndex();
 			System.out.println("balade :" + listeBalade.getSelectedValue());
+			JOptionPane.showMessageDialog(null, listeBalade.getSelectedValue());
 			System.out.println(listeBalade.getSelectedValue().getClass());
 			baladeSelected = (Balade)listeBalade.getSelectedValue();
 			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-			
-			listeVehicule.setListData(vehiculeDAO.listVehiculeByBalade((Balade)listeBalade.getSelectedValue(), vehicule).toArray());
-			
-			listSelectionModel2  = listeVehicule.getSelectionModel();
-			listSelectionModel2.addListSelectionListener(
-					new SharedListSelectionHandler2(f, baladeSelected, listeVehicule));
+			System.out.println(vehiculeDAO.listChauffeur((Balade)listeBalade.getSelectedValue()));
+			listeVehicule.setListData(vehiculeDAO.listChauffeur((Balade)listeBalade.getSelectedValue()).toArray());
 			
 			//listeVehicule.repaint();
 			Container container = listeVehicule.getParent();
@@ -208,37 +181,30 @@ public class RejoindreBalade
 
 	private class SharedListSelectionHandler2 implements ListSelectionListener 
 	{
-		private JList listeVehicule;
-		private Balade baladeSelected;
+		private JList listeBalade;
+		private JList listePassager;
 		private JFrame f;
+		private Vehicule vehicule;
 		
-		public SharedListSelectionHandler2(JFrame f, Balade baladeSelected, JList jlist1)
+		public SharedListSelectionHandler2(JFrame f, JList jlist1, Vehicule vehicule, JList listePassager)
 		{
 			this.f = f;
-			this.baladeSelected = baladeSelected;
-			this.listeVehicule = jlist1;
+			this.listeBalade = jlist1;
+			this.vehicule = vehicule;
+			this.listePassager = listePassager;
 		}
 
 		public void valueChanged(ListSelectionEvent e) {
 			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+
+			int index = listeBalade.getSelectedIndex();
+			System.out.println("balade :" + listeBalade.getSelectedValue());
+			JOptionPane.showMessageDialog(null, listeBalade.getSelectedValue());
+			System.out.println(listeBalade.getSelectedValue().getClass());
+			baladeSelected = (Balade)listeBalade.getSelectedValue();
 			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-			BaladeDAO baladeDAO = new BaladeDAO(connect);
-			
-			int index = listeVehicule.getSelectedIndex();
-			System.out.println(listeVehicule.getSelectedValue().getClass());
-			vehiculeSelected = (Vehicule)listeVehicule.getSelectedValue();
-			Vehicule vehicule = (Vehicule)vehiculeSelected;
-			int nombrePlaceMembre = vehicule.getNombrePlaceMembre();
-			int nombrePlaceVelo = vehicule.getNombrePlaceVelo();
-			int nombrePlaceMembreUtilisee = baladeDAO.getPlaceMembreUtilisee((Vehicule)vehiculeSelected, baladeSelected);
-			int nombrePlaceVeloUtilisee = baladeDAO.getPlaceVeloUtilisee((Vehicule)vehiculeSelected, baladeSelected);
-			int nombrePlaceMembreLibre = nombrePlaceMembre - nombrePlaceMembreUtilisee;
-			int nombrePlaceVeloLibre = nombrePlaceVelo - nombrePlaceVeloUtilisee;
-			labelPlaceDisponibleAffichageMembre.setText("" + nombrePlaceMembreLibre + " place(s) membres restante(s).");
-			labelPlaceDisponibleAffichageVelo.setText("" + nombrePlaceVeloLibre + " place(s) vélos restante(s).");
-			
-			//labelPlaceDisponibleMsgVehicule.setText(baladeDAO.getPlaceUtilisee());
-			
+			System.out.println(vehiculeDAO.listChauffeur((Balade)listeBalade.getSelectedValue()));
+			listePassager.setListData(vehiculeDAO.listPassager((Balade)listeBalade.getSelectedValue()).toArray());
 			
 			//listeVehicule.repaint();
 			Container container = listeVehicule.getParent();
@@ -739,14 +705,14 @@ public class RejoindreBalade
 		private JFrame f;
 		private List<Categorie> listCategorie;
 		private Vehicule vehicule;
-		private Membre currentMembre;
+		private Tresorier currentTresorier;
 		
-		public retourButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
+		public retourButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Tresorier currentTresorier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
 			this.vehicule = vehicule;
-			this.currentMembre = currentMembre;
+			this.currentTresorier = currentTresorier;
 		}
 
 		@Override
@@ -754,7 +720,7 @@ public class RejoindreBalade
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuBalade_Membre(currentMembre);
+			Main.showDashboard_Tresorier(currentTresorier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

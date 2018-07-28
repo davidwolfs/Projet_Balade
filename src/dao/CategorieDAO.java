@@ -225,6 +225,52 @@ public class CategorieDAO extends DAO<Categorie>
 		return appartient;
 	}
 	
+	public boolean appartientCategorieDonnee(Categorie categorie, Membre membre)
+	{
+		System.out.println("CATEGORIE NOM : " + categorie.getNom());
+		boolean appartient = false;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie_Membre WHERE nom = " + "\"" + categorie.getNom() + "\"" + " AND IDM = " + membre.getiD());
+			if(result.first())
+			{
+				appartient = true;
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return appartient;
+	}
+	
+	public List<Categorie> getCategorieByMembre(Membre membre)
+	{
+		List<Categorie> listCategorie = new ArrayList<>();
+		
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie_Membre WHERE IDM = " + membre.getiD());
+			while(result.next())
+			{
+				membre.setiD(result.getInt("IDM"));
+				Categorie categorie = new Categorie();
+				categorie.setiD(result.getInt("IdCat"));
+				categorie.setNom(result.getString("nom"));
+				categorie.setTypePneu(result.getString("typePneu"));
+				System.out.println("CATEGORIE : " + categorie);
+				listCategorie.add(categorie);
+			}
+			for(Categorie cat : listCategorie)
+			System.out.println("LISTE CATEGORIE : " + cat);
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return listCategorie;
+	}
+	
 	public boolean isNotResponsable(Categorie categorie, Responsable responsable)
 	{
 		boolean appartient = true;

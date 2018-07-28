@@ -183,7 +183,7 @@ public class AjouterVehiculeBalade
 				baladeDAO.create_Ligne_Balade_SansMembre((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue());
 				System.out.println("vehicule selectionne : " + listeVehicule.getSelectedValue());
 				System.out.println("INFOS VEHICULE : " + vehicule);
-				Main.RejoindreBalade(listCategorie, currentMembre);
+				Main.RejoindreBalade(listCategorie, vehicule, currentMembre);
 			}
 			
 			/*if(nombrePlacesField.getText().isEmpty() || immatriculationField.getText().isEmpty() || nombrePlaceVeloField.getText().isEmpty())
@@ -275,14 +275,20 @@ public class AjouterVehiculeBalade
 			System.out.println(vehicule);
 			for(Categorie cat : listCategorie)
 			{
-				currentMembre.AjouterCategorie(cat);
-				
+				if(listCategorie.contains(cat))
+				{
+					currentMembre.AjouterCategorie(cat);
+					System.out.println("ELLE CONTIENT QUELQUE CHOSE");
+				}
+				else
+				{
+					currentMembre.AjouterCategorie(cat);
+				}
 			}
-			
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.RejoindreBalade(listCategorie, currentMembre);
+			Main.RejoindreBalade(listCategorie, vehicule, currentMembre);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

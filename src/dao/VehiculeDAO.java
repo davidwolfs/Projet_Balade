@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import exo.Balade;
+import exo.Categorie;
 import exo.Membre;
 import exo.Tresorier;
 import exo.Trialiste;
@@ -189,7 +192,54 @@ public class VehiculeDAO extends DAO<Vehicule>{
 			{
 				Membre membre = new Membre();
 				membre.setiD(result.getInt("IDM"));
-				vehicule = new Vehicule(result.getString("Immatriculation"), result.getString("Marque"), result.getString("Modele"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);;
+				vehicule = new Vehicule(result.getString("Immatriculation"), result.getString("Marque"), result.getString("Modele"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);
+				listVehicule.add(vehicule);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listVehicule;
+	}
+
+	public List<Vehicule> listChauffeur(Balade balade) {
+		MembreDAO membreDAO = new MembreDAO(connect);
+		System.out.println(balade);
+		Vehicule vehicule = null;
+		List<Vehicule> listVehicule = new ArrayList<>();
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT Vehicule.IDM AS Chauffeur, Vehicule.Immatriculation, Vehicule.Marque, Vehicule.Modele, Vehicule.nombrePlaceMembre, Vehicule.nombrePlaceVelo  FROM Vehicule INNER JOIN Ligne_Balade ON Vehicule.Immatriculation = Ligne_Balade.Immatriculation WHERE IDB = " + balade.getiDB() + " AND Ligne_Balade.Immatriculation = Vehicule.Immatriculation AND paye = 0"); /* + "\"" + vehicule.getImmatriculation() + "\"");*/
+			while(result.next())
+			{
+				Membre membre = membreDAO.find(result.getInt("Chauffeur"));
+				vehicule = new Vehicule(result.getString("Immatriculation"), result.getString("Marque"), result.getString("Modele"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);
+				listVehicule.add(vehicule);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listVehicule;
+		
+	}
+	
+	public List<Vehicule> listPassager(Balade balade) {
+		MembreDAO membreDAO = new MembreDAO(connect);
+		System.out.println(balade);
+		Vehicule vehicule = null;
+		List<Vehicule> listVehicule = new ArrayList<>();
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT DISTINCT Vehicule.IDM AS Passager, Vehicule.Immatriculation, Vehicule.Marque, Vehicule.Modele, Vehicule.nombrePlaceMembre, Vehicule.nombrePlaceVelo  FROM Ligne_Balade LEFT JOIN Vehicule ON Ligne_Balade.Immatriculation = Vehicule.Immatriculation WHERE IDB = " + balade.getiDB() + " AND Ligne_Balade.type = \"membre\" AND paye = 0 AND Vehicule.Immatriculation IS NULL");
+			while(result.next())
+			{
+				Membre membre = membreDAO.find(result.getInt("Passager"));
+				vehicule = new Vehicule(result.getString("Immatriculation"), result.getString("Marque"), result.getString("Modele"), result.getInt("nombrePlaceMembre"), result.getInt("nombrePlaceVelo"), membre);
 				listVehicule.add(vehicule);
 			}
 		}

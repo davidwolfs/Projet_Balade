@@ -124,7 +124,7 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.RejoindreBalade(listCategorie, currentMembre);
+				Main.RejoindreBalade(listCategorie, vehicule, currentMembre);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}

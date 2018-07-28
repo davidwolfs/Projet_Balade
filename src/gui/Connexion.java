@@ -2,10 +2,12 @@ package gui;
 
 import javax.swing.*;
 
+import dao.CategorieDAO;
 import dao.MembreDAO;
 import dao.ResponsableDAO;
 import dao.TresorierDAO;
 import exo.Balade;
+import exo.Categorie;
 import exo.Membre;
 import exo.Responsable;
 import exo.Tresorier;
@@ -13,6 +15,7 @@ import exo.Tresorier;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /* PasswordDemo.java requires no other files. */
@@ -246,6 +249,8 @@ public class Connexion extends JPanel implements ActionListener
 			MembreDAO membreDAO	= new MembreDAO(connect);
 			ResponsableDAO responsableDAO	= new ResponsableDAO(connect);
 			TresorierDAO tresorierDAO	= new TresorierDAO(connect);
+			CategorieDAO categorieDAO = new CategorieDAO(connect);
+			
 			
 			if(responsableRadio.isSelected())
 			{
@@ -273,6 +278,19 @@ public class Connexion extends JPanel implements ActionListener
 						currentMembre = membreDAO.findMembreByEmailPassword(userField.getText(), passwordField.getText());
 						Container cp = f.getContentPane();
 						cp.removeAll();
+						/*Categorie categorie = new Categorie();
+						if(categorieDAO.appartientCategorieDonnee(categorie, currentMembre))
+						{*/
+							/*System.out.println(currentMembre.getListCategorie());*/
+							currentMembre.setListCategorie(categorieDAO.getCategorieByMembre(currentMembre));
+							/*System.out.println(currentMembre.getListCategorie());*/
+							
+							for(Categorie cat : categorieDAO.getCategorieByMembre(currentMembre))
+							{
+								System.out.println(cat.getNom());
+							}
+							
+						//}
 						Main.showDashboard_Membre(currentMembre);
 					}
 					else
