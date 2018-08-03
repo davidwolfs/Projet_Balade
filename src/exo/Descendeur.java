@@ -3,8 +3,8 @@ package exo;
 public class Descendeur extends VTT {
 	private String typeSuspension;
 
-	public Descendeur(int supplement, String typePneu, String nom, int NbrPlateau, String typeSuspension) {
-		super(supplement, typePneu, nom, NbrPlateau);
+	public Descendeur(int supplement, String nom, int NbrPlateau, String typeSuspension) {
+		super(supplement, nom, NbrPlateau);
 		this.typeSuspension = typeSuspension;
 	}
 	

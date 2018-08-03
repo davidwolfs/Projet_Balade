@@ -25,6 +25,7 @@ import dao.BaladeDAO;
 import dao.CategorieDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Categorie;
 import exo.Membre;
 import exo.Responsable;
@@ -50,7 +51,7 @@ public class MenuDisponibilite_Membre extends JPanel implements ActionListener
 	private JPanel p2;
 	private Object categorieSelected;
 
-	public MenuDisponibilite_Membre(JFrame f, Connection connect, Membre currentMembre) 
+	public MenuDisponibilite_Membre(JFrame f, Connection connect, Membre currentMembre, Calendrier calendrier) 
 	{
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		CategorieDAO categorieDAO = new CategorieDAO(connect);
@@ -106,8 +107,8 @@ public class MenuDisponibilite_Membre extends JPanel implements ActionListener
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1));
 		posterDisponibiliteButton.addActionListener(new posterDisponibiliteButton(f, currentMembre, jlist1));
-		retourButton.addActionListener(new retourButtonListener(f, currentMembre));
-		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
+		retourButton.addActionListener(new retourButtonListener(f, currentMembre, calendrier));
+		deconnexionButton.addActionListener(new deconnexionButtonListener(f, calendrier));
 		
 		f.pack();
 	}
@@ -197,11 +198,13 @@ public class MenuDisponibilite_Membre extends JPanel implements ActionListener
 	{
 		private JFrame f;
 		private Membre currentMembre;
+		private Calendrier calendrier;
 		
-		public retourButtonListener(JFrame f, Membre currentMembre)
+		public retourButtonListener(JFrame f, Membre currentMembre, Calendrier calendrier)
 		{
 			this.f = f;
 			this.currentMembre = currentMembre;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -209,7 +212,7 @@ public class MenuDisponibilite_Membre extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showDashboard_Membre(currentMembre);
+			Main.showDashboard_Membre(currentMembre, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -218,10 +221,12 @@ public class MenuDisponibilite_Membre extends JPanel implements ActionListener
 	private class deconnexionButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 
-		public deconnexionButtonListener(JFrame f)
+		public deconnexionButtonListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -229,7 +234,7 @@ public class MenuDisponibilite_Membre extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.creerConnexion();
+			Main.creerConnexion(calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

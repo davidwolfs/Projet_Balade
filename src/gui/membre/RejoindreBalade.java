@@ -25,6 +25,7 @@ import dao.BaladeDAO;
 import dao.MembreDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Categorie;
 import exo.Membre;
 import exo.Vehicule;
@@ -67,9 +68,9 @@ public class RejoindreBalade
 	//listeVehicule = new JList(vehicules);
 
 
-	public RejoindreBalade(JFrame f, Connection connect, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre) 
+	public RejoindreBalade(JFrame f, Connection connect, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, Calendrier calendrier) 
 	{
-		System.out.println("infos vehicule dans rejoindre balade : " + vehicule);
+		System.out.println("infos vehicule dans rejoindre balade : " + currentMembre.getiD());
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
 		System.out.println(currentMembre.getEmail());
@@ -81,8 +82,10 @@ public class RejoindreBalade
 		this.connect = connect;
 		controllingFrame = f;
 		this.currentMembre = currentMembre;
+		this.vehicule = vehicule;
+		
 		labelMsgErreur = new JLabel();
-		labelBalade = new JLabel("Balades pour la (les) catégorie(s) : " + currentMembre.getListCategorie());
+		labelBalade = new JLabel("Balades pour la (les) catégorie(s) : " + currentMembre.getListCategorie() + " ");
 		labelVehicule = new JLabel("Véhicules pour la balade sélectionnée : ");
 		labelPlaceDisponibleMsgMembre = new JLabel();
 		labelPlaceDisponibleAffichageMembre = new JLabel();
@@ -153,16 +156,16 @@ public class RejoindreBalade
 
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
-				new SharedListSelectionHandler(f, jlist1, vehicule, listeVehicule));
+				new SharedListSelectionHandler(f, jlist1, currentMembre, vehicule, listeVehicule));
 
-		rejoindreButton.addActionListener(new rejoindreButtonListener(f, listCategorie, vehicule, currentMembre));
-		rejoindreMembreButton.addActionListener(new rejoindreMembreButtonListener(f, listCategorie, vehicule, currentMembre));
-		rejoindreVehiculeButton.addActionListener(new rejoindreVehiculeButtonListener(f, listCategorie, vehicule, currentMembre));
-		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, listCategorie, vehicule, currentMembre, jlist1));
+		rejoindreButton.addActionListener(new rejoindreButtonListener(f, listCategorie, vehicule, currentMembre, calendrier));
+		rejoindreMembreButton.addActionListener(new rejoindreMembreButtonListener(f, listCategorie, vehicule, currentMembre, calendrier));
+		rejoindreVehiculeButton.addActionListener(new rejoindreVehiculeButtonListener(f, listCategorie, vehicule, currentMembre, calendrier));
+		ajoutVehiculeButton.addActionListener(new ajoutVehiculeButtonListener(f, listCategorie, vehicule, currentMembre, jlist1, calendrier));
 		quitterButton.addActionListener(new quitterButtonListener(f, listCategorie, currentMembre, vehicule, jlist1));
-		quitterMembreButton.addActionListener(new quitterMembreButtonListener(f, listCategorie, currentMembre, vehicule, jlist1));
-		quitterVeloButton.addActionListener(new quitterVeloButtonListener(f, listCategorie, currentMembre, vehicule, jlist1));
-		retourButton.addActionListener(new retourButtonListener(f, listCategorie, vehicule, currentMembre));
+		quitterMembreButton.addActionListener(new quitterMembreButtonListener(f, listCategorie, currentMembre, vehicule, jlist1, calendrier));
+		quitterVeloButton.addActionListener(new quitterVeloButtonListener(f, listCategorie, currentMembre, vehicule, jlist1, calendrier));
+		retourButton.addActionListener(new retourButtonListener(f, listCategorie, vehicule, currentMembre, calendrier));
 		f.add(p);
 		f.add(p2);
 		f.add(p3);
@@ -174,12 +177,14 @@ public class RejoindreBalade
 		private JList listeBalade;
 		private JList listeVehicule;
 		private JFrame f;
+		private Membre currentMembre;
 		private Vehicule vehicule;
 		
-		public SharedListSelectionHandler(JFrame f, JList jlist1, Vehicule vehicule, JList listeVehicule)
+		public SharedListSelectionHandler(JFrame f, JList jlist1, Membre currentMembre, Vehicule vehicule, JList listeVehicule)
 		{
 			this.f = f;
 			this.listeBalade = jlist1;
+			this.currentMembre = currentMembre;
 			this.vehicule = vehicule;
 			this.listeVehicule = listeVehicule;
 		}
@@ -192,8 +197,8 @@ public class RejoindreBalade
 			System.out.println(listeBalade.getSelectedValue().getClass());
 			baladeSelected = (Balade)listeBalade.getSelectedValue();
 			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-			
-			listeVehicule.setListData(vehiculeDAO.listVehiculeByBalade((Balade)listeBalade.getSelectedValue(), vehicule).toArray());
+			JOptionPane.showMessageDialog(null, currentMembre.getiD());
+			listeVehicule.setListData(vehiculeDAO.listVehiculeByBalade(currentMembre, (Balade)listeBalade.getSelectedValue(), vehicule).toArray());
 			
 			listSelectionModel2  = listeVehicule.getSelectionModel();
 			listSelectionModel2.addListSelectionListener(
@@ -253,7 +258,8 @@ public class RejoindreBalade
 		private Membre currentMembre;
 		private List<Categorie> listCategorie;
 		private Vehicule vehicule;
-		public rejoindreButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
+		private Calendrier calendrier;
+		public rejoindreButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
@@ -271,7 +277,6 @@ public class RejoindreBalade
 			Balade balade;
 			
 			int nombrePlacesUtilisees;
-			
 			currentMembre = membreDAO.getSoldeMembre(currentMembre);
 			double soldeMembre = currentMembre.getSolde();
 			double forfait = baladeDAO.getForfait(baladeSelected);
@@ -331,7 +336,7 @@ public class RejoindreBalade
 				
 				System.out.println("Avant ajout membre : " +  vehicule.getListMembre());
 				System.out.println("Vehicule toString Avant : " +  vehicule.toString());
-				vehicule.AjouterMembre(currentMembre);
+				//vehicule.AjouterMembre(currentMembre);
 				/*vehicule.setNombrePlaceMembre(1);
 				vehicule.setNombrePlaceVelo(1);*/
 				
@@ -347,7 +352,7 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
+				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -360,13 +365,15 @@ public class RejoindreBalade
 		private Membre currentMembre;
 		private List<Categorie> listCategorie;
 		private Vehicule vehicule;
+		private Calendrier calendrier;
 		
-		public rejoindreMembreButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
+		public rejoindreMembreButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
 			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
+			this.calendrier = calendrier;
 		}
 
 		@Override
@@ -455,7 +462,7 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
+				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -468,13 +475,15 @@ public class RejoindreBalade
 		private Membre currentMembre;
 		private List<Categorie> listCategorie;
 		private Vehicule vehicule;
+		private Calendrier calendrier;
 		
-		public rejoindreVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
+		public rejoindreVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
 			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
+			this.calendrier = calendrier;
 		}
 
 		@Override
@@ -499,7 +508,7 @@ public class RejoindreBalade
 				f.add(p4);
 				f.pack();
 			}
-			else if(baladeDAO.getPlaceVeloUtilisee((Vehicule)listeVehicule.getSelectedValue(), baladeSelected) >= vehicule.getNombrePlaceMembre())
+			else if(baladeDAO.getPlaceVeloUtilisee((Vehicule)listeVehicule.getSelectedValue(), baladeSelected) >= vehicule.getNombrePlaceVelo())
 			{
 				JOptionPane.showMessageDialog(null, "Il n'y a plus de place vélo dans ce véhicule.");
 			}
@@ -507,7 +516,7 @@ public class RejoindreBalade
 			{
 				JOptionPane.showMessageDialog(null, "Vous participer déjà à cette balade.");
 			}
-			else if(soldeMembre < forfait)
+			/*else if(soldeMembre < forfait)
 			{
 				JOptionPane.showMessageDialog(null, "Vous n'avez pas les moyens pour participer à cette balade.");
 			}*/
@@ -538,7 +547,7 @@ public class RejoindreBalade
 				System.out.println("Avant ajout véhicule : " +  balade.getListVehicule());
 				System.out.println("Balade toString Avant : " +  balade.toString());
 				balade.AjouterVehicule(vehicule);
-				//vehicule.AjouterMembre(currentMembre);
+				vehicule.AjouterMembre(currentMembre);
 				System.out.println("Après ajout véhicule : " + balade.getListVehicule());
 				System.out.println("Balade toString Après : " +  balade.toString());
 				
@@ -555,7 +564,7 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
+				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -569,14 +578,16 @@ public class RejoindreBalade
 		private JList listeBalade;
 		private List<Categorie> listCategorie;
 		private Vehicule vehicule;
+		private Calendrier calendrier;
 		
-		public ajoutVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, JList jlist1)
+		public ajoutVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, JList jlist1, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
 			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
 			this.listeBalade = jlist1;
+			this.calendrier = calendrier;
 		}
 
 		@Override
@@ -594,7 +605,7 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
+				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -621,14 +632,19 @@ public class RejoindreBalade
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			BaladeDAO baladeDAO = new BaladeDAO(connect);
+			
 			if(listeBalade.isSelectionEmpty())
 			{
 				JOptionPane.showMessageDialog(null, "Veuillez sélectionner une balade.");
 			}
+			else if(baladeDAO.membreVeloNotInBalade((Balade)listeBalade.getSelectedValue(), currentMembre))
+			{
+				JOptionPane.showMessageDialog(null,  "Le membre ainsi que le vélo ne participe à aucune balade.");
+			}
 			else 
 			{
 				// requete ajout insert into liste_balade
-				BaladeDAO baladeDAO = new BaladeDAO(connect);
 				baladeSelected = (Balade)listeBalade.getSelectedValue();
 				Balade balade = (Balade)baladeSelected;
 				baladeDAO.delete_Membre_Ligne_Balade((Balade)baladeSelected, currentMembre);
@@ -638,7 +654,8 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.showDashboard_Membre(currentMembre);
+				Calendrier calendrier = null;
+				Main.showDashboard_Membre(currentMembre, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -652,28 +669,34 @@ public class RejoindreBalade
 		private List<Categorie> listCategorie;
 		private JList listeBalade;
 		private Vehicule vehicule;
+		private Calendrier calendrier;
 
 		
-		public quitterMembreButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, Vehicule vehicule, JList jlist1)
+		public quitterMembreButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, Vehicule vehicule, JList jlist1, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie= listCategorie;
 			this.currentMembre = currentMembre;
 			this.vehicule = vehicule;
 			this.listeBalade = jlist1;
+			this.calendrier = calendrier;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			BaladeDAO baladeDAO = new BaladeDAO(connect);
 			if(listeBalade.isSelectionEmpty())
 			{
 				JOptionPane.showMessageDialog(null, "Veuillez sélectionner une balade.");
 			}
+			else if(baladeDAO.membreNotInBalade((Balade)listeBalade.getSelectedValue(), currentMembre))
+			{
+				JOptionPane.showMessageDialog(null,  "Le membre ne participe à aucune balade.");
+			}
 			else 
 			{
 				// requete ajout insert into liste_balade
-				BaladeDAO baladeDAO = new BaladeDAO(connect);
 				baladeSelected = (Balade)listeBalade.getSelectedValue();
 				Balade balade = (Balade)baladeSelected;
 				baladeDAO.delete_Membre_Ligne_Balade((Balade)baladeSelected, currentMembre);
@@ -683,7 +706,7 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
+				Main.showDashboard_Membre(currentMembre, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -697,27 +720,33 @@ public class RejoindreBalade
 		private List<Categorie> listCategorie;
 		private JList listeBalade;
 		private Vehicule vehicule;
+		private Calendrier calendrier;
 
-		public quitterVeloButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, Vehicule vehicule, JList jlist1)
+		public quitterVeloButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, Vehicule vehicule, JList jlist1, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
 			this.currentMembre = currentMembre;
 			this.vehicule = vehicule;
 			this.listeBalade = jlist1;
+			this.calendrier = calendrier;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			BaladeDAO baladeDAO = new BaladeDAO(connect);
 			if(listeBalade.isSelectionEmpty())
 			{
 				JOptionPane.showMessageDialog(null, "Veuillez sélectionner une balade.");
 			}
+			else if(baladeDAO.veloNotInBalade((Balade)listeBalade.getSelectedValue(), currentMembre))
+			{
+				JOptionPane.showMessageDialog(null,  "Le vélo ne participe à aucune balade.");
+			}
 			else 
 			{
 				// requete ajout insert into liste_balade
-				BaladeDAO baladeDAO = new BaladeDAO(connect);
 				baladeSelected = (Balade)listeBalade.getSelectedValue();
 				Balade balade = (Balade)baladeSelected;
 				baladeDAO.delete_Velo_Ligne_Balade((Balade)baladeSelected, currentMembre);
@@ -727,7 +756,7 @@ public class RejoindreBalade
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
+				Main.showDashboard_Membre(currentMembre, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -740,13 +769,15 @@ public class RejoindreBalade
 		private List<Categorie> listCategorie;
 		private Vehicule vehicule;
 		private Membre currentMembre;
+		private Calendrier calendrier;
 		
-		public retourButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
+		public retourButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
 			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
+			this.calendrier = calendrier;
 		}
 
 		@Override
@@ -754,7 +785,7 @@ public class RejoindreBalade
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuBalade_Membre(currentMembre);
+			Main.showMenuBalade_Membre(currentMembre, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

@@ -12,6 +12,7 @@ import gui.tresorier.MenuRemboursement_Tresorier;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -21,6 +22,7 @@ import dao.DAO;
 import dao.ResponsableDAO;
 import driver.DriverACCESS;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Categorie;
 import exo.Membre;
 import exo.Responsable;
@@ -37,112 +39,119 @@ public class Main {
 	private Responsable currentResponsable;
 	private Membre currentMembre;
 	private Tresorier currentTresorier;
+	private Calendrier calendrier;
 	
-	public static void creerConnexion()
+	public static void creerConnexion(Calendrier calendrier)
 	{
-		Connexion connexion = new Connexion(frame, connect);
+		Connexion connexion = new Connexion(frame, connect, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void creerUser()
+	public static void creerUser(Calendrier calendrier)
 	{
-		CreerUser con = new CreerUser(frame, connect);
+		CreerUser con = new CreerUser(frame, connect, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void showDashboard_Membre(Membre currentMembre)
+	public static void showDashboard_Membre(Membre currentMembre, Calendrier calendrier)
 	{
-		Dashboard_Membre dashboardMembre = new Dashboard_Membre(frame, connect, currentMembre);
+		Dashboard_Membre dashboardMembre = new Dashboard_Membre(frame, connect, currentMembre, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void showDashboard_Responsable(Responsable currentResponsable)
+	public static void showDashboard_Responsable(Responsable currentResponsable, Calendrier calendrier)
 	{
-		Dashboard_Responsable dashboardResponsable = new Dashboard_Responsable(frame, connect, currentResponsable);
+		Dashboard_Responsable dashboardResponsable = new Dashboard_Responsable(frame, connect, currentResponsable, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void showDashboard_Tresorier(Tresorier currentTresorier)
+	public static void showDashboard_Tresorier(Tresorier currentTresorier, Calendrier calendrier)
 	{
-		Dashboard_Tresorier dashboardTresorier = new Dashboard_Tresorier(frame, connect, currentTresorier);
+		Dashboard_Tresorier dashboardTresorier = new Dashboard_Tresorier(frame, connect, currentTresorier, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void CreerBalade(Responsable currentResponsable)
+	public static void showMenu_Payement(Membre currentMembre, Calendrier calendrier)
 	{
-		CreerBalade creerBalade = new CreerBalade(frame, connect, currentResponsable);
+		MenuPayement_Membre menuPayement_Membre = new MenuPayement_Membre(frame, connect, currentMembre, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void ModifierBalade(Object baladeSelected, Responsable currentResponsable)
+	public static void CreerBalade(Responsable currentResponsable, Calendrier calendrier)
 	{
-		ModifierBalade creerBalade = new ModifierBalade(frame, connect, baladeSelected, currentResponsable);
+		CreerBalade creerBalade = new CreerBalade(frame, connect, currentResponsable, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void CreerCategorie(Responsable currentResponsable)
+	public static void ModifierBalade(Object baladeSelected, Responsable currentResponsable, Calendrier calendrier)
 	{
-		CreerCategorie creerCategorie = new CreerCategorie(frame, connect, currentResponsable);
+		ModifierBalade creerBalade = new ModifierBalade(frame, connect, baladeSelected, currentResponsable, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void showMenuBalade_Membre(Membre currentMembre)
+	public static void CreerCategorie(Responsable currentResponsable, Calendrier calendrier)
 	{
-		MenuBalade_Membre menuBalade_Membre = new MenuBalade_Membre(frame, connect, currentMembre);
+		CreerCategorie creerCategorie = new CreerCategorie(frame, connect, currentResponsable, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void showMenuBalade_Responsable(Responsable currentResponsable)
+	public static void showMenuBalade_Membre(Membre currentMembre, Calendrier calendrier)
 	{
-		MenuBalade_Responsable menuBalade_Responsable = new MenuBalade_Responsable(frame, connect, currentResponsable);
+		MenuBalade_Membre menuBalade_Membre = new MenuBalade_Membre(frame, connect, currentMembre, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void showMenuCategorie_Responsable(Responsable currentResponsable)
+	public static void showMenuBalade_Responsable(Responsable currentResponsable, Calendrier calendrier)
 	{
-		MenuCategorie_Responsable menuCategorie_Responsable = new MenuCategorie_Responsable(frame, connect, currentResponsable);
+		MenuBalade_Responsable menuBalade_Responsable = new MenuBalade_Responsable(frame, connect, currentResponsable, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void showMenuCategorie_Membre(Membre currentMembre)
+	public static void showMenuCategorie_Responsable(Responsable currentResponsable, Calendrier calendrier)
 	{
-		MenuCategorie_Membre menuCategorie_Membre = new MenuCategorie_Membre(frame, connect, currentMembre);
+		MenuCategorie_Responsable menuCategorie_Responsable = new MenuCategorie_Responsable(frame, connect, currentResponsable, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void showMenuVehicule_Membre(Membre currentMembre)
+	public static void showMenuCategorie_Membre(Membre currentMembre, Calendrier calendrier)
 	{
-		MenuVehicule_Membre menuVehicule_Membre = new MenuVehicule_Membre(frame, connect, currentMembre);
+		MenuCategorie_Membre menuCategorie_Membre = new MenuCategorie_Membre(frame, connect, currentMembre, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void showMenuRemboursement_Tresorier(Tresorier currentTresorier)
+	public static void showMenuVehicule_Membre(Membre currentMembre, Calendrier calendrier)
 	{
-		MenuRemboursement_Tresorier menuRemboursement_Tresorier = new MenuRemboursement_Tresorier(frame, connect, currentTresorier);
+		MenuVehicule_Membre menuVehicule_Membre = new MenuVehicule_Membre(frame, connect, currentMembre, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void RejoindreBalade(List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
+	public static void showMenuRemboursement_Tresorier(Tresorier currentTresorier, Calendrier calendrier)
 	{
-		RejoindreBalade rejoindreBalade = new RejoindreBalade(frame, connect, listCategorie, vehicule, currentMembre);
+		MenuRemboursement_Tresorier menuRemboursement_Tresorier = new MenuRemboursement_Tresorier(frame, connect, currentTresorier, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void AjoutVehicule(Membre currentMembre, List<Categorie> listCategorie, Vehicule vehicule, Balade baladeSelected)
+	public static void RejoindreBalade(List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, Calendrier calendrier)
 	{
-		AjouterVehiculeBalade ajouterVehiculeBalade = new AjouterVehiculeBalade(frame, connect, currentMembre, listCategorie, vehicule, baladeSelected);
+		RejoindreBalade rejoindreBalade = new RejoindreBalade(frame, connect, listCategorie, vehicule, currentMembre, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void OrganiserCalendrier(Responsable currentResponsable, Categorie categorieSelected)
+	public static void AjoutVehicule(Membre currentMembre, List<Categorie> listCategorie, Vehicule vehicule, Balade baladeSelected, Calendrier calendrier)
 	{
-		OrganiserCalendrier organiserCalendrier = new OrganiserCalendrier(frame, connect, currentResponsable, categorieSelected);
+		AjouterVehiculeBalade ajouterVehiculeBalade = new AjouterVehiculeBalade(frame, connect, currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
 		frame.setVisible(true);
 	}
 	
-	public static void VoirCalendrier(Responsable currentResponsable, Categorie categorieSelected)
+	public static void OrganiserCalendrier(Responsable currentResponsable, Categorie categorieSelected, Calendrier calendrier)
 	{
-		VoirCalendrier voirCalendrier = new VoirCalendrier(frame, connect, currentResponsable, categorieSelected);
+		OrganiserCalendrier organiserCalendrier = new OrganiserCalendrier(frame, connect, currentResponsable, categorieSelected, calendrier);
+		frame.setVisible(true);
+	}
+	
+	public static void VoirCalendrier(Responsable currentResponsable, Categorie categorieSelected, Calendrier calendrier)
+	{
+		VoirCalendrier voirCalendrier = new VoirCalendrier(frame, connect, currentResponsable, categorieSelected, calendrier);
 		frame.setVisible(true);
 	}
 	
@@ -152,9 +161,9 @@ public class Main {
 		frame.setVisible(true);
 	}*/
 	
-	public static void showMenuDisponibilite(Membre currentMembre)
+	public static void showMenuDisponibilite(Membre currentMembre, Calendrier calendrier)
 	{
-		MenuDisponibilite_Membre menuDisponibilite_Membre = new MenuDisponibilite_Membre(frame, connect, currentMembre);
+		MenuDisponibilite_Membre menuDisponibilite_Membre = new MenuDisponibilite_Membre(frame, connect, currentMembre, calendrier);
 		frame.setVisible(true);
 	}
 	
@@ -179,7 +188,8 @@ public class Main {
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
-		creerConnexion();
+		Calendrier calendrier = null;
+		creerConnexion(calendrier);
 		//frame.setSize(500,500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		/*BaladeDAO baladeDAO = new BaladeDAO(connect);

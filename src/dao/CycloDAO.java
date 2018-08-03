@@ -75,7 +75,7 @@ public class CycloDAO extends DAO<Cyclo>
 				ResultSet.TYPE_SCROLL_INSENSITIVE,
 				ResultSet.CONCUR_READ_ONLY	).executeQuery("SELECT * FROM Cyclo WHERE IDCy = " + id);
 			if(result.first())
-				cyclo = new Cyclo(id, result.getString(""), result.getString(""));
+				cyclo = new Cyclo(id, result.getString(""));
 		}
 		catch(SQLException e){
 			e.printStackTrace();

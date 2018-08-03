@@ -53,12 +53,15 @@ public class VoirCalendrier
 	private JPanel p3;
 	private JPanel p4;
 	private Object calendrierSelected;
+	private Calendrier calendrier;
 	
-	public VoirCalendrier(JFrame f, Connection connect, Responsable currentResponsable, Categorie categorieSelected) 
+	public VoirCalendrier(JFrame f, Connection connect, Responsable currentResponsable, Categorie categorieSelected, Calendrier calendrier) 
 	{
 		this.connect = connect;
 		this.f = f;
 		this.currentResponsable = currentResponsable;
+		this.categorieSelected = categorieSelected;
+		this.calendrier = calendrier;
 		
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		CalendrierDAO calendrierDAO = new CalendrierDAO(connect);
@@ -107,7 +110,7 @@ public class VoirCalendrier
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1));
 		supprimerButton.addActionListener(new supprimerButtonListener(f, jlist1, currentResponsable));
-		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
+		retourButton.addActionListener(new retourButtonListener(f, currentResponsable, calendrier));
 		f.add(p);
 		f.add(p2);
 		f.add(p3);
@@ -176,7 +179,7 @@ public class VoirCalendrier
 				JOptionPane.showMessageDialog(null, "Le calendrier a bien été supprimé.");
 				Container cp = f.getContentPane();
 				cp.removeAll();
-				Main.showMenuCategorie_Responsable(currentResponsable);
+				Main.showMenuCategorie_Responsable(currentResponsable, calendrier);
 			}
 		}
 	}
@@ -185,11 +188,13 @@ public class VoirCalendrier
 	{
 		private JFrame f;
 		private Responsable currentResponsable;
+		private Calendrier calendrier;
 
-		public retourButtonListener(JFrame f, Responsable currentResponsable)
+		public retourButtonListener(JFrame f, Responsable currentResponsable, Calendrier calendrier)
 		{
 			this.f = f;
 			this.currentResponsable = currentResponsable;
+			this.calendrier = calendrier;
 		}
 
 		@Override
@@ -197,7 +202,7 @@ public class VoirCalendrier
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuCategorie_Responsable(currentResponsable);
+			Main.showMenuCategorie_Responsable(currentResponsable, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

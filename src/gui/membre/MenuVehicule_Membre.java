@@ -20,6 +20,7 @@ import javax.swing.event.ListSelectionListener;
 import dao.BaladeDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Membre;
 import exo.Vehicule;
 import gui.Main;
@@ -46,7 +47,7 @@ public class MenuVehicule_Membre
 	private JPanel p;
 	private JPanel p2;
 	
-	public MenuVehicule_Membre(JFrame f, Connection connect, Membre currentMembre) 
+	public MenuVehicule_Membre(JFrame f, Connection connect, Membre currentMembre, Calendrier calendrier) 
 	{
 		this.connect = connect;
 		this.f = f;
@@ -80,8 +81,8 @@ public class MenuVehicule_Membre
 		p.add(nombrePlacesVeloField);
 		p.add(ajoutButton);
 		p.add(retourButton);
-		ajoutButton.addActionListener(new ajoutButtonListener(f, currentMembre));
-		retourButton.addActionListener(new retourButtonListener(f, currentMembre));
+		ajoutButton.addActionListener(new ajoutButtonListener(f, currentMembre, calendrier));
+		retourButton.addActionListener(new retourButtonListener(f, currentMembre, calendrier));
 		f.add(p);
 		f.add(p2);
 		f.pack();
@@ -91,11 +92,13 @@ public class MenuVehicule_Membre
 	{
 		private JFrame f;
 		private Membre currentMembre;
+		private Calendrier calendrier;
 		
-		public ajoutButtonListener(JFrame f, Membre currentMembre)
+		public ajoutButtonListener(JFrame f, Membre currentMembre, Calendrier calendrier)
 		{
 			this.f = f;
 			this.currentMembre = currentMembre;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -122,10 +125,10 @@ public class MenuVehicule_Membre
 				{
 					Container cp = f.getContentPane();
 					cp.removeAll();
-					vehiculeDAO.create(vehicule);
+					vehiculeDAO.create(vehicule, currentMembre);
 					vehicule.AjouterMembre(currentMembre);
 					System.out.println("Chauffeur du véhicule : " + vehicule.getChauffeur());
-					Main.showDashboard_Membre(currentMembre);
+					Main.showDashboard_Membre(currentMembre, calendrier);
 				}
 			}
 		}
@@ -135,11 +138,13 @@ public class MenuVehicule_Membre
 	{
 		private JFrame f;
 		private Membre currentMembre;
+		private Calendrier calendrier;
 
-		public retourButtonListener(JFrame f, Membre currentMembre)
+		public retourButtonListener(JFrame f, Membre currentMembre, Calendrier calendrier)
 		{
 			this.f = f;
 			this.currentMembre = currentMembre;
+			this.calendrier = calendrier;
 		}
 
 		@Override
@@ -147,7 +152,7 @@ public class MenuVehicule_Membre
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showDashboard_Membre(currentMembre);
+			Main.showDashboard_Membre(currentMembre, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

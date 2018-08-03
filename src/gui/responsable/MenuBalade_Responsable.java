@@ -24,6 +24,7 @@ import javax.swing.event.ListSelectionListener;
 import dao.BaladeDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Categorie;
 import exo.Responsable;
 import gui.Main;
@@ -52,7 +53,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	private JPanel p4;
 	private Object baladeSelected;
 
-	public MenuBalade_Responsable(JFrame f, Connection connect, Responsable currentResponsable) 
+	public MenuBalade_Responsable(JFrame f, Connection connect, Responsable currentResponsable, Calendrier calendrier) 
 	{
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		BaladeDAO baladeDAO = new BaladeDAO(connect);
@@ -115,11 +116,11 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1, currentResponsable));
-		creerBaladeButton.addActionListener(new creerBaladeButtonListener(f));
-		modifierBaladeButton.addActionListener(new modifierBaladeButtonListener(f, jlist1));
-		supprimerBaladeButton.addActionListener(new supprimerBaladeButtonListener(f, jlist1, currentResponsable));
-		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
-		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
+		creerBaladeButton.addActionListener(new creerBaladeButtonListener(f, calendrier));
+		modifierBaladeButton.addActionListener(new modifierBaladeButtonListener(f, jlist1, calendrier));
+		supprimerBaladeButton.addActionListener(new supprimerBaladeButtonListener(f, jlist1, currentResponsable, calendrier));
+		retourButton.addActionListener(new retourButtonListener(f, currentResponsable, calendrier));
+		deconnexionButton.addActionListener(new deconnexionButtonListener(f, calendrier));
 		
 		f.pack();
 	}
@@ -165,10 +166,12 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	private class creerBaladeButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 
-		public creerBaladeButtonListener(JFrame f)
+		public creerBaladeButtonListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -176,7 +179,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.CreerBalade(currentResponsable);
+			Main.CreerBalade(currentResponsable, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -186,11 +189,13 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	{
 		private JList listeBalade;
 		private JFrame f;
+		private Calendrier calendrier;
 		
-		public modifierBaladeButtonListener(JFrame f, JList listeBalade)
+		public modifierBaladeButtonListener(JFrame f, JList listeBalade, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listeBalade = listeBalade;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -205,7 +210,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.ModifierBalade(baladeSelected, currentResponsable);
+				Main.ModifierBalade(baladeSelected, currentResponsable, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -224,12 +229,14 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 		private JList listeBalade;
 		private JFrame f;
 		private Responsable currentResponsable;
+		private Calendrier calendrier;
 		
-		public supprimerBaladeButtonListener(JFrame f, JList listeBalade, Responsable currentResponsable)
+		public supprimerBaladeButtonListener(JFrame f, JList listeBalade, Responsable currentResponsable, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listeBalade = listeBalade;
 			this.currentResponsable = currentResponsable;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -246,7 +253,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.showMenuBalade_Responsable(currentResponsable);
+				Main.showMenuBalade_Responsable(currentResponsable, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 				
@@ -267,11 +274,13 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	{
 		private JFrame f;
 		private Responsable currentResponsable;
+		private Calendrier calendrier;
 		
-		public retourButtonListener(JFrame f, Responsable currentResponsable)
+		public retourButtonListener(JFrame f, Responsable currentResponsable, Calendrier calendrier)
 		{
 			this.f = f;
 			this.currentResponsable = currentResponsable;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -279,7 +288,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showDashboard_Responsable(currentResponsable);
+			Main.showDashboard_Responsable(currentResponsable, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -288,10 +297,12 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 	private class deconnexionButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 
-		public deconnexionButtonListener(JFrame f)
+		public deconnexionButtonListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -299,7 +310,7 @@ public class MenuBalade_Responsable extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.creerConnexion();
+			Main.creerConnexion(calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

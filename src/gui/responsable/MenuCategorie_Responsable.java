@@ -51,7 +51,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	private JPanel p4;
 	private Object categorieSelected;
 
-	public MenuCategorie_Responsable(JFrame f, Connection connect, Responsable currentResponsable) 
+	public MenuCategorie_Responsable(JFrame f, Connection connect, Responsable currentResponsable, Calendrier calendrier) 
 	{
 		this.connect = connect;
 		this.f = f;
@@ -113,12 +113,12 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1));
-		organiserCalendrierButton.addActionListener(new organiserCalendrierButtonListener(f, jlist1));
-		voirCalendrierButton.addActionListener(new voirCalendrierButtonListener(f, jlist1));
+		organiserCalendrierButton.addActionListener(new organiserCalendrierButtonListener(f, jlist1, calendrier));
+		voirCalendrierButton.addActionListener(new voirCalendrierButtonListener(f, jlist1, calendrier));
 		devenirResponsableButton.addActionListener(new devenirResponsableButtonListener(f, jlist1, currentResponsable));
 		NePlusEtreResponsableButton.addActionListener(new NePlusEtreResponsableButtonListener(f, jlist1, currentResponsable));
-		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
-		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
+		retourButton.addActionListener(new retourButtonListener(f, currentResponsable, calendrier));
+		deconnexionButton.addActionListener(new deconnexionButtonListener(f, calendrier));
 		
 		f.pack();
 	}
@@ -165,11 +165,13 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	{
 		private JFrame f;
 		private JList listeCategorie;
+		private Calendrier calendrier;
 		
-		public organiserCalendrierButtonListener(JFrame f, JList listeCategorie)
+		public organiserCalendrierButtonListener(JFrame f, JList listeCategorie, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listeCategorie = listeCategorie;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -194,7 +196,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.OrganiserCalendrier(currentResponsable, (Categorie)categorieSelected);
+				Main.OrganiserCalendrier(currentResponsable, (Categorie)categorieSelected, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -205,11 +207,13 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	{
 		private JFrame f;
 		private JList listeCategorie;
+		private Calendrier calendrier;
 
-		public voirCalendrierButtonListener(JFrame f, JList listeCategorie)
+		public voirCalendrierButtonListener(JFrame f, JList listeCategorie, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listeCategorie = listeCategorie;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -234,7 +238,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 				cp.removeAll();
 				//f.removeAll();*/
 				Categorie categorie = (Categorie)categorieSelected;
-				Main.VoirCalendrier(currentResponsable, categorie);
+				Main.VoirCalendrier(currentResponsable, categorie, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
@@ -331,11 +335,13 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	{
 		private JFrame f;
 		private Responsable currentResponsable;
+		private Calendrier calendrier;
 		
-		public retourButtonListener(JFrame f, Responsable currentResponsable)
+		public retourButtonListener(JFrame f, Responsable currentResponsable, Calendrier calendrier)
 		{
 			this.f = f;
 			this.currentResponsable = currentResponsable;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -343,7 +349,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showDashboard_Responsable(currentResponsable);
+			Main.showDashboard_Responsable(currentResponsable, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -352,8 +358,9 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 	private class deconnexionButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 
-		public deconnexionButtonListener(JFrame f)
+		public deconnexionButtonListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
 		}
@@ -363,7 +370,7 @@ public class MenuCategorie_Responsable extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.creerConnexion();
+			Main.creerConnexion(calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

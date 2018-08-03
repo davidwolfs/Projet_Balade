@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import dao.BaladeDAO;
 import exo.Balade;
 import exo.Calendrier;
@@ -45,7 +47,7 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Ligne_Balade (IDB, Immatriculation, IDM, type) VALUES (" + balade.getiDB() + "," + "\"" + vehicule.getImmatriculation() + "\"" + "," + membre.getiD() + "," + "\"membre\"" + ");";
+			String query = "INSERT INTO Ligne_Balade (IDB, Immatriculation, IDM, type, paye) VALUES (" + balade.getiDB() + "," + "\"" + vehicule.getImmatriculation() + "\"" + "," + membre.getiD() + "," + "\"membre\"" + "," + "'" + 1 + "'" + ");";
 			for(int i = 0; i < balade.getListVehicule().size() ; i++)
 			{
 				//String query2 = "INSERT INTO Liste_Balade (ID, IDB, IDV, IDM) VALUES ('" + 1 + "','" + obj.getIDB() + "','" + obj.getListVehicule().get(i).getIDV() + "','" + obj."
@@ -89,7 +91,7 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Ligne_Balade (IDB, Immatriculation, IDM) VALUES (" + balade.getiDB() + "," + "\"" + vehicule.getImmatriculation() + "\"" + "," + 29 + ");";
+			String query = "INSERT INTO Ligne_Balade (IDB, Immatriculation, IDM) VALUES (" + balade.getiDB() + "," + "\"" + vehicule.getImmatriculation() + "\"" + "," + 100 + ");";
 			for(int i = 0; i < balade.getListVehicule().size() ; i++)
 			{
 				//String query2 = "INSERT INTO Liste_Balade (ID, IDB, IDV, IDM) VALUES ('" + 1 + "','" + obj.getIDB() + "','" + obj.getListVehicule().get(i).getIDV() + "','" + obj."
@@ -144,7 +146,7 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "DELETE FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND IDM = " + membre.getiD() + " AND type = " + "\"membre\"";
+			String query = "DELETE FROM Ligne_Balade WHERE IDB = " + balade.getiDB() + " AND IDM = " + membre.getiD() + " AND type = " + "\"membre\" OR type = \"velo\"";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -179,7 +181,7 @@ public class BaladeDAO extends DAO<Balade>
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "UPDATE Balade SET libelleB = " + "'" + obj.getLibelle() +  "', " + "lieuDepart = " + "'" + obj.getLieuDepart() + "', " +  "dateDepart = " + "'" + obj.getDateDepart() + "', " + "forfaitBalade = " + "'" + obj.getForfaitBalade() + "', " + "forfaitRemboursement : " + "'" + obj.getForfaitRemboursement() + "'" + " WHERE IDB = " + obj.getiDB() + ";";
+			String query = "UPDATE Balade SET libelleB = " + "'" + obj.getLibelle() +  "', " + "lieuDepart = " + "'" + obj.getLieuDepart() + "', " +  "dateDepart = " + "'" + obj.getDateDepart() + "', " + "forfaitBalade = " + "'" + obj.getForfaitBalade() + "', " + "forfaitRemboursement = " + "'" + obj.getForfaitRemboursement() + "'" + " WHERE IDB = " + obj.getiDB() + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -247,6 +249,7 @@ public class BaladeDAO extends DAO<Balade>
 	
 	public boolean membrealreadyInBalade(Balade baladeSelected, Membre currentMembre)
 	{
+		JOptionPane.showMessageDialog(null, currentMembre.getNom());
 		boolean exist = false;
 		try{
 			ResultSet result = this.connect.createStatement(
@@ -255,6 +258,45 @@ public class BaladeDAO extends DAO<Balade>
 			if(result.first())
 			{
 				exist = true;
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return exist;
+	}
+	public boolean membreVeloNotInBalade(Balade baladeSelected, Membre currentMembre)
+	{
+		JOptionPane.showMessageDialog(null, currentMembre.getNom());
+		boolean notExist = true;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Ligne_Balade WHERE IDB = " + baladeSelected.getiDB() + " AND IDM = " + currentMembre.getiD() + " AND type = " + "\"membre\" OR type = " + "\"velo\"");
+			if(result.first())
+			{
+				notExist = false;
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return notExist;
+	}
+	
+	public boolean membreNotInBalade(Balade baladeSelected, Membre currentMembre)
+	{
+		JOptionPane.showMessageDialog(null, currentMembre.getNom());
+		boolean exist = true;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Ligne_Balade WHERE IDB = " + baladeSelected.getiDB() + " AND IDM = " + currentMembre.getiD() + " AND type = " + "\"membre\"");
+			if(result.first())
+			{
+				exist = false;
 			}
 				
 		}
@@ -282,6 +324,25 @@ public class BaladeDAO extends DAO<Balade>
 		}
 		return exist;
 	}*/
+	
+	public boolean veloNotInBalade(Balade baladeSelected, Membre currentMembre)
+	{
+		boolean exist = true;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Ligne_Balade WHERE IDB = " + baladeSelected.getiDB() + " AND IDM = " + currentMembre.getiD() + " AND type = " + "\"velo\"");
+			if(result.first())
+			{
+				exist = false;
+			}
+				
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return exist;
+	}
 	
 	public List<Balade> listBalade()
 	{
@@ -410,7 +471,7 @@ public class BaladeDAO extends DAO<Balade>
 			if(result.next())
 			{
 				balade = new Balade(result.getInt("IDB"), result.getString("libelleB"), result.getString("lieuDepart"), result.getString("dateDepart"), result.getDouble("forfaitBalade"), result.getDouble("forfaitRemboursement"));
-				solde = result.getDouble("forfait");
+				solde = result.getDouble("forfaitBalade");
 			}
 		}
 		catch(SQLException e){

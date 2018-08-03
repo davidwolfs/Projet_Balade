@@ -21,6 +21,7 @@ import dao.CategorieDAO;
 import dao.MembreDAO;
 import dao.ResponsableDAO;
 import dao.TresorierDAO;
+import exo.Calendrier;
 import exo.Categorie;
 import exo.Membre;
 import exo.Personne;
@@ -35,6 +36,7 @@ public class CreerUser extends JPanel implements ActionListener {
 	private JLabel labelDateNaiss;
 	private JLabel labelEmail;
 	private JLabel labelPassword;
+	private JLabel labelSolde;
 	private JLabel labelResponsable;
 	private JLabel labelMembre;
 	private JLabel labelTresorier;
@@ -44,6 +46,7 @@ public class CreerUser extends JPanel implements ActionListener {
 	private JTextField dateNaissField;
 	private JTextField emailField;
 	private JTextField passwordField;
+	private JTextField soldeField;
 	private JRadioButton responsableRadio;
 	private JRadioButton membreRadio;
 	private JRadioButton tresorierRadio;
@@ -53,8 +56,9 @@ public class CreerUser extends JPanel implements ActionListener {
 	private JPanel p2;
 	private JPanel p3;
 	private JPanel p4;
+	private Calendrier calendrier;
 	
-	public CreerUser(JFrame f, Connection connect) 
+	public CreerUser(JFrame f, Connection connect, Calendrier calendrier)
 	{
 		this.connect = connect;
 		this.f = f;
@@ -63,12 +67,14 @@ public class CreerUser extends JPanel implements ActionListener {
 		labelDateNaiss = new JLabel("Date de naissance");
 		labelEmail = new JLabel("Email");
 		labelPassword = new JLabel("Password");
+		labelSolde = new JLabel("Solde");
 		labelMsgErreur = new JLabel();
 		nomField = new JTextField(15);
 		prenomField = new JTextField(15);
 		dateNaissField = new JTextField(8);
 		emailField = new JTextField(25);
 		passwordField = new JTextField(15);
+		soldeField = new JTextField(10);
 		labelResponsable = new JLabel("Responsable");
 		labelMembre = new JLabel("Membre");
 		labelTresorier = new JLabel("Trésorier");
@@ -77,7 +83,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		tresorierRadio = new JRadioButton();
 		createUserButton = new JButton("Créer");
 		retourButton = new JButton("Retour");
-		p = new JPanel(new GridLayout(5,2));
+		p = new JPanel(new GridLayout(6,2));
 		p2 = new JPanel(new GridLayout(1,3));
 		p3 = new JPanel(new GridLayout(1,2));
 		p4 = new JPanel(new GridLayout(1,1));
@@ -93,7 +99,8 @@ public class CreerUser extends JPanel implements ActionListener {
 		p.add(emailField);
 		p.add(labelPassword);
 		p.add(passwordField);
-		
+		p.add(labelSolde);
+		p.add(soldeField);
 		p2.add(labelResponsable);
 		p2.add(responsableRadio);
 		p2.add(labelMembre);
@@ -114,7 +121,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		
 		
 		createUserButton.addActionListener(this);
-		retourButton.addActionListener(new ReturnListener(f));
+		retourButton.addActionListener(new ReturnListener(f, calendrier));
 		
 		ButtonGroup personneRadio = new ButtonGroup();
 		personneRadio.add(responsableRadio);
@@ -136,12 +143,15 @@ public class CreerUser extends JPanel implements ActionListener {
 	public boolean champsVide()
 	{
 		String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-		 
+		String regex2 = "[0-99999999]";
+		
 		Pattern pattern = Pattern.compile(regex);
+		Pattern pattern2 = Pattern.compile(regex2);
 		Matcher matcher = pattern.matcher(emailField.getText());
+		Matcher matcher2 = pattern2.matcher(soldeField.getText());
 		System.out.println();
 		boolean valid = true;
-		if(nomField.getText().isEmpty() || prenomField.getText().isEmpty() || dateNaissField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty())
+		if(nomField.getText().isEmpty() || prenomField.getText().isEmpty() || dateNaissField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty() || soldeField.getText().isEmpty())
 		{
 			labelMsgErreur.setText("Veuillez remplir tous les champs.");
 			p4.add(labelMsgErreur);
@@ -160,6 +170,17 @@ public class CreerUser extends JPanel implements ActionListener {
 			System.out.println("OK");
 			valid = false;
 		}
+		
+		/*else if (!(matcher2.matches()))
+		{
+			labelMsgErreur.setText("Veuillez entrer un solde valide.");
+			p4.add(labelMsgErreur);
+			f.add(p4);
+			f.pack();
+			System.out.println("OK");
+			valid = false;
+		}*/
+		
 		return valid;
 	}
 	
@@ -184,7 +205,7 @@ public class CreerUser extends JPanel implements ActionListener {
 					responsableDAO.create(responsable);
 					Container cp = f.getContentPane();
 					cp.removeAll();
-					Main.showDashboard_Responsable(responsable);
+					Main.showDashboard_Responsable(responsable, calendrier);
 					f.revalidate();
 					f.repaint();
 				}
@@ -194,7 +215,7 @@ public class CreerUser extends JPanel implements ActionListener {
 		{
 			if(champsVide())
 			{
-				Membre membre = new Membre(nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText());
+				Membre membre = new Membre(nomField.getText(), prenomField.getText(), dateNaissField.getText(), emailField.getText(), passwordField.getText(), Double.parseDouble(soldeField.getText()));
 				MembreDAO membreDAO = new MembreDAO(connect);
 				/*CategorieDAO categorieDAO = new CategorieDAO(connect);
 				Categorie categorie = new Categorie();
@@ -213,7 +234,7 @@ public class CreerUser extends JPanel implements ActionListener {
 					membre.AjouterCategorie(categorie);*/
 					Container cp = f.getContentPane();
 					cp.removeAll();
-					Main.showDashboard_Membre(membre);
+					Main.showDashboard_Membre(membre, calendrier);
 					//f.removeAll();
 					f.revalidate();
 					f.repaint();
@@ -239,7 +260,7 @@ public class CreerUser extends JPanel implements ActionListener {
 					tresorierDAO.create(tresorier);
 					Container cp = f.getContentPane();
 					cp.removeAll();
-					Main.showDashboard_Tresorier(tresorier);
+					Main.showDashboard_Tresorier(tresorier, calendrier);
 					//f.removeAll();
 					f.revalidate();
 					f.repaint();
@@ -255,17 +276,19 @@ public class CreerUser extends JPanel implements ActionListener {
 	private class ReturnListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 
-		public ReturnListener(JFrame f)
+		public ReturnListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.creerConnexion();
+			Main.creerConnexion(calendrier);
 			f.revalidate();
 			f.repaint();
 		}

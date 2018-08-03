@@ -132,7 +132,7 @@ public class CategorieDAO extends DAO<Categorie>
 				ResultSet.TYPE_SCROLL_INSENSITIVE,
 				ResultSet.CONCUR_READ_ONLY	).executeQuery("SELECT * FROM Categorie WHERE IdCat = " + id);
 			if(result.first())
-				categorie = new Categorie(result.getInt("IdCat"), result.getString("typePneu"), result.getString("nom"));
+				categorie = new Categorie(result.getInt("IdCat"), result.getString("nom"));
 		}
 		catch(SQLException e){
 			e.printStackTrace();
@@ -150,7 +150,7 @@ public class CategorieDAO extends DAO<Categorie>
 					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Categorie_Responsable WHERE nom != \"N/A\"");
 			while(result.next())
 			{
-				categorie = new Categorie(result.getInt("supplement"), result.getString("typePneu"), result.getString("nom"));
+				categorie = new Categorie(result.getInt("supplement"), result.getString("nom"));
 				listCategorie.add(categorie);
 			}
 		}
@@ -172,7 +172,7 @@ public class CategorieDAO extends DAO<Categorie>
 	System.out.println("after");
 			while(result.next())
 			{
-				categorie = new Categorie(result.getInt("IdCat"), result.getString("typePneu"), result.getString("nom"));
+				categorie = new Categorie(result.getInt("IdCat"), result.getString("nom"));
 				listCategorie.add(categorie);
 			}
 		}
@@ -194,7 +194,7 @@ public class CategorieDAO extends DAO<Categorie>
 	System.out.println("after");
 			while(result.next())
 			{
-				categorie = new Categorie(result.getInt("IdCat"), result.getString("typePneu"), result.getString("nom"));
+				categorie = new Categorie(result.getInt("IdCat"), result.getString("nom"));
 				listCategorie.add(categorie);
 			}
 		}
@@ -215,7 +215,7 @@ public class CategorieDAO extends DAO<Categorie>
 	ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Membre INNER JOIN Categorie_Membre ON Membre.IDM = Categorie_Membre.IDM WHERE Categorie_Membre.IDM = " + membre.getiD() + "");
 			if(result.first())
 			{
-				categorie = new Categorie(result.getInt("IdCat"), result.getString("typePneu"), result.getString("nom"));
+				categorie = new Categorie(result.getInt("IdCat"), result.getString("nom"));
 				appartient = true;
 			}
 		}
@@ -258,7 +258,6 @@ public class CategorieDAO extends DAO<Categorie>
 				Categorie categorie = new Categorie();
 				categorie.setiD(result.getInt("IdCat"));
 				categorie.setNom(result.getString("nom"));
-				categorie.setTypePneu(result.getString("typePneu"));
 				System.out.println("CATEGORIE : " + categorie);
 				listCategorie.add(categorie);
 			}

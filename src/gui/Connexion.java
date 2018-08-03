@@ -7,6 +7,7 @@ import dao.MembreDAO;
 import dao.ResponsableDAO;
 import dao.TresorierDAO;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Categorie;
 import exo.Membre;
 import exo.Responsable;
@@ -47,7 +48,7 @@ public class Connexion extends JPanel implements ActionListener
 	private Membre currentMembre;
 	private Tresorier currentTresorier;
 
-	public Connexion(JFrame f, Connection connect) {
+	public Connexion(JFrame f, Connection connect, Calendrier calendrier) {
 		this.connect = connect;
 		controllingFrame = f;
 		labelUser = new JLabel("User : ");
@@ -76,8 +77,8 @@ public class Connexion extends JPanel implements ActionListener
 		// Create everything.
 		passwordField.setActionCommand(Connexion);
 		passwordField.addActionListener(this);
-		connexionButton.addActionListener(new ConnexionButtonListener(f));
-		createUserButton.addActionListener(new CreateUserButtonListener(f));
+		connexionButton.addActionListener(new ConnexionButtonListener(f, calendrier));
+		createUserButton.addActionListener(new CreateUserButtonListener(f, calendrier));
 		
 		passwordField = new JPasswordField(15);
 		// passwordField.setLabelFor(passwordField);
@@ -203,10 +204,12 @@ public class Connexion extends JPanel implements ActionListener
 	private class ConnexionButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 		
-		public ConnexionButtonListener(JFrame f)
+		public ConnexionButtonListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
+			this.calendrier = calendrier;
 		}
 		
 		
@@ -261,7 +264,7 @@ public class Connexion extends JPanel implements ActionListener
 						currentResponsable = responsableDAO.findResponsableByEmailPassword(userField.getText(), passwordField.getText());
 						Container cp = f.getContentPane();
 						cp.removeAll();
-						Main.showDashboard_Responsable(currentResponsable);
+						Main.showDashboard_Responsable(currentResponsable, calendrier);
 					}
 					else
 					{
@@ -291,7 +294,7 @@ public class Connexion extends JPanel implements ActionListener
 							}
 							
 						//}
-						Main.showDashboard_Membre(currentMembre);
+						Main.showDashboard_Membre(currentMembre, calendrier);
 					}
 					else
 					{
@@ -309,7 +312,7 @@ public class Connexion extends JPanel implements ActionListener
 						currentTresorier = tresorierDAO.findTresorierByEmailPassword(userField.getText(), passwordField.getText());
 						Container cp = f.getContentPane();
 						cp.removeAll();
-						Main.showDashboard_Tresorier(currentTresorier);
+						Main.showDashboard_Tresorier(currentTresorier, calendrier);
 					}
 					else 
 					{
@@ -327,10 +330,12 @@ public class Connexion extends JPanel implements ActionListener
 	private class CreateUserButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 
-		public CreateUserButtonListener(JFrame f)
+		public CreateUserButtonListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -338,7 +343,7 @@ public class Connexion extends JPanel implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();
-			Main.creerUser();
+			Main.creerUser(calendrier);
 			
 			cp.revalidate();
 			cp.repaint();

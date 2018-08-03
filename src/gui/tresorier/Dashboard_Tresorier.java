@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 
 import dao.BaladeDAO;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Membre;
 import exo.Tresorier;
 import gui.Main;
@@ -38,7 +39,7 @@ public class Dashboard_Tresorier implements ActionListener
 	private JButton deconnexionButton;
 	private JPanel p;
 
-	public Dashboard_Tresorier(JFrame f, Connection connect, Tresorier currentTresorier) {
+	public Dashboard_Tresorier(JFrame f, Connection connect, Tresorier currentTresorier, Calendrier calendrier) {
 		this.connect = connect;
 		this.f = f;
 		this.currentTresorier = currentTresorier;
@@ -62,11 +63,11 @@ public class Dashboard_Tresorier implements ActionListener
 		f.add(p);
 		
 	//	BaladeButton.addActionListener(this);
-		RemboursementeButton.addActionListener(new RemboursementeButtonListener(f, connect, currentTresorier));
+		RemboursementeButton.addActionListener(new RemboursementeButtonListener(f, connect, currentTresorier, calendrier));
 	//	DisponibiliteButton.addActionListener(this);
 	//	CategorieButton.addActionListener(new CategorieButtonListener(f));
 	//	PayementButton.addActionListener(new PayementButtonListener(f));
-		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
+		deconnexionButton.addActionListener(new deconnexionButtonListener(f, calendrier));
 		
 		f.pack();
 	}
@@ -86,12 +87,14 @@ public class Dashboard_Tresorier implements ActionListener
 		private JFrame f;
 		private Connection connect;
 		private Tresorier currentTresorier;
+		private Calendrier calendrier;
 
-		public RemboursementeButtonListener(JFrame f, Connection connect, Tresorier currentTresorier)
+		public RemboursementeButtonListener(JFrame f, Connection connect, Tresorier currentTresorier, Calendrier calendrier)
 		{
 			this.f = f;
 			this.connect = connect;
 			this.currentTresorier = currentTresorier;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -99,7 +102,7 @@ public class Dashboard_Tresorier implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuRemboursement_Tresorier(currentTresorier);
+			Main.showMenuRemboursement_Tresorier(currentTresorier, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -108,10 +111,12 @@ public class Dashboard_Tresorier implements ActionListener
 	private class deconnexionButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 
-		public deconnexionButtonListener(JFrame f)
+		public deconnexionButtonListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -119,7 +124,7 @@ public class Dashboard_Tresorier implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.creerConnexion();
+			Main.creerConnexion(calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

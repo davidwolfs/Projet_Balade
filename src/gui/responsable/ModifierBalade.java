@@ -22,6 +22,7 @@ import dao.MembreDAO;
 import dao.ResponsableDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Membre;
 import exo.Responsable;
 import exo.Vehicule;
@@ -47,7 +48,7 @@ public class ModifierBalade implements ActionListener
 	private	JPanel p2;
 	private Object baladeSelected;
 	
-	public ModifierBalade(JFrame f, Connection connect, Object baladeSelected, Responsable currentResponsable)
+	public ModifierBalade(JFrame f, Connection connect, Object baladeSelected, Responsable currentResponsable, Calendrier calendrier)
 	{
 		/*VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
@@ -89,7 +90,7 @@ public class ModifierBalade implements ActionListener
 		p.add(retourButton);
 		
 		modifierBaladeButton.addActionListener(this);
-		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
+		retourButton.addActionListener(new retourButtonListener(f, currentResponsable, calendrier));
 		f.add(p);
 		f.pack();
 	}
@@ -129,7 +130,8 @@ public class ModifierBalade implements ActionListener
 			//baladeDAO.update(balade);
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuBalade_Responsable(currentResponsable);
+			Calendrier calendrier = null;
+			Main.showMenuBalade_Responsable(currentResponsable, calendrier);
 		}
 	}
 	
@@ -137,18 +139,20 @@ public class ModifierBalade implements ActionListener
 	{
 		private JFrame f;
 		private Responsable currentResponsable;
+		private Calendrier calendrier;
 
-		public retourButtonListener(JFrame f, Responsable currentResponsable)
+		public retourButtonListener(JFrame f, Responsable currentResponsable, Calendrier calendrier)
 		{
 			this.f = f;
 			this.currentResponsable = currentResponsable;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuBalade_Responsable(currentResponsable);
+			Main.showMenuBalade_Responsable(currentResponsable, calendrier);
 		}
 	}
 }

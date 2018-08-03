@@ -4,33 +4,25 @@ public class Categorie {
 	private int iD;
 	private static final int cotisationAnnuelle = 20;
 	private static final int supplement = 5;
-	private String typePneu;
 	private String nom;
 	private Calendrier calendrier;
 	private Responsable responsable;
 
-	public Categorie(int iD, String typePneu, String nom, Calendrier calendrier, Responsable responsable) {
+	public Categorie(int iD, String nom, Calendrier calendrier, Responsable responsable) {
 		this.iD = iD;
-		this.typePneu = typePneu;
 		this.nom = nom;
 		this.calendrier = calendrier;
 		this.responsable = responsable;
 	}
 	
-	public Categorie(String typePneu, String nom) 
+	public Categorie(String nom) 
 	{
-		this.typePneu = typePneu;
 		this.nom = nom;
 	}
 	
-	public Categorie(int iD, String typePneu, String nom) 
+	public Categorie(int iD, String nom) 
 	{
 		this.iD = iD;
-		this.typePneu = typePneu;
-		this.nom = nom;
-	}
-	
-	public Categorie(String nom) {
 		this.nom = nom;
 	}
 	
@@ -51,14 +43,6 @@ public class Categorie {
 		return supplement;
 	}
 	
-	public String getTypePneu() {
-		return typePneu;
-	}
-
-	public void setTypePneu(String typePneu) {
-		this.typePneu = typePneu;
-	}
-
 	public String getNom() {
 		return nom;
 	}
@@ -85,7 +69,7 @@ public class Categorie {
 
 	/*@Override
 	public String toString() {
-		return "Categorie [supplement=" + supplement + ", typePneu=" + typePneu + ", nom=" + nom + ", calendrier="
+		return "Categorie [supplement=" + supplement + ", nom=" + nom + ", calendrier="
 				+ calendrier + "]";
 	}*/
 	

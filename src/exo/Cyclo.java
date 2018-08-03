@@ -3,12 +3,11 @@ package exo;
 public class Cyclo extends Categorie
 {
 	private int IDCy;
-	private String typePneu;
 	private String nom;
 	
-	public Cyclo(int supplement, String typePneu, String nom) 
+	public Cyclo(int supplement, String nom) 
 	{
-		super(supplement, typePneu, nom);
+		super(supplement, nom);
 	}
 	
 	public Cyclo() 
@@ -23,15 +22,7 @@ public class Cyclo extends Categorie
 	public void setIDCy(int iDCy) {
 		IDCy = iDCy;
 	}
-
-	public String getTypePneu() {
-		return typePneu;
-	}
-
-	public void setTypePneu(String typePneu) {
-		this.typePneu = typePneu;
-	}
-
+	
 	public String getNom() {
 		return nom;
 	}

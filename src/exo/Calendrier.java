@@ -7,39 +7,24 @@ public class Calendrier
 {
 	private int iD;
 	private String nomCal;
-	private String dateCal;
 	private List<Balade> listBalade = new ArrayList<>();
 	
-	public Calendrier(int iD, String nomCal, String dateCal, List<Balade> listBalade)
+	public Calendrier(int iD, String nomCal, List<Balade> listBalade)
 	{
 		this.iD = iD;
 		this.nomCal = nomCal;
-		this.dateCal = dateCal;
 		this.listBalade = listBalade;
 	}
 	
-	public Calendrier(int iD, String nomCal, String dateCal)
+	public Calendrier(int iD, String nomCal)
 	{
 		this.iD = iD;
 		this.nomCal = nomCal;
-		this.dateCal = dateCal;
 	}
 	
-	public Calendrier(String nomCal, String dateCal)
+	public Calendrier(String nomCal)
 	{
 		this.nomCal = nomCal;
-		this.dateCal = dateCal;
-	}
-	
-	public Calendrier(String dateCal)
-	{
-		this.dateCal = dateCal;
-	}
-	
-	public Calendrier(int iD, String dateCal)
-	{
-		this.iD = iD;
-		this.dateCal = dateCal;
 	}
 	
 	public Calendrier()
@@ -62,15 +47,7 @@ public class Calendrier
 	public void setNomCal(String nomCal) {
 		this.nomCal = nomCal;
 	}
-
-	public String getDateCal() {
-		return dateCal;
-	}
-
-	public void setDateCal(String dateCal) {
-		this.dateCal = dateCal;
-	}
-
+	
 	public List<Balade> getListBalade() {
 		return listBalade;
 	}
@@ -91,7 +68,7 @@ public class Calendrier
 	
 	@Override
 	public String toString() {
-		return "Calendrier [iD=" + iD + ", nomCal=" + nomCal + ", dateCal=" + dateCal + ", listBalade=" + listBalade
+		return "Calendrier [iD=" + iD + ", nomCal=" + nomCal + ", listBalade=" + listBalade
 				+ "]";
 	}
 }

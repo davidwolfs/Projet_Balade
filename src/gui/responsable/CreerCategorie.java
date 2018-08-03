@@ -41,15 +41,15 @@ public class CreerCategorie implements ActionListener
 	private JLabel labelMembre;
 	private JLabel labelMsgErreur;
 	private JTextField supplementField;
-	private JTextField typePneuField;
 	private JTextField nomField;
 	private JTextField membreField;
 	private JButton createBaladeButton;
 	private JButton retourButton;
 	private	JPanel p;
 	private	JPanel p2;
+	private Calendrier calendrier;
 	
-	public CreerCategorie(JFrame f, Connection connect, Responsable currentResponsable) 
+	public CreerCategorie(JFrame f, Connection connect, Responsable currentResponsable, Calendrier calendrier) 
 	{
 		/*VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
@@ -64,7 +64,6 @@ public class CreerCategorie implements ActionListener
 		labelMsgErreur = new JLabel();
 		//String listVehicules = vehicules.toString();
 		supplementField = new JTextField(5);
-		typePneuField = new JTextField(15);
 		nomField = new JTextField(15);
 		membreField = new JTextField(15);
 		createBaladeButton = new JButton("Créer");
@@ -75,7 +74,6 @@ public class CreerCategorie implements ActionListener
 		p.add(labelSupplement);
 		p.add(supplementField);
 		p.add(labelTypePneu);
-		p.add(typePneuField);
 		p.add(labelNom);
 		p.add(nomField);
 		p.add(labelMembre);
@@ -84,7 +82,7 @@ public class CreerCategorie implements ActionListener
 		p.add(retourButton);
 		
 		createBaladeButton.addActionListener(this);
-		retourButton.addActionListener(new retourButtonListener(f));
+		retourButton.addActionListener(new retourButtonListener(f, calendrier));
 		f.add(p);
 		f.pack();
 	}
@@ -93,7 +91,7 @@ public class CreerCategorie implements ActionListener
 	public void actionPerformed(ActionEvent arg0) 
 	{
 		int idMembre = Integer.parseInt(membreField.getText());
-		if(supplementField.getText().isEmpty() || typePneuField.getText().isEmpty() || nomField.getText().isEmpty() || membreField.getText().isEmpty())
+		if(supplementField.getText().isEmpty() || nomField.getText().isEmpty() || membreField.getText().isEmpty())
 		{
 			labelMsgErreur.setText("Veuillez remplir tous les champs.");
 			p2.add(labelMsgErreur);
@@ -103,29 +101,31 @@ public class CreerCategorie implements ActionListener
 		}
 		else
 		{
-			Categorie categorie = new Categorie(Integer.parseInt(supplementField.getText()), typePneuField.getText(), nomField.getText());
+			Categorie categorie = new Categorie(Integer.parseInt(supplementField.getText()), nomField.getText());
 			CategorieDAO categorieDAO = new CategorieDAO(connect);
 			categorieDAO.create_Categorie_Responsable(categorie, currentResponsable);
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuCategorie_Responsable(currentResponsable);
+			Main.showMenuCategorie_Responsable(currentResponsable, calendrier);
 		}
 	}
 	
 	private class retourButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 
-		public retourButtonListener(JFrame f)
+		public retourButtonListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuCategorie_Responsable(currentResponsable);
+			Main.showMenuCategorie_Responsable(currentResponsable, calendrier);
 		}
 	}
 }

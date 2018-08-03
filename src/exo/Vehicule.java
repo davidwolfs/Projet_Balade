@@ -100,14 +100,25 @@ public class Vehicule
 	}
 
 	@Override
-	public String toString() {
-		/*return "Vehicule [immatriculation=" + immatriculation + ", nombrePlaceMembre=" + nombrePlaceMembre
+	public String toString() 
+	{
+	/*	if(immatriculation = null)
+		{
+			
+		}*/
+		return "Vehicule [immatriculation=" + immatriculation + ", nombrePlaceMembre=" + nombrePlaceMembre
 				+ ", nombrePlaceVelo=" + nombrePlaceVelo + ", chauffeur=" + chauffeur + ", listMembre=" + listMembre
-				+ "]";*/
+				+ "]";
+		//return chauffeur + "";
+	}
+	
+	public String toString2() 
+	{
 		return chauffeur + "";
 	}
 	
-	/*public String toString2() {
-		return "chauffeur";
-	}*/
+	public String toString3() 
+	{
+		return chauffeur + "";
+	}
 }

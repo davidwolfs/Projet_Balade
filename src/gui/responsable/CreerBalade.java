@@ -49,7 +49,7 @@ public class CreerBalade implements ActionListener
 	private	JPanel p;
 	private	JPanel p2;
 	
-	public CreerBalade(JFrame f, Connection connect, Responsable currentResponsable) 
+	public CreerBalade(JFrame f, Connection connect, Responsable currentResponsable, Calendrier calendrier) 
 	{
 		/*VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		List<Vehicule> listVehicule = vehiculeDAO.listVehicule();
@@ -90,7 +90,7 @@ public class CreerBalade implements ActionListener
 		p.add(retourButton);
 		
 		createBaladeButton.addActionListener(this);
-		retourButton.addActionListener(new retourButtonListener(f));
+		retourButton.addActionListener(new retourButtonListener(f, calendrier));
 		f.add(p);
 		f.pack();
 	}
@@ -144,7 +144,7 @@ public class CreerBalade implements ActionListener
 				calendrier.AjouterBalade(balade);
 				Container cp = f.getContentPane();
 				cp.removeAll();
-				Main.showMenuBalade_Responsable(currentResponsable);
+				Main.showMenuBalade_Responsable(currentResponsable, calendrier);
 			}
 		}
 	}
@@ -152,17 +152,19 @@ public class CreerBalade implements ActionListener
 	private class retourButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 
-		public retourButtonListener(JFrame f)
+		public retourButtonListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Container cp = f.getContentPane();
 			cp.removeAll();
-			Main.showMenuBalade_Responsable(currentResponsable);
+			Main.showMenuBalade_Responsable(currentResponsable, calendrier);
 		}
 	}
 }

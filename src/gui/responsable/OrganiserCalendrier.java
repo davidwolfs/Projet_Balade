@@ -40,10 +40,8 @@ public class OrganiserCalendrier
 	private Categorie categorieSelected;
 	private ListSelectionModel listSelectionModel;
 	private JLabel labelBalades;
-	private JLabel labelDate;
 	private JLabel labelnombrePlaceVelo;
 	private JLabel labelMsgErreur;
-	private JTextField dateField;
 	private JButton rejoindreButton;
 	private JButton retourButton;
 	private JButton ajoutButton;
@@ -54,7 +52,7 @@ public class OrganiserCalendrier
 	private JPanel p5;
 	private Object baladeSelected;
 	
-	public OrganiserCalendrier(JFrame f, Connection connect, Responsable currentResponsable, Categorie categorieSelected) 
+	public OrganiserCalendrier(JFrame f, Connection connect, Responsable currentResponsable, Categorie categorieSelected, Calendrier calendrier) 
 	{
 		this.connect = connect;
 		this.f = f;
@@ -70,9 +68,7 @@ public class OrganiserCalendrier
 		
 		
 		labelBalades = new JLabel("Balades : ");
-		labelDate = new JLabel("Date : ");
 		labelMsgErreur = new JLabel();
-		dateField = new JTextField(2);
 		
 		ajoutButton = new JButton("Ajouter");
 		retourButton = new JButton("Retour");
@@ -104,20 +100,17 @@ public class OrganiserCalendrier
 	    
 	    p.add(labelBalades);
 	    p2.add(scrollPane1);
-		p3.add(labelDate);
-		p3.add(dateField);
-		p4.add(ajoutButton);
-		p4.add(retourButton);
+		p3.add(ajoutButton);
+		p3.add(retourButton);
 		
 		listSelectionModel  = jlist1.getSelectionModel();
 		listSelectionModel.addListSelectionListener(
 				new SharedListSelectionHandler(f, jlist1));
-		ajoutButton.addActionListener(new ajoutButtonListener(f, jlist1, currentResponsable));
-		retourButton.addActionListener(new retourButtonListener(f, currentResponsable));
+		ajoutButton.addActionListener(new ajoutButtonListener(f, jlist1, currentResponsable, calendrier));
+		retourButton.addActionListener(new retourButtonListener(f, currentResponsable, calendrier));
 		f.add(p);
 		f.add(p2);
 		f.add(p3);
-		f.add(p4);
 		f.pack();
 	}
 
@@ -153,12 +146,14 @@ public class OrganiserCalendrier
 		private JFrame f;
 		private Responsable currentResponsable;
 		private JList listeBalade;
+		private Calendrier calendrier;
 		
-		public ajoutButtonListener(JFrame f, JList listeBalade, Responsable currentResponsable)
+		public ajoutButtonListener(JFrame f, JList listeBalade, Responsable currentResponsable, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listeBalade = listeBalade;
 			this.currentResponsable = currentResponsable;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -166,15 +161,8 @@ public class OrganiserCalendrier
 			if(listeBalade.isSelectionEmpty())
 			{
 				labelMsgErreur.setText("Veuillez sélectionné une balade.");
-				p5.add(labelMsgErreur);
-				f.add(p5);
-				f.pack();
-			}
-			else if(dateField.getText().isEmpty())
-			{
-				labelMsgErreur.setText("Veuillez entrer tous les champs.");
-				p5.add(labelMsgErreur);
-				f.add(p5);
+				p4.add(labelMsgErreur);
+				f.add(p4);
 				f.pack();
 			}
 			else 
@@ -188,10 +176,13 @@ public class OrganiserCalendrier
 				balade = (Balade)baladeSelected;
 				System.out.println("Balade : " + balade);
 				
-				Calendrier calendrier = new Calendrier(categorie.getNom(), dateField.getText());
+				Calendrier calendrier = new Calendrier(1, categorie.getNom());
+				System.out.println(calendrier.getListBalade());
 				calendrier.AjouterBalade(balade);
+				System.out.println(calendrier.getListBalade());
 				CalendrierDAO calendrierDAO = new CalendrierDAO(connect);
 				calendrierDAO.create(calendrier, balade, categorie);
+				calendrier = calendrierDAO.getCalendrierFromNom(calendrier);
 				
 				System.out.println("Calendrier avant : " + categorie.toString());
 				categorie.setCalendrier(calendrier);
@@ -199,11 +190,12 @@ public class OrganiserCalendrier
 				
 				System.out.println("Liste des calendrier dans la catégorie : " + categorie.getCalendrier());
 				
+				System.out.println("NUMERO DU CALENDRIER : " + calendrier.getiD());
 				System.out.println("Liste des balades dans le calendrier : " + calendrier.getListBalade());
 				
 				Container cp = f.getContentPane();
 				cp.removeAll();
-				Main.showMenuCategorie_Responsable(currentResponsable);
+				Main.showMenuCategorie_Responsable(currentResponsable, calendrier);
 			}
 		}
 	}
@@ -212,11 +204,13 @@ public class OrganiserCalendrier
 	{
 		private JFrame f;
 		private Responsable currentResponsable;
+		private Calendrier calendrier;
 
-		public retourButtonListener(JFrame f, Responsable currentResponsable)
+		public retourButtonListener(JFrame f, Responsable currentResponsable, Calendrier calendier)
 		{
 			this.f = f;
 			this.currentResponsable = currentResponsable;
+			this.calendrier = calendrier;
 		}
 
 		@Override
@@ -224,7 +218,7 @@ public class OrganiserCalendrier
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuCategorie_Responsable(currentResponsable);
+			Main.showMenuCategorie_Responsable(currentResponsable, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

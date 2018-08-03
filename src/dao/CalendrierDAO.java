@@ -25,11 +25,11 @@ public class CalendrierDAO extends DAO<Calendrier>
 	}
 	
 	public boolean create(Calendrier calendrier, Balade balade, Categorie categorie){
-		System.out.println(calendrier.getDateCal() + balade.getLibelle() + categorie.getNom());
+		System.out.println(balade.getLibelle() + categorie.getNom());
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
-			String query = "INSERT INTO Calendrier (nom, dateCal, IDB) VALUES ('" + calendrier.getNomCal() + "','" + calendrier.getDateCal() + "','" + balade.getiDB() + "')" + ";";
+			String query = "INSERT INTO Calendrier (nom, IDB) VALUES ('" + calendrier.getNomCal() + "','" + balade.getiDB() + "')" + ";";
 			System.out.println(query);
 			statementResult = true;
 			statementResult = statement.execute(query);
@@ -40,6 +40,25 @@ public class CalendrierDAO extends DAO<Calendrier>
 		}
 		System.out.println(statementResult);
 		return statementResult;
+	}
+	
+	public Calendrier getCalendrierFromNom(Calendrier calendrier)
+	{
+		try
+		{
+			ResultSet result = this.connect.createStatement(
+				ResultSet.TYPE_SCROLL_INSENSITIVE,
+				ResultSet.CONCUR_READ_ONLY	).executeQuery("SELECT * FROM Calendrier WHERE nom = " + "\"" + calendrier.getNomCal() + "\"");
+			if(result.first())
+			{
+				calendrier.setiD(result.getInt("IdCal"));
+				calendrier.setNomCal(result.getString("nom"));
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return calendrier;
 	}
 	
 	public boolean delete(Calendrier calendrier){
@@ -107,11 +126,12 @@ public class CalendrierDAO extends DAO<Calendrier>
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendrier WHERE dateCal != \"N/A\" AND nom != \"N/A\" AND nom = " + "\"" + categorie.getNom() + "\"");
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendrier WHERE nom != \"N/A\" AND nom = " + "\"" + categorie.getNom() + "\"");
 	System.out.println("after");
 			while(result.next())
 			{
-				calendrier = new Calendrier(result.getInt("IdCal"), result.getString("nom"), result.getString("dateCal"));
+				calendrier = new Calendrier(result.getInt("IdCal"), result.getString("nom"));
+				listCalendrierByCategorie2(calendrier, categorie);
 				listCalendrier.add(calendrier);
 			}
 		}
@@ -120,5 +140,30 @@ public class CalendrierDAO extends DAO<Calendrier>
 		}
 		
 		return listCalendrier;
+	}
+	
+	public List<Balade> listCalendrierByCategorie2(Calendrier calendrier, Categorie categorie)
+	{
+		System.out.println("Calendrier : " + calendrier.getiD() + "Categorie : " + categorie.getNom());
+		List<Balade> listBalade = new ArrayList<>();
+		BaladeDAO baladeDAO = new BaladeDAO(connect);
+		Balade balade = null;
+		//Calendrier calendrier;
+		try{
+			ResultSet result = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendrier WHERE nom != \"N/A\" AND nom = " + "\"" + categorie.getNom() + "\"" + " AND IdCal = " + calendrier.getiD());
+			while(result.next())
+			{
+				balade = baladeDAO.find(result.getInt("IDB"));
+				listBalade.add(balade);
+				calendrier.setListBalade(listBalade);
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return listBalade;
 	}
 }

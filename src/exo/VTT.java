@@ -4,9 +4,9 @@ public class VTT extends Categorie
 {
 	private int NbrPlateau;
 
-	public VTT(int supplement, String typePneu, String nom, int NbrPlateau) 
+	public VTT(int supplement, String nom, int NbrPlateau) 
 	{
-		super(supplement, typePneu, nom);
+		super(supplement, nom);
 		this.NbrPlateau = NbrPlateau;
 	}
 

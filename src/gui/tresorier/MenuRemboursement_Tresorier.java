@@ -25,6 +25,7 @@ import dao.BaladeDAO;
 import dao.MembreDAO;
 import dao.VehiculeDAO;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Categorie;
 import exo.Membre;
 import exo.Tresorier;
@@ -40,13 +41,19 @@ public class MenuRemboursement_Tresorier
 	private JLabel labelBalade;
 	private JLabel labelChauffeur;
 	private JLabel labelPassager;
+	private JLabel labelCotisation;
 	private JLabel labelMsgErreur;
 	private JList listeBalade;
 	private JList listeVehicule;
 	private JList listePassager;
+	private JList listeMembre;
 	private ListSelectionModel listSelectionModel;
 	private ListSelectionModel listSelectionModel2;
+	private ListSelectionModel listSelectionModel3;
 	private JButton quitterVeloButton;
+	private JButton payerButton;
+	private JButton rembourserButton;
+	private JButton supprimerButton;
 	private JButton retourButton;
 	private JPanel p;
 	private JPanel p2;
@@ -60,7 +67,7 @@ public class MenuRemboursement_Tresorier
 	//listeVehicule = new JList(vehicules);
 
 
-	public MenuRemboursement_Tresorier(JFrame f, Connection connect, Tresorier currentTresorier) 
+	public MenuRemboursement_Tresorier(JFrame f, Connection connect, Tresorier currentTresorier, Calendrier calendrier) 
 	{
 		System.out.println("infos vehicule dans rejoindre balade : " + vehicule);
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
@@ -76,11 +83,13 @@ public class MenuRemboursement_Tresorier
 		this.currentTresorier = currentTresorier;
 		labelBalade = new JLabel("Liste des balades : ");
 		labelChauffeur = new JLabel("Liste des chauffeurs : ");
-		labelPassager = new JLabel("Liste des passagers : ");
+		labelPassager = new JLabel("Liste des passagers (Balade non payée): ");
+		labelCotisation = new JLabel("Liste des membres (Cotisation non payée) : ");
 		labelMsgErreur = new JLabel();
 		listeBalade = new JList(balades);
 		listeVehicule = new JList();
 		listePassager = new JList();
+		listeMembre = new JList();
 		//String listVehicules = vehicules.toString();
 
 		//Vehicule vehiculeSelectionne = (Vehicule) listeVehicule.getSelectedValue();
@@ -103,6 +112,9 @@ public class MenuRemboursement_Tresorier
 		
 		JScrollPane scrollPane3 = new JScrollPane(listePassager);
 		f.add(scrollPane3, BorderLayout.NORTH);
+		
+		JScrollPane scrollPane4 = new JScrollPane(listeMembre);
+		f.add(scrollPane3, BorderLayout.NORTH);
 		 
 	    jlist1.setVisibleRowCount(4);
 	    jlist1.setFixedCellHeight(12);
@@ -112,10 +124,13 @@ public class MenuRemboursement_Tresorier
 	    f.setSize(300, 350);
 	    f.setVisible(true);
 
+	    payerButton = new JButton("Supprimer le membre de la balade");
+	    rembourserButton = new JButton("Rembourser");
+	    supprimerButton = new JButton("Supprimer le membre");
 		retourButton = new JButton("Retour");
 		p = new JPanel(new GridLayout(4, 2));
 		p2 = new JPanel(new GridLayout(1,2));
-		p3 = new JPanel(new GridLayout(4,1));
+		p3 = new JPanel(new GridLayout(5,1));
 		p4 = new JPanel(new GridLayout(1,1));
 		p5 = new JPanel(new GridLayout(1,1));
 		
@@ -125,7 +140,11 @@ public class MenuRemboursement_Tresorier
 		p.add(scrollPane2);
 		p.add(labelPassager);
 		p.add(scrollPane3);
-		
+		p.add(labelCotisation);
+		p.add(scrollPane4);
+		p3.add(payerButton);
+		p3.add(rembourserButton);
+		p3.add(supprimerButton);
 		p3.add(retourButton);
 
 
@@ -137,8 +156,15 @@ public class MenuRemboursement_Tresorier
 		listSelectionModel2  = jlist1.getSelectionModel();
 		listSelectionModel2.addListSelectionListener(
 				new SharedListSelectionHandler2(f, jlist1, vehicule, listePassager));
+
+		listSelectionModel3  = jlist1.getSelectionModel();
+		listSelectionModel3.addListSelectionListener(
+				new SharedListSelectionHandler3(f, jlist1, vehicule, listeMembre));
 		
-		retourButton.addActionListener(new retourButtonListener(f, listCategorie, vehicule, currentTresorier));
+		rembourserButton.addActionListener(new rembourserButtonListener(f, listCategorie, vehicule, currentTresorier, jlist1, calendrier));
+		payerButton.addActionListener(new payerButtonListener(f, listCategorie, vehicule, currentTresorier, jlist1, calendrier));
+		retourButton.addActionListener(new retourButtonListener(f, listCategorie, vehicule, currentTresorier, calendrier));
+		supprimerButton.addActionListener(new supprimerButtonListener(f, listCategorie, vehicule, currentTresorier, jlist1, calendrier));
 		f.add(p);
 		f.add(p2);
 		f.add(p3);
@@ -165,7 +191,6 @@ public class MenuRemboursement_Tresorier
 
 			int index = listeBalade.getSelectedIndex();
 			System.out.println("balade :" + listeBalade.getSelectedValue());
-			JOptionPane.showMessageDialog(null, listeBalade.getSelectedValue());
 			System.out.println(listeBalade.getSelectedValue().getClass());
 			baladeSelected = (Balade)listeBalade.getSelectedValue();
 			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
@@ -213,18 +238,55 @@ public class MenuRemboursement_Tresorier
 		}
 	}
 	
+	private class SharedListSelectionHandler3 implements ListSelectionListener 
+	{
+		private JList listeBalade;
+		private JList listeMembre;
+		private JFrame f;
+		private Vehicule vehicule;
+		
+		public SharedListSelectionHandler3(JFrame f, JList jlist1, Vehicule vehicule, JList listeMembre)
+		{
+			this.f = f;
+			this.listeBalade = jlist1;
+			this.vehicule = vehicule;
+			this.listeMembre = listeMembre;
+		}
+
+		public void valueChanged(ListSelectionEvent e) {
+			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+
+			int index = listeBalade.getSelectedIndex();
+			System.out.println("balade :" + listeBalade.getSelectedValue());
+			JOptionPane.showMessageDialog(null, listeBalade.getSelectedValue());
+			System.out.println(listeBalade.getSelectedValue().getClass());
+			baladeSelected = (Balade)listeBalade.getSelectedValue();
+			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
+			//System.out.println(vehiculeDAO.listChauffeur((Balade)listeBalade.getSelectedValue()));
+			listeMembre.setListData(vehiculeDAO.listMembreCotisationNonPayee().toArray());
+			
+			//listeVehicule.repaint();
+			Container container = listeVehicule.getParent();
+			container.revalidate();
+			container.repaint();
+		}
+	}
+	
 	private class rejoindreButtonListener implements ActionListener
 	{
 		private JFrame f;
 		private Membre currentMembre;
 		private List<Categorie> listCategorie;
 		private Vehicule vehicule;
-		public rejoindreButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
+		private Calendrier calendrier;
+		
+		public rejoindreButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
 			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
+			this.calendrier = calendrier;
 		}
 
 		@Override
@@ -313,241 +375,477 @@ public class MenuRemboursement_Tresorier
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
+				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
 		}
 	}
 	
-	private class rejoindreMembreButtonListener implements ActionListener
-	{
-		private JFrame f;
-		private Membre currentMembre;
-		private List<Categorie> listCategorie;
-		private Vehicule vehicule;
-		
-		public rejoindreMembreButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
-		{
-			this.f = f;
-			this.listCategorie = listCategorie;
-			this.vehicule = vehicule;
-			this.currentMembre = currentMembre;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// requete ajout insert into liste_balade
-			BaladeDAO baladeDAO = new BaladeDAO(connect);
-			MembreDAO membreDAO = new MembreDAO(connect);
-			Vehicule vehicule;
-			vehicule = (Vehicule)listeVehicule.getSelectedValue();
-			Balade balade;
-			
-			int nombrePlacesUtilisees;
-			
-			currentMembre = membreDAO.getSoldeMembre(currentMembre);
-			double soldeMembre = currentMembre.getSolde();
-			double forfait = baladeDAO.getForfait(baladeSelected);
-			if(listeVehicule.isSelectionEmpty())
-			{
-				labelMsgErreur.setText("Veuillez sélectionner un véhicule.");
-				p4.add(labelMsgErreur);
-				f.add(p4);
-				f.pack();
-			}
-			else if(baladeDAO.getPlaceMembreUtilisee((Vehicule)listeVehicule.getSelectedValue(), baladeSelected) >= vehicule.getNombrePlaceMembre())
-			{
-				JOptionPane.showMessageDialog(null, "Il n'y a plus de place membre dans ce véhicule.");
-			}
-			/*else if(baladeDAO.getPlaceVeloUtilisee((Vehicule)listeVehicule.getSelectedValue(), baladeSelected) >= vehicule.getNombrePlaceMembre())
-			{
-				JOptionPane.showMessageDialog(null, "Il n'y a plus de place vélo dans ce véhicule.");
-			}*/
-			else if(baladeDAO.membrealreadyInBalade((Balade)baladeSelected, currentMembre))
-			{
-				JOptionPane.showMessageDialog(null, "Vous participer déjà à cette balade.");
-			}
-			else if(soldeMembre < forfait)
-			{
-				JOptionPane.showMessageDialog(null, "Vous n'avez pas les moyens pour participer à cette balade.");
-			}
-			else
-			{
-				System.out.println("Solde membre : " + currentMembre.getSolde());
-				System.out.println("Nom membre : " + currentMembre.getNom());
-				System.out.println("Forfait : " + forfait);
-				System.out.println("Solde avant : " + currentMembre.getSolde());
-				System.out.println("Nom Membre courant : " + currentMembre.getNom());
-				currentMembre.soustraitSolde(forfait);
-				System.out.println("Solde après : " + currentMembre.getSolde());
-				double soldeSoustrait = currentMembre.getSolde();
-				membreDAO.update_solde(currentMembre);
-				System.out.println("Balade : " + baladeSelected);
-				System.out.println("Véhicule : " + listeVehicule.getSelectedValue());
-				System.out.println("Véhicule sélectionné : " + (Vehicule)listeVehicule.getSelectedValue());
-				System.out.println("Membre : " + currentMembre.getNom());
-				/*Membre membre = new Membre();
-				
-				(Vehicule)listeVehicule.getSelectedValue()).toArray()*/
-			
-				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-				baladeDAO.create((Balade)baladeSelected);
-				
-				//System.out.println("Liste balade : " + baladeDAO.listBalade(currentMembre.getListCategorie()));
-				balade = (Balade) baladeSelected; 
-				System.out.println("Avant ajout véhicule : " +  balade.getListVehicule());
-				System.out.println("Balade toString Avant : " +  balade.toString());
-				balade.AjouterVehicule(vehicule);
-				vehicule.AjouterMembre(currentMembre);
-				System.out.println("Après ajout véhicule : " + balade.getListVehicule());
-				System.out.println("Balade toString Après : " +  balade.toString());
-				
-				System.out.println("Avant ajout membre : " +  vehicule.getListMembre());
-				System.out.println("Vehicule toString Avant : " +  vehicule.toString());
-				vehicule.AjouterMembre(currentMembre);
-				vehicule.setNombrePlaceMembre(1);
-				//vehicule.setNombrePlaceVelo(1);
-				
-				System.out.println("Après ajout membre : " +  vehicule.getListMembre());
-				System.out.println("Vehicule toString Après : " +  vehicule.toString());
+//	private class rejoindreMembreButtonListener implements ActionListener
+//	{
+//		private JFrame f;
+//		private Membre currentMembre;
+//		private List<Categorie> listCategorie;
+//		private Vehicule vehicule;
+//		private Calendrier calendrier;
+//		
+//		public rejoindreMembreButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, Calendrier calendrier)
+//		{
+//			this.f = f;
+//			this.listCategorie = listCategorie;
+//			this.vehicule = vehicule;
+//			this.currentMembre = currentMembre;
+//			this.calendrier = calendrier;
+//		}
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			// requete ajout insert into liste_balade
+//			BaladeDAO baladeDAO = new BaladeDAO(connect);
+//			MembreDAO membreDAO = new MembreDAO(connect);
+//			Vehicule vehicule;
+//			vehicule = (Vehicule)listeVehicule.getSelectedValue();
+//			Balade balade;
+//			
+//			int nombrePlacesUtilisees;
+//			
+//			currentMembre = membreDAO.getSoldeMembre(currentMembre);
+//			double soldeMembre = currentMembre.getSolde();
+//			double forfait = baladeDAO.getForfait(baladeSelected);
+//			if(listeVehicule.isSelectionEmpty())
+//			{
+//				labelMsgErreur.setText("Veuillez sélectionner un véhicule.");
+//				p4.add(labelMsgErreur);
+//				f.add(p4);
+//				f.pack();
+//			}
+//			else if(baladeDAO.getPlaceMembreUtilisee((Vehicule)listeVehicule.getSelectedValue(), baladeSelected) >= vehicule.getNombrePlaceMembre())
+//			{
+//				JOptionPane.showMessageDialog(null, "Il n'y a plus de place membre dans ce véhicule.");
+//			}
+//			/*else if(baladeDAO.getPlaceVeloUtilisee((Vehicule)listeVehicule.getSelectedValue(), baladeSelected) >= vehicule.getNombrePlaceMembre())
+//			{
+//				JOptionPane.showMessageDialog(null, "Il n'y a plus de place vélo dans ce véhicule.");
+//			}*/
+//			else if(baladeDAO.membrealreadyInBalade((Balade)baladeSelected, currentMembre))
+//			{
+//				JOptionPane.showMessageDialog(null, "Vous participer déjà à cette balade.");
+//			}
+//			else if(soldeMembre < forfait)
+//			{
+//				JOptionPane.showMessageDialog(null, "Vous n'avez pas les moyens pour participer à cette balade.");
+//			}
+//			else
+//			{
+//				System.out.println("Solde membre : " + currentMembre.getSolde());
+//				System.out.println("Nom membre : " + currentMembre.getNom());
+//				System.out.println("Forfait : " + forfait);
+//				System.out.println("Solde avant : " + currentMembre.getSolde());
+//				System.out.println("Nom Membre courant : " + currentMembre.getNom());
+//				currentMembre.soustraitSolde(forfait);
+//				System.out.println("Solde après : " + currentMembre.getSolde());
+//				double soldeSoustrait = currentMembre.getSolde();
+//				membreDAO.update_solde(currentMembre);
+//				System.out.println("Balade : " + baladeSelected);
+//				System.out.println("Véhicule : " + listeVehicule.getSelectedValue());
+//				System.out.println("Véhicule sélectionné : " + (Vehicule)listeVehicule.getSelectedValue());
+//				System.out.println("Membre : " + currentMembre.getNom());
+//				/*Membre membre = new Membre();
+//				
+//				(Vehicule)listeVehicule.getSelectedValue()).toArray()*/
+//			
+//				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
+//				baladeDAO.create((Balade)baladeSelected);
+//				
+//				//System.out.println("Liste balade : " + baladeDAO.listBalade(currentMembre.getListCategorie()));
+//				balade = (Balade) baladeSelected; 
+//				System.out.println("Avant ajout véhicule : " +  balade.getListVehicule());
+//				System.out.println("Balade toString Avant : " +  balade.toString());
+//				balade.AjouterVehicule(vehicule);
+//				vehicule.AjouterMembre(currentMembre);
+//				System.out.println("Après ajout véhicule : " + balade.getListVehicule());
+//				System.out.println("Balade toString Après : " +  balade.toString());
+//				
+//				System.out.println("Avant ajout membre : " +  vehicule.getListMembre());
+//				System.out.println("Vehicule toString Avant : " +  vehicule.toString());
+//				vehicule.AjouterMembre(currentMembre);
+//				vehicule.setNombrePlaceMembre(1);
+//				//vehicule.setNombrePlaceVelo(1);
+//				
+//				System.out.println("Après ajout membre : " +  vehicule.getListMembre());
+//				System.out.println("Vehicule toString Après : " +  vehicule.toString());
+//	
+//				JOptionPane.showMessageDialog(null, "Vous avez rejoint la balade : " + balade.getLibelle() + " avec le véhicule immatriculé : " + vehicule.getImmatriculation());
+//				baladeDAO.create_Ligne_Balade_Membre((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue(), currentMembre);
+//			//	baladeDAO.create_Ligne_Balade_Velo((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue(), currentMembre);
+//				//vehiculeDAO.update(vehicule);
+//				
+//				
+//				Container cp = f.getContentPane();
+//				cp.removeAll();
+//				//f.removeAll();*/
+//				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
+//				/*f.revalidate();*/
+//				//f.getLayout().removeLayoutComponent(f);
+//			}
+//		}
+//	}
+//
+//	private class rejoindreVehiculeButtonListener implements ActionListener
+//	{
+//		private JFrame f;
+//		private Membre currentMembre;
+//		private List<Categorie> listCategorie;
+//		private Vehicule vehicule;
+//		private Calendrier calendrier;
+//		
+//		public rejoindreVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, Calendrier calendrier)
+//		{
+//			this.f = f;
+//			this.listCategorie = listCategorie;
+//			this.vehicule = vehicule;
+//			this.currentMembre = currentMembre;
+//			this.calendrier = calendrier;
+//		}
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) 
+//		{
+//			// requete ajout insert into liste_balade
+//			BaladeDAO baladeDAO = new BaladeDAO(connect);
+//			MembreDAO membreDAO = new MembreDAO(connect);
+//			Vehicule vehicule;
+//			vehicule = (Vehicule)listeVehicule.getSelectedValue();
+//			Balade balade;
+//			
+//			int nombrePlacesUtilisees;
+//			
+//			currentMembre = membreDAO.getSoldeMembre(currentMembre);
+//			double soldeMembre = currentMembre.getSolde();
+//			double forfait = baladeDAO.getForfait(baladeSelected);
+//			if(listeVehicule.isSelectionEmpty())
+//			{
+//				labelMsgErreur.setText("Veuillez sélectionner un véhicule.");
+//				p4.add(labelMsgErreur);
+//				f.add(p4);
+//				f.pack();
+//			}
+//			else if(baladeDAO.getPlaceVeloUtilisee((Vehicule)listeVehicule.getSelectedValue(), baladeSelected) >= vehicule.getNombrePlaceMembre())
+//			{
+//				JOptionPane.showMessageDialog(null, "Il n'y a plus de place vélo dans ce véhicule.");
+//			}
+//			/*else if(baladeDAO.veloalreadyInBalade((Balade)baladeSelected, currentMembre))
+//			{
+//				JOptionPane.showMessageDialog(null, "Vous participer déjà à cette balade.");
+//			}
+//			else if(soldeMembre < forfait)
+//			{
+//				JOptionPane.showMessageDialog(null, "Vous n'avez pas les moyens pour participer à cette balade.");
+//			}*/
+//			else
+//			{
+//				System.out.println("Solde membre : " + currentMembre.getSolde());
+//				System.out.println("Nom membre : " + currentMembre.getNom());
+//				System.out.println("Forfait : " + forfait);
+//				System.out.println("Solde avant : " + currentMembre.getSolde());
+//				System.out.println("Nom Membre courant : " + currentMembre.getNom());
+//				currentMembre.soustraitSolde(forfait);
+//				System.out.println("Solde après : " + currentMembre.getSolde());
+//				double soldeSoustrait = currentMembre.getSolde();
+//				membreDAO.update_solde(currentMembre);
+//				System.out.println("Balade : " + baladeSelected);
+//				System.out.println("Véhicule : " + listeVehicule.getSelectedValue());
+//				System.out.println("Véhicule sélectionné : " + (Vehicule)listeVehicule.getSelectedValue());
+//				System.out.println("Membre : " + currentMembre.getNom());
+//				/*Membre membre = new Membre();
+//				
+//				(Vehicule)listeVehicule.getSelectedValue()).toArray()*/
+//			
+//				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
+//				baladeDAO.create((Balade)baladeSelected);
+//				
+//				//System.out.println("Liste balade : " + baladeDAO.listBalade(currentMembre.getListCategorie()));
+//				balade = (Balade) baladeSelected; 
+//				System.out.println("Avant ajout véhicule : " +  balade.getListVehicule());
+//				System.out.println("Balade toString Avant : " +  balade.toString());
+//				balade.AjouterVehicule(vehicule);
+//				//vehicule.AjouterMembre(currentMembre);
+//				System.out.println("Après ajout véhicule : " + balade.getListVehicule());
+//				System.out.println("Balade toString Après : " +  balade.toString());
+//				
+//				//vehicule.setNombrePlaceVelo(1);
+//				
+//				System.out.println("Après ajout membre : " +  vehicule.getListMembre());
+//				System.out.println("Vehicule toString Après : " +  vehicule.toString());
+//	
+//				JOptionPane.showMessageDialog(null, "Votre vélo a bien été ajouté à la balade : " + balade.getLibelle() + " dans le véhicule immatriculé : " + vehicule.getImmatriculation());
+//				baladeDAO.create_Ligne_Balade_Velo((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue(), currentMembre);
+//				//vehiculeDAO.update(vehicule);
+//				
+//				
+//				Container cp = f.getContentPane();
+//				cp.removeAll();
+//				//f.removeAll();*/
+//				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
+//				/*f.revalidate();*/
+//				//f.getLayout().removeLayoutComponent(f);
+//			}
+//		}
+//	}
+//	
+//	private class ajoutVehiculeButtonListener implements ActionListener
+//	{
+//		private JFrame f;
+//		private Membre currentMembre;
+//		private JList listeBalade;
+//		private List<Categorie> listCategorie;
+//		private Vehicule vehicule;
+//		private Calendrier calendrier;
+//		
+//		public ajoutVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, JList jlist1, Calendrier calendrier)
+//		{
+//			this.f = f;
+//			this.listCategorie = listCategorie;
+//			this.vehicule = vehicule;
+//			this.currentMembre = currentMembre;
+//			this.listeBalade = jlist1;
+//			this.calendrier = calendrier;
+//		}
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			// requete ajout insert into liste_balade
+//			if(listeBalade.isSelectionEmpty())
+//			{
+//				labelMsgErreur.setText("Veuillez sélectionner une balade.");
+//				p4.add(labelMsgErreur);
+//				f.add(p4);
+//				f.pack();
+//			}
+//			else
+//			{
+//				Container cp = f.getContentPane();
+//				cp.removeAll();
+//				//f.removeAll();*/
+//				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
+//				/*f.revalidate();*/
+//				//f.getLayout().removeLayoutComponent(f);
+//			}
+//		}
+//	}
+//	
+//	private class quitterButtonListener implements ActionListener
+//	{
+//		private JFrame f;
+//		private List<Categorie> listCategorie;
+//		private Membre currentMembre;
+//		private Vehicule vehicule;
+//		private JList listeBalade;
+//		private Calendrier calendrier;
+//
+//		public quitterButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, Vehicule vehicule, JList jlist1, Calendrier calendrier)
+//		{
+//			this.f = f;
+//			this.listCategorie = listCategorie;
+//			this.currentMembre = currentMembre;
+//			this.vehicule = vehicule;
+//			this.listeBalade = jlist1;
+//			this.calendrier = calendrier;
+//		}
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) 
+//		{
+//			if(listeBalade.isSelectionEmpty())
+//			{
+//				JOptionPane.showMessageDialog(null, "Veuillez sélectionner une balade.");
+//			}
+//			else 
+//			{
+//				// requete ajout insert into liste_balade
+//				BaladeDAO baladeDAO = new BaladeDAO(connect);
+//				baladeSelected = (Balade)listeBalade.getSelectedValue();
+//				Balade balade = (Balade)baladeSelected;
+//				baladeDAO.delete_Membre_Ligne_Balade((Balade)baladeSelected, currentMembre);
+//				System.out.println("Balade sélectionnée : " + baladeSelected);
+//				System.out.println("La balade : " + baladeSelected + "a bien été supprimée.");
+//				JOptionPane.showMessageDialog(null, "Vous avez quitté la balade : " + balade.getLibelle());
+//				Container cp = f.getContentPane();
+//				cp.removeAll();
+//				//f.removeAll();*/
+//				Main.showDashboard_Membre(currentMembre, calendrier);
+//				/*f.revalidate();*/
+//				//f.getLayout().removeLayoutComponent(f);
+//			}
+//		}
+//	}
+//	
+//	private class quitterMembreButtonListener implements ActionListener
+//	{
+//		private JFrame f;
+//		private Membre currentMembre;
+//		private List<Categorie> listCategorie;
+//		private JList listeBalade;
+//		private Vehicule vehicule;
+//		private Calendrier calendrier;
+//		
+//		public quitterMembreButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, Vehicule vehicule, JList jlist1, Calendrier calendrier)
+//		{
+//			this.f = f;
+//			this.listCategorie= listCategorie;
+//			this.currentMembre = currentMembre;
+//			this.vehicule = vehicule;
+//			this.listeBalade = jlist1;
+//			this.calendrier = calendrier;
+//		}
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) 
+//		{
+//			if(listeBalade.isSelectionEmpty())
+//			{
+//				JOptionPane.showMessageDialog(null, "Veuillez sélectionner une balade.");
+//			}
+//			else 
+//			{
+//				// requete ajout insert into liste_balade
+//				BaladeDAO baladeDAO = new BaladeDAO(connect);
+//				baladeSelected = (Balade)listeBalade.getSelectedValue();
+//				Balade balade = (Balade)baladeSelected;
+//				baladeDAO.delete_Membre_Ligne_Balade((Balade)baladeSelected, currentMembre);
+//				System.out.println("Balade sélectionnée : " + baladeSelected);
+//				System.out.println("La balade : " + baladeSelected + "a bien été supprimée.");
+//				JOptionPane.showMessageDialog(null, "Le membre a bien quitté la balade : " + balade.getLibelle());
+//				Container cp = f.getContentPane();
+//				cp.removeAll();
+//				//f.removeAll();*/
+//				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
+//				/*f.revalidate();*/
+//				//f.getLayout().removeLayoutComponent(f);
+//			}
+//		}
+//	}
+//	
+//	private class quitterVeloButtonListener implements ActionListener
+//	{
+//		private JFrame f;
+//		private Membre currentMembre;
+//		private List<Categorie> listCategorie;
+//		private JList listeBalade;
+//		private Vehicule vehicule;
+//		private Calendrier calendrier;
+//
+//		public quitterVeloButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, Vehicule vehicule, JList jlist1, Calendrier calendrier)
+//		{
+//			this.f = f;
+//			this.listCategorie = listCategorie;
+//			this.currentMembre = currentMembre;
+//			this.vehicule = vehicule;
+//			this.listeBalade = jlist1;
+//			this.calendrier = calendrier;
+//		}
+//
+//		@Override
+//		public void actionPerformed(ActionEvent e) 
+//		{
+//			if(listeBalade.isSelectionEmpty())
+//			{
+//				JOptionPane.showMessageDialog(null, "Veuillez sélectionner une balade.");
+//			}
+//			else 
+//			{
+//				// requete ajout insert into liste_balade
+//				BaladeDAO baladeDAO = new BaladeDAO(connect);
+//				baladeSelected = (Balade)listeBalade.getSelectedValue();
+//				Balade balade = (Balade)baladeSelected;
+//				baladeDAO.delete_Velo_Ligne_Balade((Balade)baladeSelected, currentMembre);
+//				System.out.println("Balade sélectionnée : " + baladeSelected);
+//				System.out.println("La balade : " + baladeSelected + "a bien été supprimée.");
+//				JOptionPane.showMessageDialog(null, "Le vélo a bien quitté la balade : " + balade.getLibelle());
+//				Container cp = f.getContentPane();
+//				cp.removeAll();
+//				//f.removeAll();*/
+//				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected, calendrier);
+//				/*f.revalidate();*/
+//				//f.getLayout().removeLayoutComponent(f);
+//			}
+//		}
+//	}
 	
-				JOptionPane.showMessageDialog(null, "Vous avez rejoint la balade : " + balade.getLibelle() + " avec le véhicule immatriculé : " + vehicule.getImmatriculation());
-				baladeDAO.create_Ligne_Balade_Membre((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue(), currentMembre);
-			//	baladeDAO.create_Ligne_Balade_Velo((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue(), currentMembre);
-				//vehiculeDAO.update(vehicule);
-				
-				
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
-				/*f.revalidate();*/
-				//f.getLayout().removeLayoutComponent(f);
-			}
-		}
-	}
-
-	private class rejoindreVehiculeButtonListener implements ActionListener
+	private class payerButtonListener implements ActionListener
 	{
 		private JFrame f;
-		private Membre currentMembre;
+		private JList listeBalade;
 		private List<Categorie> listCategorie;
 		private Vehicule vehicule;
+		private Tresorier currentTresorier;
+		private Calendrier calendrier;
 		
-		public rejoindreVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre)
+		public payerButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Tresorier currentTresorier, JList jlist1, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
 			this.vehicule = vehicule;
-			this.currentMembre = currentMembre;
+			this.currentTresorier = currentTresorier;
+			this.listeBalade = jlist1;
+			this.calendrier = calendrier;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			// requete ajout insert into liste_balade
-			BaladeDAO baladeDAO = new BaladeDAO(connect);
-			MembreDAO membreDAO = new MembreDAO(connect);
-			Vehicule vehicule;
-			vehicule = (Vehicule)listeVehicule.getSelectedValue();
-			Balade balade;
-			
-			int nombrePlacesUtilisees;
-			
-			currentMembre = membreDAO.getSoldeMembre(currentMembre);
-			double soldeMembre = currentMembre.getSolde();
-			double forfait = baladeDAO.getForfait(baladeSelected);
-			if(listeVehicule.isSelectionEmpty())
+			if(listePassager.isSelectionEmpty())
 			{
-				labelMsgErreur.setText("Veuillez sélectionner un véhicule.");
+				labelMsgErreur.setText("Veuillez sélectionner un passager.");
 				p4.add(labelMsgErreur);
 				f.add(p4);
 				f.pack();
 			}
-			else if(baladeDAO.getPlaceVeloUtilisee((Vehicule)listeVehicule.getSelectedValue(), baladeSelected) >= vehicule.getNombrePlaceMembre())
-			{
-				JOptionPane.showMessageDialog(null, "Il n'y a plus de place vélo dans ce véhicule.");
-			}
-			/*else if(baladeDAO.veloalreadyInBalade((Balade)baladeSelected, currentMembre))
-			{
-				JOptionPane.showMessageDialog(null, "Vous participer déjà à cette balade.");
-			}
-			else if(soldeMembre < forfait)
-			{
-				JOptionPane.showMessageDialog(null, "Vous n'avez pas les moyens pour participer à cette balade.");
-			}*/
 			else
 			{
-				System.out.println("Solde membre : " + currentMembre.getSolde());
-				System.out.println("Nom membre : " + currentMembre.getNom());
-				System.out.println("Forfait : " + forfait);
-				System.out.println("Solde avant : " + currentMembre.getSolde());
-				System.out.println("Nom Membre courant : " + currentMembre.getNom());
-				currentMembre.soustraitSolde(forfait);
-				System.out.println("Solde après : " + currentMembre.getSolde());
-				double soldeSoustrait = currentMembre.getSolde();
-				membreDAO.update_solde(currentMembre);
-				System.out.println("Balade : " + baladeSelected);
-				System.out.println("Véhicule : " + listeVehicule.getSelectedValue());
-				System.out.println("Véhicule sélectionné : " + (Vehicule)listeVehicule.getSelectedValue());
-				System.out.println("Membre : " + currentMembre.getNom());
-				/*Membre membre = new Membre();
+				MembreDAO membreDAO = new MembreDAO(connect);
+				System.out.println(listePassager.getSelectedValue());
 				
-				(Vehicule)listeVehicule.getSelectedValue()).toArray()*/
-			
-				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-				baladeDAO.create((Balade)baladeSelected);
-				
-				//System.out.println("Liste balade : " + baladeDAO.listBalade(currentMembre.getListCategorie()));
-				balade = (Balade) baladeSelected; 
-				System.out.println("Avant ajout véhicule : " +  balade.getListVehicule());
-				System.out.println("Balade toString Avant : " +  balade.toString());
-				balade.AjouterVehicule(vehicule);
-				//vehicule.AjouterMembre(currentMembre);
-				System.out.println("Après ajout véhicule : " + balade.getListVehicule());
-				System.out.println("Balade toString Après : " +  balade.toString());
-				
-				//vehicule.setNombrePlaceVelo(1);
-				
-				System.out.println("Après ajout membre : " +  vehicule.getListMembre());
-				System.out.println("Vehicule toString Après : " +  vehicule.toString());
-	
-				JOptionPane.showMessageDialog(null, "Votre vélo a bien été ajouté à la balade : " + balade.getLibelle() + " dans le véhicule immatriculé : " + vehicule.getImmatriculation());
-				baladeDAO.create_Ligne_Balade_Velo((Balade)baladeSelected, (Vehicule)listeVehicule.getSelectedValue(), currentMembre);
-				//vehiculeDAO.update(vehicule);
-				
-				
+				Vehicule vehicule = (Vehicule)listePassager.getSelectedValue();
+				Membre membre = vehicule.getChauffeur();
+				System.out.println(membre);
+				membreDAO.findMembre(membre);
+				membreDAO.deleteFromBalade(membre);
+				JOptionPane.showMessageDialog(null,  "Le membre " + membre.getNom() + " a bien été supprimé de la balade.");
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
+				Main.showDashboard_Tresorier(currentTresorier, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
 			}
 		}
 	}
 	
-	private class ajoutVehiculeButtonListener implements ActionListener
+	private class rembourserButtonListener implements ActionListener
 	{
 		private JFrame f;
-		private Membre currentMembre;
 		private JList listeBalade;
 		private List<Categorie> listCategorie;
 		private Vehicule vehicule;
+		private Tresorier currentTresorier;
+		private boolean rembourse = false;
+		private Calendrier calendrier;
 		
-		public ajoutVehiculeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, JList jlist1)
+		public rembourserButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Tresorier currentTresorier, JList jlist1, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
 			this.vehicule = vehicule;
-			this.currentMembre = currentMembre;
+			this.currentTresorier = currentTresorier;
 			this.listeBalade = jlist1;
+			this.calendrier = calendrier;
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			// requete ajout insert into liste_balade
+		public void actionPerformed(ActionEvent e) 
+		{
 			if(listeBalade.isSelectionEmpty())
 			{
 				labelMsgErreur.setText("Veuillez sélectionner une balade.");
@@ -555,150 +853,103 @@ public class MenuRemboursement_Tresorier
 				f.add(p4);
 				f.pack();
 			}
+			else if(listeVehicule.isSelectionEmpty())
+			{
+				labelMsgErreur.setText("Veuillez sélectionner un véhicule.");
+				p4.add(labelMsgErreur);
+				f.add(p4);
+				f.pack();
+			}
 			else
 			{
+				System.out.println(listeVehicule.getSelectedValue());
+				
+				Vehicule vehicule = (Vehicule)listeVehicule.getSelectedValue();
+				Membre membre = vehicule.getChauffeur();
+				MembreDAO membreDAO = new MembreDAO(connect);
+				membre = membreDAO.findMembre(membre);
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
-				/*f.revalidate();*/
-				//f.getLayout().removeLayoutComponent(f);
+				if(membreDAO.alreadyRembourse(membre, (Balade)listeBalade.getSelectedValue()))
+				{
+					JOptionPane.showMessageDialog(null, "Le chauffeur a déjà été remboursé.");
+					Main.showDashboard_Tresorier(currentTresorier, calendrier);
+					/*f.revalidate();*/
+					//f.getLayout().removeLayoutComponent(f);
+				}
+				else
+				{
+					System.out.println("Le chauffeur a bien été remboursé.");
+					JOptionPane.showMessageDialog(null, "MEMBRE : " + membre);
+					JOptionPane.showMessageDialog(null, "SOLDE MEMBRE : " + membre.getSolde());
+					Balade balade = (Balade)listeBalade.getSelectedValue();
+					membre.ajouterSolde(balade.getForfaitRemboursement());
+					JOptionPane.showMessageDialog(null, "SOLDE MEMBRE : " + membre.getSolde());
+					//JOptionPane.showMessageDialog(null, balade.getForfaitRemboursement());
+					membreDAO.update_solde(membre);
+					membreDAO.update_Statut_Remboursement(membre);
+					JOptionPane.showMessageDialog(null, "Le chauffeur a bien été remboursé.");
+					Main.showDashboard_Tresorier(currentTresorier, calendrier);
+					/*f.revalidate();*/
+					//f.getLayout().removeLayoutComponent(f);
+				}
 			}
 		}
 	}
 	
-	private class quitterButtonListener implements ActionListener
+	private class supprimerButtonListener implements ActionListener
 	{
 		private JFrame f;
-		private List<Categorie> listCategorie;
-		private Membre currentMembre;
-		private Vehicule vehicule;
 		private JList listeBalade;
-
-		public quitterButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, Vehicule vehicule, JList jlist1)
-		{
-			this.f = f;
-			this.listCategorie = listCategorie;
-			this.currentMembre = currentMembre;
-			this.vehicule = vehicule;
-			this.listeBalade = jlist1;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) 
-		{
-			if(listeBalade.isSelectionEmpty())
-			{
-				JOptionPane.showMessageDialog(null, "Veuillez sélectionner une balade.");
-			}
-			else 
-			{
-				// requete ajout insert into liste_balade
-				BaladeDAO baladeDAO = new BaladeDAO(connect);
-				baladeSelected = (Balade)listeBalade.getSelectedValue();
-				Balade balade = (Balade)baladeSelected;
-				baladeDAO.delete_Membre_Ligne_Balade((Balade)baladeSelected, currentMembre);
-				System.out.println("Balade sélectionnée : " + baladeSelected);
-				System.out.println("La balade : " + baladeSelected + "a bien été supprimée.");
-				JOptionPane.showMessageDialog(null, "Vous avez quitté la balade : " + balade.getLibelle());
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				//f.removeAll();*/
-				Main.showDashboard_Membre(currentMembre);
-				/*f.revalidate();*/
-				//f.getLayout().removeLayoutComponent(f);
-			}
-		}
-	}
-	
-	private class quitterMembreButtonListener implements ActionListener
-	{
-		private JFrame f;
-		private Membre currentMembre;
 		private List<Categorie> listCategorie;
-		private JList listeBalade;
 		private Vehicule vehicule;
-
+		private Tresorier currentTresorier;
+		private boolean rembourse = false;
+		private Calendrier calendrier;
 		
-		public quitterMembreButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, Vehicule vehicule, JList jlist1)
-		{
-			this.f = f;
-			this.listCategorie= listCategorie;
-			this.currentMembre = currentMembre;
-			this.vehicule = vehicule;
-			this.listeBalade = jlist1;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) 
-		{
-			if(listeBalade.isSelectionEmpty())
-			{
-				JOptionPane.showMessageDialog(null, "Veuillez sélectionner une balade.");
-			}
-			else 
-			{
-				// requete ajout insert into liste_balade
-				BaladeDAO baladeDAO = new BaladeDAO(connect);
-				baladeSelected = (Balade)listeBalade.getSelectedValue();
-				Balade balade = (Balade)baladeSelected;
-				baladeDAO.delete_Membre_Ligne_Balade((Balade)baladeSelected, currentMembre);
-				System.out.println("Balade sélectionnée : " + baladeSelected);
-				System.out.println("La balade : " + baladeSelected + "a bien été supprimée.");
-				JOptionPane.showMessageDialog(null, "Le membre a bien quitté la balade : " + balade.getLibelle());
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
-				/*f.revalidate();*/
-				//f.getLayout().removeLayoutComponent(f);
-			}
-		}
-	}
-	
-	private class quitterVeloButtonListener implements ActionListener
-	{
-		private JFrame f;
-		private Membre currentMembre;
-		private List<Categorie> listCategorie;
-		private JList listeBalade;
-		private Vehicule vehicule;
-
-		public quitterVeloButtonListener(JFrame f, List<Categorie> listCategorie, Membre currentMembre, Vehicule vehicule, JList jlist1)
+		public supprimerButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Tresorier currentTresorier, JList jlist1, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
-			this.currentMembre = currentMembre;
 			this.vehicule = vehicule;
+			this.currentTresorier = currentTresorier;
 			this.listeBalade = jlist1;
+			this.calendrier = calendrier;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			if(listeBalade.isSelectionEmpty())
+			if(listeMembre.isSelectionEmpty())
 			{
-				JOptionPane.showMessageDialog(null, "Veuillez sélectionner une balade.");
+				labelMsgErreur.setText("Veuillez sélectionner un membre.");
+				p4.add(labelMsgErreur);
+				f.add(p4);
+				f.pack();
 			}
-			else 
+			else
 			{
-				// requete ajout insert into liste_balade
-				BaladeDAO baladeDAO = new BaladeDAO(connect);
-				baladeSelected = (Balade)listeBalade.getSelectedValue();
-				Balade balade = (Balade)baladeSelected;
-				baladeDAO.delete_Velo_Ligne_Balade((Balade)baladeSelected, currentMembre);
-				System.out.println("Balade sélectionnée : " + baladeSelected);
-				System.out.println("La balade : " + baladeSelected + "a bien été supprimée.");
-				JOptionPane.showMessageDialog(null, "Le vélo a bien quitté la balade : " + balade.getLibelle());
+				System.out.println(listeMembre.getSelectedValue());
+				
+				Membre membre = (Membre)listeMembre.getSelectedValue();
+				System.out.println(membre);
+				MembreDAO membreDAO = new MembreDAO(connect);
+				membreDAO.delete(membre);
+				JOptionPane.showMessageDialog(null,  "Le membre " + membre.getNom() + " a bien été supprimé.");
 				Container cp = f.getContentPane();
 				cp.removeAll();
 				//f.removeAll();*/
-				Main.AjoutVehicule(currentMembre, listCategorie, vehicule, baladeSelected);
+				
+			
+					
+				Main.showDashboard_Tresorier(currentTresorier, calendrier);
 				/*f.revalidate();*/
 				//f.getLayout().removeLayoutComponent(f);
+				}
 			}
-		}
 	}
+
 	
 	private class retourButtonListener implements ActionListener
 	{
@@ -706,13 +957,15 @@ public class MenuRemboursement_Tresorier
 		private List<Categorie> listCategorie;
 		private Vehicule vehicule;
 		private Tresorier currentTresorier;
+		private Calendrier calendrier;
 		
-		public retourButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Tresorier currentTresorier)
+		public retourButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Tresorier currentTresorier, Calendrier calendrier)
 		{
 			this.f = f;
 			this.listCategorie = listCategorie;
 			this.vehicule = vehicule;
 			this.currentTresorier = currentTresorier;
+			this.calendrier = calendrier;
 		}
 
 		@Override
@@ -720,7 +973,7 @@ public class MenuRemboursement_Tresorier
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showDashboard_Tresorier(currentTresorier);
+			Main.showDashboard_Tresorier(currentTresorier, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

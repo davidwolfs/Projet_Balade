@@ -18,7 +18,6 @@ import javax.swing.JTextField;
 import dao.BaladeDAO;
 import dao.CategorieDAO;
 import dao.MembreDAO;
-import dao.VehiculeDAO;
 import exo.Balade;
 import exo.Calendrier;
 import exo.Categorie;
@@ -26,46 +25,40 @@ import exo.Membre;
 import exo.Vehicule;
 import gui.Main;
 
-public class MenuBalade_Membre extends JPanel implements ActionListener 
+public class MenuPayement_Membre extends JPanel implements ActionListener 
 {
 	private Connection connect;
 	private JFrame controllingFrame; // needed for dialogs
 	private Membre currentMembre;
-	//private JButton rechercherBaladeButton;
-	private JButton rejoindreBaladeButton;
-	private JButton supprimerBaladeButton;
-	private JButton voirBaladeButton;
+	private JButton payerCotisationAnnuelleButton;
 	private JButton retourButton;
-	private JButton deconnexionButton;
 	private JPanel p;
-	private List<Categorie> listCategorie;
-	private Vehicule vehicule;
 
-	public MenuBalade_Membre(JFrame f, Connection connect, Membre currentMembre, Calendrier calendrier) 
-	{
+
+	public MenuPayement_Membre(JFrame f, Connection connect, Membre currentMembre, Calendrier calendrier) {
 		this.connect = connect;
 		controllingFrame = f;
 		this.currentMembre = currentMembre;
 	//	rechercherBaladeButton = new JButton("Rechercher balade");
-		rejoindreBaladeButton = new JButton("Rejoindre balade");
+		payerCotisationAnnuelleButton = new JButton("Payer cotisation annuelle");
+		// Button = new JButton("");
 		retourButton = new JButton("Retour");
-		deconnexionButton = new JButton("Déconnexion");
+		
 		
 		
 		//deconnexionButton = new JButton("Déconnexion");
-		p = new JPanel(new GridLayout(3, 0));
+		p = new JPanel(new GridLayout(2,0));
 		
 	//	p.add(rechercherBaladeButton);
-		p.add(rejoindreBaladeButton);
+		p.add(payerCotisationAnnuelleButton);
 		p.add(retourButton);
-		p.add(deconnexionButton);
+
 		
 		f.add(p);
 	
 	//	rechercherBaladeButton.addActionListener(new rechercherBaladeButtonListener(f));
-		rejoindreBaladeButton.addActionListener(new rejoindreBaladeButtonListener(f, listCategorie, vehicule, currentMembre, calendrier));
+		payerCotisationAnnuelleButton.addActionListener(new payerCotisationAnnuelleButtonListener(f, currentMembre));
 		retourButton.addActionListener(new retourButtonListener(f, calendrier));
-		deconnexionButton.addActionListener(new deconnexionButtonListener(f, calendrier));
 		
 		f.pack();
 	}
@@ -101,44 +94,44 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 		/*}
 	}*/
 	
-	private class rejoindreBaladeButtonListener implements ActionListener
+	private class payerCotisationAnnuelleButtonListener implements ActionListener
 	{
 		private JFrame f;
 		private Membre currentMembre;
-		private List<Categorie> listCategorie;
-		private Vehicule vehicule;
-		private Calendrier calendrier;
-
-		public rejoindreBaladeButtonListener(JFrame f, List<Categorie> listCategorie, Vehicule vehicule, Membre currentMembre, Calendrier calendrier)
+		public payerCotisationAnnuelleButtonListener(JFrame f, Membre currentMembre)
 		{
 			this.f = f;
-			this.listCategorie = listCategorie;
-			this.vehicule = vehicule;
 			this.currentMembre = currentMembre;
-			this.calendrier = calendrier;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			CategorieDAO categorieDAO = new CategorieDAO(connect);
 			MembreDAO membreDAO = new MembreDAO(connect);
-			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-			currentMembre = membreDAO.getListCategorieMembre(currentMembre);
-			/*if(categorieDAO.appartientCategorie(currentMembre))
-			{*/
-			if(currentMembre.getListCategorie().size() > 0 )
+			CategorieDAO categorieDAO = new CategorieDAO(connect);
+			
+			currentMembre = membreDAO.findIdByMembre(currentMembre);
+			currentMembre = membreDAO.getSoldeMembre(currentMembre);
+			double soldeMembre = currentMembre.getSolde();
+			double forfait = 20;
+			
+			if(membreDAO.VerifierPayementCotisationAnnuelleChangeStatus(currentMembre))
 			{
-				Container cp = f.getContentPane();
-				cp.removeAll();
-				//f.removeAll();*/
-				Main.RejoindreBalade(listCategorie, vehicule, currentMembre, calendrier);
-				/*f.revalidate();*/
-				//f.getLayout().removeLayoutComponent(f);
+				java.time.LocalDate.now();
+				JOptionPane.showMessageDialog(null,  "Vous avez déjà payé votre cotisation pour cette année.");
+			}
+			else if(soldeMembre < forfait)
+			{
+				JOptionPane.showMessageDialog(null,  "Vous n'avez pas les moyens de payer votre cotisation annuelle.");
 			}
 			else
 			{
-				JOptionPane.showMessageDialog(null, "Veuillez d'abord vous affilier à une catégorie.");
+				JOptionPane.showMessageDialog(null,  "Votre solde : " + currentMembre.getSolde());
+				currentMembre.PayerCotisation(20);
+				JOptionPane.showMessageDialog(null,  "Votre solde : " + currentMembre.getSolde());
+				membreDAO.payerCotisationAnnuelle(currentMembre);
+				membreDAO.payerCotisationAnnuelleChangeStatus(currentMembre);
+				JOptionPane.showMessageDialog(null,  "Votre cotisation annuelle a bien été payée.");
 			}
 		}
 	}
@@ -161,28 +154,6 @@ public class MenuBalade_Membre extends JPanel implements ActionListener
 			cp.removeAll();
 			//f.removeAll();*/
 			Main.showDashboard_Membre(currentMembre, calendrier);
-			/*f.revalidate();*/
-			//f.getLayout().removeLayoutComponent(f);
-		}
-	}
-	
-	private class deconnexionButtonListener implements ActionListener
-	{
-		private JFrame f;
-		private Calendrier calendrier;
-
-		public deconnexionButtonListener(JFrame f, Calendrier scalendrier)
-		{
-			this.f = f;
-			this.calendrier = calendrier;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Container cp = f.getContentPane();
-			cp.removeAll();
-			//f.removeAll();*/
-			Main.creerConnexion(calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

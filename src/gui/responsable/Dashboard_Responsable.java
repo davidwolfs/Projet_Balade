@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 
 import dao.BaladeDAO;
 import exo.Balade;
+import exo.Calendrier;
 import exo.Membre;
 import exo.Responsable;
 import gui.Main;
@@ -39,7 +40,7 @@ public class Dashboard_Responsable implements ActionListener
 	private JButton deconnexionButton;
 	private JPanel p;
 
-	public Dashboard_Responsable(JFrame f, Connection connect, Responsable currentResponsable) 
+	public Dashboard_Responsable(JFrame f, Connection connect, Responsable currentResponsable, Calendrier calendrier) 
 	{
 		this.connect = connect;
 		this.f = f;
@@ -64,12 +65,12 @@ public class Dashboard_Responsable implements ActionListener
 		
 		f.add(p);
 		
-		BaladeButton.addActionListener(new BaladeButtonListener(f, currentResponsable));
+		BaladeButton.addActionListener(new BaladeButtonListener(f, currentResponsable, calendrier));
 		//RemboursementeButton.addActionListener(new RemboursementeButtonListener(f));
 		//DisponibiliteButton.addActionListener(new DisponibiliteButtonListener(f));
-		CategorieButton.addActionListener(new CategorieButtonListener(f, currentResponsable));
+		CategorieButton.addActionListener(new CategorieButtonListener(f, currentResponsable, calendrier));
 		//PayementButton.addActionListener(new PayementButtonListener(f));
-		deconnexionButton.addActionListener(new deconnexionButtonListener(f));
+		deconnexionButton.addActionListener(new deconnexionButtonListener(f, calendrier));
 		
 		f.pack();
 	}
@@ -89,11 +90,13 @@ public class Dashboard_Responsable implements ActionListener
 	{
 		private JFrame f;
 		private Responsable currentResponsable;
+		private Calendrier calendrier;
 
-		public BaladeButtonListener(JFrame f, Responsable currentResponsable)
+		public BaladeButtonListener(JFrame f, Responsable currentResponsable, Calendrier calendrier)
 		{
 			this.f = f;
 			this.currentResponsable = currentResponsable;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -101,7 +104,7 @@ public class Dashboard_Responsable implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuBalade_Responsable(currentResponsable);
+			Main.showMenuBalade_Responsable(currentResponsable, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -151,8 +154,9 @@ public class Dashboard_Responsable implements ActionListener
 	{
 		private JFrame f;
 		private Responsable currentResponsable;
+		private Calendrier calendrier;
 
-		public CategorieButtonListener(JFrame f, Responsable currentResponsable)
+		public CategorieButtonListener(JFrame f, Responsable currentResponsable, Calendrier calendrier)
 		{
 			this.f = f;
 			this.currentResponsable = currentResponsable;
@@ -163,7 +167,7 @@ public class Dashboard_Responsable implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.showMenuCategorie_Responsable(currentResponsable);
+			Main.showMenuCategorie_Responsable(currentResponsable, calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}
@@ -192,10 +196,12 @@ public class Dashboard_Responsable implements ActionListener
 	private class deconnexionButtonListener implements ActionListener
 	{
 		private JFrame f;
+		private Calendrier calendrier;
 
-		public deconnexionButtonListener(JFrame f)
+		public deconnexionButtonListener(JFrame f, Calendrier calendrier)
 		{
 			this.f = f;
+			this.calendrier = calendrier;
 		}
 		
 		@Override
@@ -203,7 +209,7 @@ public class Dashboard_Responsable implements ActionListener
 			Container cp = f.getContentPane();
 			cp.removeAll();
 			//f.removeAll();*/
-			Main.creerConnexion();
+			Main.creerConnexion(calendrier);
 			/*f.revalidate();*/
 			//f.getLayout().removeLayoutComponent(f);
 		}

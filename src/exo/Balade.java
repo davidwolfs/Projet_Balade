@@ -108,6 +108,6 @@ public class Balade {
 	@Override
 	public String toString() {
 		return "Libelle=" + libelle + ", Lieu de départ=" + lieuDepart + ", Date de départ="
-				+ dateDepart + ", Forfait=" + forfaitBalade + "€";
+				+ dateDepart + ", Forfait balade=" + forfaitBalade + "€" + ", Forfait remboursement=" + forfaitRemboursement + "€";
 	}
 }

@@ -29,6 +29,12 @@ public class Membre extends Personne
 		
 	}
 	
+	public Membre(String nom, String prenom, String dateNaiss, String email, String password, double solde) 
+	{
+		super(nom, prenom, dateNaiss, email, password);
+		this.solde = solde;
+	}
+	
 	public Membre(String nom, String prenom, String dateNaiss, String email, String password) 
 	{
 		super(nom, prenom, dateNaiss, email, password);
@@ -48,6 +54,9 @@ public class Membre extends Personne
 		this.solde = solde;
 	}
 	
+	public void ajouterSolde(double solde) {
+		this.solde += solde;
+	}
 	public void soustraitSolde(double solde) {
 		this.solde -= solde;
 	}
@@ -65,9 +74,9 @@ public class Membre extends Personne
 		listCategorie.add(categorie);
 	}
 	
-	public double PayerCotisation(double solde)
+	public void PayerCotisation(double solde)
 	{
-		return 0.00;
+		this.soustraitSolde(solde);
 		
 	}
 	public double CalculerCotisation(double solde)

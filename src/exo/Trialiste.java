@@ -3,8 +3,8 @@ package exo;
 public class Trialiste extends VTT {
 	private String selle;
 
-	public Trialiste(int supplement, String typePneu, String nom, int NbrPlateau, String selle) {
-		super(supplement, typePneu, nom, NbrPlateau);
+	public Trialiste(int supplement, String nom, int NbrPlateau, String selle) {
+		super(supplement, nom, NbrPlateau);
 		this.selle = selle;
 	}
 
