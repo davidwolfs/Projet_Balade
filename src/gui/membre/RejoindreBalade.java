@@ -197,7 +197,6 @@ public class RejoindreBalade
 			System.out.println(listeBalade.getSelectedValue().getClass());
 			baladeSelected = (Balade)listeBalade.getSelectedValue();
 			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-			JOptionPane.showMessageDialog(null, currentMembre.getiD());
 			listeVehicule.setListData(vehiculeDAO.listVehiculeByBalade(currentMembre, (Balade)listeBalade.getSelectedValue(), vehicule).toArray());
 			
 			listSelectionModel2  = listeVehicule.getSelectionModel();
@@ -323,7 +322,7 @@ public class RejoindreBalade
 				(Vehicule)listeVehicule.getSelectedValue()).toArray()*/
 			
 				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-				baladeDAO.create((Balade)baladeSelected);
+				//baladeDAO.create((Balade)baladeSelected);
 				
 				//System.out.println("Liste balade : " + baladeDAO.listBalade(currentMembre.getListCategorie()));
 				balade = (Balade) baladeSelected; 
@@ -433,7 +432,7 @@ public class RejoindreBalade
 				(Vehicule)listeVehicule.getSelectedValue()).toArray()*/
 			
 				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-				baladeDAO.create((Balade)baladeSelected);
+				//baladeDAO.create((Balade)baladeSelected);
 				
 				//System.out.println("Liste balade : " + baladeDAO.listBalade(currentMembre.getListCategorie()));
 				balade = (Balade) baladeSelected; 
@@ -540,7 +539,7 @@ public class RejoindreBalade
 				(Vehicule)listeVehicule.getSelectedValue()).toArray()*/
 			
 				VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
-				baladeDAO.create((Balade)baladeSelected);
+				//baladeDAO.create((Balade)baladeSelected);
 				
 				//System.out.println("Liste balade : " + baladeDAO.listBalade(currentMembre.getListCategorie()));
 				balade = (Balade) baladeSelected; 

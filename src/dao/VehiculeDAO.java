@@ -13,8 +13,7 @@ import javax.swing.JOptionPane;
 import exo.Balade;
 import exo.Categorie;
 import exo.Membre;
-import exo.Tresorier;
-import exo.Trialiste;
+import exo.Tresorier;import exo.Trialiste;
 import exo.Vehicule;
 
 public class VehiculeDAO extends DAO<Vehicule>{
@@ -25,7 +24,6 @@ public class VehiculeDAO extends DAO<Vehicule>{
 
 	public boolean create(Vehicule vehicule, Membre membre) 
 	{
-		JOptionPane.showMessageDialog(null, "ID MEMBRE DANS CREATE VEHICULE : " + membre.getiD());
 		boolean statementResult;
 		try {
 			Statement statement = connect.createStatement();
@@ -189,7 +187,6 @@ public class VehiculeDAO extends DAO<Vehicule>{
 
 	public List<Vehicule> listVehiculeByMembre(Membre membre)
 	{
-		JOptionPane.showMessageDialog(null,  membre.getiD());
 		Membre storedMembre = membre;
 		List<Vehicule> listVehicule = new ArrayList<>();
 		Vehicule vehicule = null;

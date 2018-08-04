@@ -112,12 +112,12 @@ public class Vehicule
 		//return chauffeur + "";
 	}
 	
-	public String toString2() 
+	public String AfficherChauffeur() 
 	{
 		return chauffeur + "";
 	}
 	
-	public String toString3() 
+	public String AfficherPassager() 
 	{
 		return chauffeur + "";
 	}
