@@ -1,10 +1,12 @@
 package exo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Calendrier 
+public class Calendrier implements Serializable 
 {
+	private static final long serialVersionUID = 7787170877756499146L;
 	private int iD;
 	private String nomCal;
 	private List<Balade> listBalade = new ArrayList<>();

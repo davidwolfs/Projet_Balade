@@ -1,6 +1,9 @@
 package exo;
 
-public class Descendeur extends VTT {
+import java.io.Serializable;
+
+public class Descendeur extends VTT implements Serializable {
+	private static final long serialVersionUID = 7787170877756499146L;
 	private String typeSuspension;
 
 	public Descendeur(int supplement, String nom, int NbrPlateau, String typeSuspension) {

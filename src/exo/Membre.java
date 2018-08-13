@@ -1,11 +1,13 @@
 package exo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Membre extends Personne 
+public class Membre extends Personne implements Serializable
 {
+	private static final long serialVersionUID = 7787170877756499146L;
 	private static final double initSolde = 0;
 	private double solde;
 	private List<Categorie> listCategorie;

@@ -1,8 +1,10 @@
 package exo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Tresorier extends Personne {
+public class Tresorier extends Personne implements Serializable {
+	private static final long serialVersionUID = 7787170877756499146L;
 	private int numCompteCourant;
 
 	public Tresorier(String nom, String prenom, String dateNaiss, String email, String password,

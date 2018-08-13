@@ -1,6 +1,10 @@
 package exo;
 
-public class Categorie {
+import java.io.Serializable;
+
+public class Categorie implements Serializable
+{
+	private static final long serialVersionUID = 7787170877756499146L;
 	private int iD;
 	private static final int cotisationAnnuelle = 20;
 	private static final int supplement = 5;

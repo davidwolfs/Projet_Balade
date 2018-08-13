@@ -1,10 +1,12 @@
 package exo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vehicule 
+public class Vehicule implements Serializable
 {
+	private static final long serialVersionUID = 7787170877756499146L;
 	private String immatriculation;
 	private String marque;
 	private String modele;

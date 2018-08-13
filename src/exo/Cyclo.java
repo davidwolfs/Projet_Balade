@@ -1,7 +1,10 @@
 package exo;
 
-public class Cyclo extends Categorie
+import java.io.Serializable;
+
+public class Cyclo extends Categorie implements Serializable
 {
+	private static final long serialVersionUID = 7787170877756499146L;
 	private int IDCy;
 	private String nom;
 	

@@ -1,10 +1,12 @@
 package exo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Balade {
+public class Balade implements Serializable {
+	private static final long serialVersionUID = 7787170877756499146L;
 	private int iDB;
 	private String libelle;
 	private String lieuDepart;
@@ -103,6 +105,11 @@ public class Balade {
 	public void AjouterVehicule(Vehicule vehicule)
 	{
 		listVehicule.add(vehicule);
+	}
+	
+	public void AfficherForfaitCalcul()
+	{
+		
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package exo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public abstract class Personne 
+public abstract class Personne implements Serializable
 {
+	private static final long serialVersionUID = 7787170877756499146L;
 	protected int iD;
 	protected String nom;
 	protected String prenom;

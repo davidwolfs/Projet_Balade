@@ -1,8 +1,10 @@
 package exo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Responsable extends Personne {
+public class Responsable extends Personne implements Serializable {
+	private static final long serialVersionUID = 7787170877756499146L;
 	private String dateDebut;
 	private Categorie categorie;
 	
