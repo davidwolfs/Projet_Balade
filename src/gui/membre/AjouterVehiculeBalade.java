@@ -75,7 +75,8 @@ public class AjouterVehiculeBalade
 	    JList jlist1 = new JList(vehicules);
 	    jlist1.setVisibleRowCount(4);
 	    
-	    DefaultListModel model = new DefaultListModel();
+	    @SuppressWarnings("rawtypes")
+		DefaultListModel model = new DefaultListModel();
 	    model.ensureCapacity(100);
 	    for (int i = 0; i < 100; i++) {
 	        model.addElement(Integer.toString(i));

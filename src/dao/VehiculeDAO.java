@@ -162,7 +162,6 @@ public class VehiculeDAO extends DAO<Vehicule>{
 	{
 		VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 		MembreDAO membreDAO = new MembreDAO(connect);
-		System.out.println(balade.getiDB());
 		List<Vehicule> listVehicule = new ArrayList<>();
 		try{
 			ResultSet result = this.connect.createStatement(

@@ -200,7 +200,6 @@ public class MenuCategorie_Membre extends JPanel implements ActionListener
 				System.out.println(currentMembre.getListCategorie());
 				currentMembre.AjouterCategorie(categorie);
 				System.out.println(currentMembre.getListCategorie());
-				JOptionPane.showMessageDialog(null, currentMembre.getListCategorie());
 				categorieDAO.create_Categorie_Membre((Categorie)listeCategorie.getSelectedValue(), currentMembre);
 				currentMembre = membreDAO.getSoldeMembre(currentMembre);
 				double soldeMembre = currentMembre.getSolde();

@@ -193,8 +193,6 @@ public class RejoindreBalade
 			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 
 			int index = listeBalade.getSelectedIndex();
-			System.out.println("balade :" + listeBalade.getSelectedValue());
-			System.out.println(listeBalade.getSelectedValue().getClass());
 			baladeSelected = (Balade)listeBalade.getSelectedValue();
 			VehiculeDAO vehiculeDAO = new VehiculeDAO(connect);
 			listeVehicule.setListData(vehiculeDAO.listVehiculeByBalade(currentMembre, (Balade)listeBalade.getSelectedValue(), vehicule).toArray());
