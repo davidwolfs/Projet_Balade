@@ -109,7 +109,6 @@ public class MembreDAO extends DAO<Membre>
 	
 	public Membre findMembre(Membre membre)
 	{
-		JOptionPane.showMessageDialog(null,  membre);
 		try{
 			ResultSet result = this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,

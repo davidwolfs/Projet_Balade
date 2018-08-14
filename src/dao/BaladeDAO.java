@@ -249,7 +249,6 @@ public class BaladeDAO extends DAO<Balade>
 	
 	public boolean membrealreadyInBalade(Balade baladeSelected, Membre currentMembre)
 	{
-		JOptionPane.showMessageDialog(null, currentMembre.getNom());
 		boolean exist = false;
 		try{
 			ResultSet result = this.connect.createStatement(
@@ -268,7 +267,6 @@ public class BaladeDAO extends DAO<Balade>
 	}
 	public boolean membreVeloNotInBalade(Balade baladeSelected, Membre currentMembre)
 	{
-		JOptionPane.showMessageDialog(null, currentMembre.getNom());
 		boolean notExist = true;
 		try{
 			ResultSet result = this.connect.createStatement(
@@ -288,7 +286,6 @@ public class BaladeDAO extends DAO<Balade>
 	
 	public boolean membreNotInBalade(Balade baladeSelected, Membre currentMembre)
 	{
-		JOptionPane.showMessageDialog(null, currentMembre.getNom());
 		boolean exist = true;
 		try{
 			ResultSet result = this.connect.createStatement(
